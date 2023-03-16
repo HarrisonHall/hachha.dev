@@ -2,11 +2,15 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 
 use axum::{
+    extract::Path,
     routing::{get, post},
+    response::Html,
     Json, Router
 };
 use clap::{Parser, Subcommand};
 use handlebars::Handlebars;
+use log::*;
+use pretty_env_logger;
 use rust_embed::RustEmbed;
 use serde_json::json;
 
@@ -23,14 +27,17 @@ struct CliArgs {
 
 #[tokio::main]
 async fn main() {
-    println!("nfra framework");
-
     let args = CliArgs::parse();
+    std::env::set_var("RUST_LOG", "debug");
+    pretty_env_logger::init();
+    
 
     let mut app = Router::new();
     app = app.route("/", get(root));
+    //app = app.route("/:foo", get(root));
 
     let addr = SocketAddr::from(([0, 0, 0, 0], args.port));
+    info!("Serving haccha.dev on {}", args.port);
     axum::Server::bind(&addr)
         .serve(app.into_make_service())
         .await
@@ -43,10 +50,11 @@ async fn main() {
 #[exclude = "*.md"]
 pub struct Content;
 
-async fn root() -> String {
+//async fn root(Path((foo)): Path<String>) -> Html<String> {
+async fn root() -> Html<String> {
     let mut reg = Handlebars::new();
-    return reg.render_template(
-        std::str::from_utf8(&Content::get("pages/index.html").unwrap().data).unwrap(), 
-        &json!({})
-    ).unwrap();
+    return Html(reg.render_template(
+        std::str::from_utf8(&Content::get("pages/index.html").unwrap().data).unwrap(),
+        &json!({"version": env!("CARGO_PKG_VERSION")})
+    ).unwrap());
 }
