@@ -1,13 +1,18 @@
 <html>
     <head>
-
+        {{>templates/head.html}}
     </head>
 
-    <body>
-        <h1>Test website!</h1>
-        <p>Version: {{version}}</p>
-    </body>
+    <body class="index-page">
+        {{>templates/navbar.html}}
 
-    <footer>
-    </footer>
+        <div class="hero bg-secondary">
+            <div class="container grid-lg text-center">
+                <h1>Welcome!</h1>
+                <p>Foo bar lorup ipsum...</p>
+            </div>
+        </div>
+
+        {{>templates/footer.html}}
+    </body>
 </html>

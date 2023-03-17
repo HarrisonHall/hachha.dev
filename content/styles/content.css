@@ -1,0 +1,45 @@
+html * {
+   font-family: FiraSans !important;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+@font-face {
+    font-family: FiraSans;
+    src: url("/fonts/FiraSans-Regular.otf") format("opentype");
+}
+
+#navbar {
+    position: fixed;
+}
+
+.navbar-home {
+    color: #d8dee9;
+    background-color: #d8dee9;
+}
+
+
+footer p {
+    margin-bottom: 0px;
+}
+
+.footer-spacer {
+    flex: 1;
+}
+
+/* Index page */
+.index-page {
+    background-color: #a3be8c;
+}
+
+.section {
+
+}
+
+.section-footer {
+
+}
