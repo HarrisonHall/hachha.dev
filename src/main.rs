@@ -46,7 +46,6 @@ pub struct Pages;
 
 
 async fn index<'a>(State(site): State<Arc<Site<'a>>>) -> Html<String> {
-   
     let current_time = chrono::Utc::now();
     return Html(site.templater.render_template(
         std::str::from_utf8(&Pages::get("index.html").unwrap().data).unwrap(),
