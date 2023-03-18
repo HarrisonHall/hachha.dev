@@ -1,0 +1,8 @@
+# Article ordering: oldest to newest
+articles:
+  - name: The first blog post
+    blurb: A sample 1
+    path: sample1
+  - name: Sample 2
+    blurb: A second sample
+    path: sample2

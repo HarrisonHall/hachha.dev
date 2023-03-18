@@ -1,5 +1,6 @@
-html * {
-   font-family: FiraSans !important;
+body * {
+    font-family: MPLUS1;
+    /*font-weight: 500;*/
 }
 
 body {
@@ -13,8 +14,15 @@ body {
     src: url("/fonts/fira_sans/FiraSans-Regular.otf") format("opentype");
 }
 
-#navbar {
-    position: fixed;
+@font-face {
+    font-family: MPLUS1;
+    src: url("/fonts/mplus1/MPLUS1-VariableFont_wght.ttf") format("truetype");
+}
+
+.navbar {
+    position: sticky;
+    width: 100vw;
+    top: 0;
 }
 
 .navbar-home {
@@ -35,11 +43,11 @@ footer p {
 .index-page {
     background-color: #a3be8c;
 }
-
-.section {
-
+.blog-page {
+    background-color: #b48ead;
 }
 
-.section-footer {
-
+.section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
 }

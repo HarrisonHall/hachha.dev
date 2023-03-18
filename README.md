@@ -11,3 +11,4 @@ Site compiles into a single executable.
 ## Stack
 Site is served with an async runtime powered by tokio-axum.
 Templating is powered by handlebars.
+Styling is thanks to spectre.css.

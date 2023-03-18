@@ -8,12 +8,13 @@ use axum::{
     response::Html,
     Json, Router
 };
-use chrono::{Datelike};
 use log::*;
 use rust_embed::RustEmbed;
 use serde_json::json;
 
 mod site;
+mod pages;
+mod util;
 
 use crate::site::Site;
 
@@ -21,13 +22,16 @@ use crate::site::Site;
 #[tokio::main]
 async fn main() {
     // Generate site data
-    let site = Arc::new(Site::new());
+    let site: Arc<Site> = Arc::new(Site::new());
 
     // Set up routing
     let mut app = Router::new();
-    app = app.route("/", get(index));
+    app = app.route("/", get(pages::visit_index));
     app = app.route("/styles/*path", get(style));
     app = app.route("/fonts/*path", get(font));
+    app = app.route("/blog", get(pages::visit_blog_index));
+    app = app.route("/blog/", get(pages::visit_blog_index));
+    app = app.route("/blog/*path", get(pages::visit_blog));
     let app = app.with_state(site.clone());
     
     // Serve
@@ -41,34 +45,19 @@ async fn main() {
 
 
 #[derive(RustEmbed)]
-#[folder = "content/pages/"]
-pub struct Pages;
-
-
-async fn index<'a>(State(site): State<Arc<Site<'a>>>) -> Html<String> {
-    let current_time = chrono::Utc::now();
-    return Html(site.templater.render_template(
-        std::str::from_utf8(&Pages::get("index.html").unwrap().data).unwrap(),
-        &json!({
-            "version": env!("CARGO_PKG_VERSION"),
-            "year": current_time.year(),
-        })
-    ).unwrap());
-}
-
-
-#[derive(RustEmbed)]
 #[folder = "content/styles/"]
 pub struct Styles;
-async fn style(Path(path): Path<String>) -> String {
+async fn style(Path(path): Path<String>) -> Vec<u8> {
     // TODO - decide if we should return text/css mime type
     match Styles::get(&path) {
         Some(file) => {
-           std::str::from_utf8(&(file.data)).unwrap().to_string()
+           //std::str::from_utf8(&(file.data)).unwrap().to_string()
+           file.data.to_vec()
         },
         None => {
             error!("Asked for invalid asset at style/{}", path);
-            "".to_owned()
+            //"".to_owned()
+            vec![]
         }
     }
 }

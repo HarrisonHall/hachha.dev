@@ -5,10 +5,14 @@ use handlebars::Handlebars;
 use log::*;
 use rust_embed::RustEmbed;
 
+use crate::pages::BlogIndexer;
+use crate::util;
+
 
 pub struct Site<'a> {
     pub config: SiteConfig,
     pub templater: Handlebars<'a>,
+    pub blog_indexer: BlogIndexer,
 }
 
 impl<'a> Site<'a> {
@@ -27,6 +31,21 @@ impl<'a> Site<'a> {
         Site {
             config: args,
             templater: create_templater(),
+            blog_indexer: BlogIndexer::new(),
+        }
+    }
+
+    pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> String {
+        // TODO - add default variables to metadata
+        match self.templater.render_template(&page, metadata) {
+            Ok(rendered_page) => {
+                rendered_page
+            },
+            Err(e) => {
+                error!("Error rendering page: {e}");
+                // TODO 404 page
+                "".to_owned()
+            }
         }
     }
 }
@@ -52,14 +71,20 @@ pub struct Templates;
 
 fn create_templater<'a>() -> Handlebars<'a> {
     let mut templater = Handlebars::new();
+
+    // Register templates
     for item in Templates::iter() {
         let raw_template = Templates::get(&item).unwrap();
         let template = std::str::from_utf8(&raw_template.data).unwrap();
         let template_name: String = item.to_string(); //.strip_prefix("templates/").unwrap().to_owned();
         let res = templater.register_partial(&format!("templates/{}", template_name), template);
         if res.is_err() {
-            error!("Unable to register partial {}", template_name);
+            error!("Unable to register partial {}: {:?}", template_name, res);
         }
     }
+
+    // Register helpers
+    templater.register_helper("markdown", Box::new(util::markdown_helper));
+
     return templater;
 }
