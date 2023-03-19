@@ -7,7 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: var(--dark1);
+    background-color: var(--background);
 }
 
 @font-face {
@@ -24,15 +24,12 @@ body {
     position: sticky;
     width: 100vw;
     top: 0;
-    background-color: var(--dark2);
+    background-color: var(--navbar);
 }
 
-.navbar-home {
-    color: #d8dee9;
-    background-color: #d8dee9;
+footer {
+    padding-bottom: .5em;
 }
-
-
 footer p {
     margin-bottom: 0px;
 }
@@ -49,9 +46,23 @@ footer p {
     /*background-color: #b48ead;*/
 }
 
+.box {
+    background-color: var(--panel);
+}
+
 .section {
-    padding-top: 2.5rem;
-    padding-bottom: 2.5rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.empty {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.hero {
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
 }
 
 .divider {

@@ -54,12 +54,12 @@ impl<'a> Site<'a> {
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct SiteConfig {
-    #[arg(short, long, value_name = "PORT", default_value_t = 8080)]
+    #[arg(short, long, value_name = "PORT", default_value_t = 443)]
     pub port: u16,
+    #[arg(short, long, value_name = "CERT_DIR", default_value_t = String::from("/etc/letsencrypt/live/hachha.dev"))]
+    pub cert_dir: String,
     #[arg(short, long, value_name = "LOG_PATH")]
     pub log: Option<String>,
-    #[arg(short, long, value_name = "DIRECTORY")]
-    pub content: Option<PathBuf>,
     #[arg(short, long, default_value_t = false)]
     pub debug: bool,
 }

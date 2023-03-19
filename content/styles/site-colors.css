@@ -1,10 +1,13 @@
 :root {
-    --dark1: #292a2d;
-    --dark2: #252627;
+    --navbar: #292a2d;
+    --background: #252627;
     --text: #d8dee9;
     --headers: #55bde2;
     --flavor1: #b48ead;
     --flavor2:  #a3be8c;
+    --panel: #292a2d;
+
+    --banner: #dddddd;
 
     --warning: #ebcb8b;
     --alert: #bf616a;
