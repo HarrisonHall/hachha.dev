@@ -6,7 +6,7 @@
     <body class="index-page">
         {{> templates/navbar.html }}
 
-        <div class="hero bg-secondary">
+        <div class="hero">
             <div class="container grid-lg text-center">
                 <h1 style="font-size: 4em;"><b>Harrison Hall</b></h1>
                 <p>Developer and grad student.</p>
@@ -15,11 +15,13 @@
 
         {{> templates/generic/section.html section-content="templates/pages/index/about.html" }}
 
-        {{> templates/generic/section.html section-content="templates/pages/index/links.html" section-bg="#81a1c1" }}
+        {{> templates/generic/section.html section-content="templates/pages/index/links.html" }}
+
+        {{> templates/generic/divider_hor.html }}
 
         {{> templates/generic/section.html section-content="templates/pages/index/about.html" }}
 
-        {{> templates/generic/section.html section-content="templates/generic/box.html" section-bg="#81a1c1" box-content="templates/pages/index/about.html" box-padding="1em" box-bg="#bf616a" }}
+        {{> templates/generic/section.html section-content="templates/generic/box.html" box-content="templates/pages/index/about.html" box-padding="1em" box-bg="var(--dark2)" }}
 
         {{> templates/footer.html }}
     </body>

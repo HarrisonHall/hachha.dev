@@ -49,14 +49,10 @@ async fn main() {
 pub struct Styles;
 async fn style(Path(path): Path<String>) -> Vec<u8> {
     // TODO - decide if we should return text/css mime type
-    match Styles::get(&path) {
-        Some(file) => {
-           //std::str::from_utf8(&(file.data)).unwrap().to_string()
-           file.data.to_vec()
-        },
-        None => {
-            error!("Asked for invalid asset at style/{}", path);
-            //"".to_owned()
+    match util::read_embedded_data::<Styles>(&path) {
+        Ok(data) => data,
+        Err(e) => {
+            error!("Asked for invalid asset at style/{path}: {e}");
             vec![]
         }
     }
@@ -67,12 +63,10 @@ async fn style(Path(path): Path<String>) -> Vec<u8> {
 pub struct Fonts;
 async fn font(Path(path): Path<String>) -> Vec<u8> {
     // TODO - decide if we should return text/? mime type
-    match Fonts::get(&path) {
-        Some(file) => {
-           file.data.to_vec()
-        },
-        None => {
-            error!("Asked for invalid asset at fonts/{}", path);
+    match util::read_embedded_data::<Fonts>(&path) {
+        Ok(data) => data,
+        Err(e) => {
+            error!("Asked for invalid asset at fonts/{path}: {e}");
             vec![]
         }
     }

@@ -7,6 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    background-color: var(--dark1);
 }
 
 @font-face {
@@ -23,6 +24,7 @@ body {
     position: sticky;
     width: 100vw;
     top: 0;
+    background-color: var(--dark2);
 }
 
 .navbar-home {
@@ -41,13 +43,35 @@ footer p {
 
 /* Index page */
 .index-page {
-    background-color: #a3be8c;
+    /*background-color: #a3be8c;*/
 }
 .blog-page {
-    background-color: #b48ead;
+    /*background-color: #b48ead;*/
 }
 
 .section {
     padding-top: 2.5rem;
     padding-bottom: 2.5rem;
+}
+
+.divider {
+    border-top-color: var(--text);
+    height: 0.1rem;
+}
+
+.empty {
+    background-color: inherit;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: var(--headers);
+}
+
+p, a {
+    color: var(--text);
+    font-weight: 500;
+}
+
+a:visited {
+    color: var(--text);
 }

@@ -32,31 +32,12 @@ pub fn read_yaml_to_json(yaml: &str) -> Result<serde_json::Value, Box<dyn std::e
     Ok(serde_yaml::from_str::<serde_json::Value>(yaml)?)
 }
 
-/*
-pub fn markdown_helper(h: &Helper,
-    _: &Handlebars,
-    _: &Context,
-    _: &mut RenderContext,
-    out: &mut Output)
-    -> Result<(), RenderError> {
-let markdown_text_var =
-try!(h.param(0)
-.ok_or_else(|| RenderError::new("Param not found for helper \"markdown\"")));
-let markdown_text = markdown_text_var.value().render();
-let html_string = render_html(markdown_text);
-try!(out.write(&html_string));
-Ok(())
-}
- */
-
 handlebars_helper!(markdown_helper: |content: String| {
     let mut options = Options::empty();
     options.insert(Options::ENABLE_STRIKETHROUGH);
     let parser = Parser::new_ext(&content, options);
 
-    // Write to String buffer.
     let mut html_output = String::new();
     html::push_html(&mut html_output, parser);
-    info!("Rendered as `{}`", html_output);
     html_output
 });

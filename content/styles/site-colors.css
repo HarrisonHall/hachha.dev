@@ -1,0 +1,27 @@
+:root {
+    --dark1: #292a2d;
+    --dark2: #252627;
+    --text: #d8dee9;
+    --headers: #55bde2;
+    --flavor1: #b48ead;
+    --flavor2:  #a3be8c;
+
+    --warning: #ebcb8b;
+    --alert: #bf616a;
+}
+
+/*
+:root {
+    --dark1: #222222;
+    --dark2: #333333;
+    --text: #d8dee9;
+
+    --headers: #81a1c1;
+
+    --flavor1: #a3be8c;
+    --flavor2:  #4c566a;
+
+    --warning: #ebcb8b;
+    --alert: #bf616a;
+}
+*/
