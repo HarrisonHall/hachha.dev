@@ -4,6 +4,7 @@ body * {
 }
 
 body {
+    color: var(--text);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -85,4 +86,15 @@ p, a {
 
 a:visited {
     color: var(--text);
+}
+
+.card {
+    background-color: var(--panel);
+    border-color: var(--flavor2);
+}
+
+.btn, .btn-primary, .btn-primary:hover, .btn-primary:focus, .btn.btn-primary, .btn.btn-primary:hover, .btn.btn-primary:focus {
+    color: var(--text);
+    background: var(--flavor1);
+    border-color: var(--flavor1);
 }

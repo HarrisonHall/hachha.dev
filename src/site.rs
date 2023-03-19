@@ -1,13 +1,14 @@
 use std::path::PathBuf;
 
+use chrono::Datelike;
 use clap::Parser;
 use handlebars::Handlebars;
 use log::*;
 use rust_embed::RustEmbed;
+use serde_json::json;
 
 use crate::pages::BlogIndexer;
 use crate::util;
-
 
 pub struct Site<'a> {
     pub config: SiteConfig,
@@ -35,12 +36,20 @@ impl<'a> Site<'a> {
         }
     }
 
+    pub fn get_base_context(&self) -> serde_json::Value {
+        let current_time = chrono::Utc::now();
+        return json!({
+            "version": env!("CARGO_PKG_VERSION"),
+            "year": current_time.year(),
+        });
+    }
+
     pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> String {
-        // TODO - add default variables to metadata
-        match self.templater.render_template(&page, metadata) {
-            Ok(rendered_page) => {
-                rendered_page
-            },
+        let mut render_context = self.get_base_context();
+        util::merge_json(&mut render_context, metadata);
+
+        match self.templater.render_template(&page, &render_context) {
+            Ok(rendered_page) => rendered_page,
             Err(e) => {
                 error!("Error rendering page: {e}");
                 // TODO 404 page
@@ -49,7 +58,6 @@ impl<'a> Site<'a> {
         }
     }
 }
-
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
@@ -63,7 +71,6 @@ pub struct SiteConfig {
     #[arg(short, long, default_value_t = false)]
     pub debug: bool,
 }
-
 
 #[derive(RustEmbed)]
 #[folder = "content/templates/"]

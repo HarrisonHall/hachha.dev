@@ -1,31 +1,27 @@
+use std::borrow::Cow;
 use std::path::PathBuf;
 use std::sync::Arc;
-use std::borrow::Cow;
-
-use clap::Parser;
-use handlebars::Handlebars;
-use log::*;
-use rust_embed::RustEmbed;
 
 use axum::{
     extract::Path,
     extract::State,
-    routing::{get, post, get_service},
     response::Html,
-    Json, Router
+    routing::{get, get_service, post},
+    Json, Router,
 };
+use clap::Parser;
+use handlebars::Handlebars;
+use log::*;
+use rust_embed::RustEmbed;
 use serde_json::json;
 use serde_yaml;
-
 
 use crate::site::Site;
 use crate::util::*;
 
-
 #[derive(RustEmbed)]
 #[folder = "content/pages/blog"]
 pub struct BlogFiles;
-
 
 pub struct BlogData {
     name: String,
@@ -55,14 +51,14 @@ pub struct BlogIndexer {
 impl BlogIndexer {
     pub fn new() -> Self {
         // Parse pages
-        let index = read_embedded_text::<BlogFiles>("index.html").unwrap();
-        let blog_page = read_embedded_text::<BlogFiles>("blog_page.html").unwrap();
+        let index = read_embedded_text::<BlogFiles>("blog.html").unwrap();
+        let blog_page = read_embedded_text::<BlogFiles>("blog_article.html").unwrap();
 
         // Parse blogs
         //// Read yaml metadata
-        let article_metadata: serde_json::Value = read_yaml_to_json(
-            &read_embedded_text::<BlogFiles>("article_metadata.yaml").unwrap()
-        ).unwrap();
+        let article_metadata: serde_json::Value =
+            read_yaml_to_json(&read_embedded_text::<BlogFiles>("article_metadata.yaml").unwrap())
+                .unwrap();
 
         //// Convert to array
         let mut blogs: Vec<BlogData> = Vec::new();
@@ -72,16 +68,15 @@ impl BlogIndexer {
             let name = article_data["name"].as_str().unwrap_or("").to_string();
             let blurb = article_data["blurb"].as_str().unwrap_or("").to_string();
             let path = article_data["path"].as_str().unwrap_or("").to_string();
-            let markdown = read_embedded_text::<BlogFiles>(&format!("articles/{path}/{path}.md")).unwrap();
-            
-            blogs.push(
-                BlogData {
-                    name: name,
-                    blurb: blurb,
-                    path: path,
-                    markdown: markdown,
-                }
-            );
+            let markdown =
+                read_embedded_text::<BlogFiles>(&format!("articles/{path}/{path}.md")).unwrap();
+
+            blogs.push(BlogData {
+                name: name,
+                blurb: blurb,
+                path: path,
+                markdown: markdown,
+            });
         }
 
         BlogIndexer {
@@ -102,13 +97,15 @@ impl BlogIndexer {
     }
 }
 
-
 pub async fn visit_blog_index<'a>(State(site): State<Arc<Site<'a>>>) -> Html<String> {
-        let blog_metadata = site.blog_indexer.blog_metadata();
-        Html(site.render_page(&site.blog_indexer.index, &blog_metadata))
+    let blog_metadata = site.blog_indexer.blog_metadata();
+    Html(site.render_page(&site.blog_indexer.index, &blog_metadata))
 }
 
-pub async fn visit_blog<'a>(Path(blog): Path<String>, State(site): State<Arc<Site<'a>>>) -> Html<String> {
+pub async fn visit_blog<'a>(
+    Path(blog): Path<String>,
+    State(site): State<Arc<Site<'a>>>,
+) -> Html<String> {
     for other_blog in site.blog_indexer.blogs.iter() {
         if blog == other_blog.path {
             let blog_metadata = other_blog.metadata();
@@ -121,7 +118,11 @@ pub async fn visit_blog<'a>(Path(blog): Path<String>, State(site): State<Arc<Sit
     Html("".to_owned())
 }
 
-pub async fn get_blog_resource<'a>(Path(blog): Path<String>, Path(resource): Path<String>, State(site): State<Arc<Site<'a>>>) -> Vec<u8> {
+pub async fn get_blog_resource<'a>(
+    Path(blog): Path<String>,
+    Path(resource): Path<String>,
+    State(site): State<Arc<Site<'a>>>,
+) -> Vec<u8> {
     // TODO get resource from embedded data
     return Vec::new();
 }

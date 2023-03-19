@@ -1,24 +1,23 @@
 use std::net::SocketAddr;
-use std::sync::Arc;
 use std::path::PathBuf;
+use std::sync::Arc;
 
 use axum::{
     extract::Path,
     extract::State,
-    routing::{get, post, get_service},
     response::Html,
-    Json, Router
+    routing::{get, get_service, post},
+    Json, Router,
 };
 use axum_server::tls_rustls::RustlsConfig;
 use log::*;
 use rust_embed::RustEmbed;
 
-mod site;
 mod pages;
+mod site;
 mod util;
 
 use crate::site::Site;
-
 
 #[tokio::main]
 async fn main() {
@@ -28,17 +27,12 @@ async fn main() {
     // Try to set up TLS/HTTPS
     let cert_dir = PathBuf::from(&site.config.cert_dir);
     let tls_config: Option<RustlsConfig> = match cert_dir.is_dir() {
-        true => {
-            Some(RustlsConfig::from_pem_file(
-                cert_dir.join("cert.pem"),
-                cert_dir.join("privkey.pem"),
-            )
-            .await
-            .unwrap())
-        },
-        false => {
-            None
-        }
+        true => Some(
+            RustlsConfig::from_pem_file(cert_dir.join("cert.pem"), cert_dir.join("privkey.pem"))
+                .await
+                .unwrap(),
+        ),
+        false => None,
     };
 
     // Set up routing
@@ -50,7 +44,7 @@ async fn main() {
     app = app.route("/blog/", get(pages::visit_blog_index));
     app = app.route("/blog/*path", get(pages::visit_blog));
     let app = app.with_state(site.clone());
-    
+
     // Serve
     info!("Serving haccha.dev on {}", site.config.port);
     let addr = SocketAddr::from(([0, 0, 0, 0], site.config.port));
@@ -61,18 +55,16 @@ async fn main() {
                 .serve(app.into_make_service())
                 .await
                 .unwrap();
-        },
+        }
         None => {
             debug!("Serving HTTP");
             axum::Server::bind(&addr)
                 .serve(app.into_make_service())
-            .await
-            .unwrap();
+                .await
+                .unwrap();
         }
     };
-    
 }
-
 
 #[derive(RustEmbed)]
 #[folder = "content/styles/"]
