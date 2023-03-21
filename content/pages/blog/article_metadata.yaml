@@ -3,9 +3,6 @@ articles:
   - name: Launching hachha.dev
     blurb: A new site with new features!
     path: site_launch
-  - name: The first blog post
-    blurb: A sample 1
-    path: sample1
-  - name: Sample 2
-    blurb: A second sample
-    path: sample2
+  - name: Designing hachha.dev
+    blurb: Why this is the way it is.
+    path: site_design

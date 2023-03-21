@@ -4,8 +4,6 @@ use std::sync::Arc;
 
 use axum::{
     extract::Path,
-    extract::State,
-    response::Html,
     routing::{get, get_service, post},
     Json, Router,
 };
@@ -88,7 +86,6 @@ async fn get_favicon() -> Vec<u8> {
 #[folder = "content/styles/"]
 pub struct Styles;
 async fn style(Path(path): Path<String>) -> Vec<u8> {
-    // TODO - decide if we should return text/css mime type
     match util::read_embedded_data::<Styles>(&path) {
         Ok(data) => data,
         Err(e) => {
@@ -102,7 +99,6 @@ async fn style(Path(path): Path<String>) -> Vec<u8> {
 #[folder = "content/fonts/"]
 pub struct Fonts;
 async fn font(Path(path): Path<String>) -> Vec<u8> {
-    // TODO - decide if we should return text/? mime type
     match util::read_embedded_data::<Fonts>(&path) {
         Ok(data) => data,
         Err(e) => {

@@ -12,9 +12,7 @@ You're already here!
 ### The Future
 I still have a bunch of this to do here:
 - [ ] Styling
-- [ ] Blog styling
 - [ ] Resume
 - [ ] Projects page
-  - [ ] Projects modal
 - [ ] Landing page information
 - [ ] Games page (link to [trackl.space](trackl.space)?)

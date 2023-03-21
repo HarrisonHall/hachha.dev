@@ -44,14 +44,6 @@ footer p {
     flex: 1;
 }
 
-/* Index page */
-.index-page {
-    /*background-color: #a3be8c;*/
-}
-.blog-page {
-    /*background-color: #b48ead;*/
-}
-
 .box {
     background-color: var(--panel);
 }
@@ -87,7 +79,7 @@ h1, h2, h3, h4, h5, h6 {
 p, a, li {
     color: var(--text);
     font-weight: 500;
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
 
 a:visited {
@@ -110,5 +102,5 @@ code, code.code, pre.code, .code code {
     background: var(--panel);
     font-family: MPLUS1Code;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 0.8rem;
 }
