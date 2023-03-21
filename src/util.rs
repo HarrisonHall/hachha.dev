@@ -1,6 +1,6 @@
 use handlebars::handlebars_helper;
 use log::*;
-use pulldown_cmark::{html, Options, Parser};
+use markdown;
 use rust_embed::RustEmbed;
 use serde_json::json;
 use serde_yaml;
@@ -27,13 +27,10 @@ pub fn read_yaml_to_json(yaml: &str) -> Result<serde_json::Value, Box<dyn std::e
 }
 
 handlebars_helper!(markdown_helper: |content: String| {
-    let mut options = Options::empty();
-    options.insert(Options::ENABLE_STRIKETHROUGH);
-    let parser = Parser::new_ext(&content, options);
-
-    let mut html_output = String::new();
-    html::push_html(&mut html_output, parser);
-    html_output
+    let md_options = markdown::Options::gfm();
+    let mut compiled_markdown = markdown::to_html_with_options(&content, &md_options).unwrap();  // TODO - remove unwrap
+    compiled_markdown = compiled_markdown.replace("<pre>", "<pre class=\"code\">");  // Replace code blocks
+    compiled_markdown
 });
 
 pub fn merge_json(a: &mut serde_json::Value, b: &serde_json::Value) {

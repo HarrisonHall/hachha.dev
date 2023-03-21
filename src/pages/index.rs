@@ -28,3 +28,16 @@ pub async fn visit_index<'a>(State(site): State<Arc<Site<'a>>>) -> Html<String> 
         .to_string(); // TODO avoid unwraps here
     return Html(site.render_page(&index_page, &json!({})));
 }
+
+#[derive(RustEmbed)]
+#[folder = "content/pages/"]
+#[exclude = "*/*"]
+#[include = "404.html"]
+pub struct ErrorPage;
+
+pub async fn visit_404<'a>(State(site): State<Arc<Site<'a>>>) -> Html<String> {
+    let index_page = std::str::from_utf8(&ErrorPage::get("404.html").unwrap().data)
+        .unwrap()
+        .to_string(); // TODO avoid unwraps here
+    return Html(site.render_page(&index_page, &json!({})));
+}

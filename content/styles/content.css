@@ -21,6 +21,11 @@ body {
     src: url("/fonts/mplus1/MPLUS1-VariableFont_wght.ttf") format("truetype");
 }
 
+@font-face {
+    font-family: MPLUS1Code;
+    src: url("/fonts/mplus1/MPLUS1Code-VariableFont_wght.ttf") format("truetype");
+}
+
 .navbar {
     position: sticky;
     width: 100vw;
@@ -79,9 +84,10 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--headers);
 }
 
-p, a {
+p, a, li {
     color: var(--text);
     font-weight: 500;
+    font-size: 1rem;
 }
 
 a:visited {
@@ -97,4 +103,12 @@ a:visited {
     color: var(--text);
     background: var(--flavor1);
     border-color: var(--flavor1);
+}
+
+code, code.code, pre.code, .code code {
+    color: var(--text);
+    background: var(--panel);
+    font-family: MPLUS1Code;
+    font-weight: 400;
+    font-size: 1rem;
 }

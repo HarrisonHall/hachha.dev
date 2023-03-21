@@ -1,4 +1,4 @@
-use std::path::PathBuf;
+use std::sync::Arc;
 
 use chrono::Datelike;
 use clap::Parser;
@@ -9,6 +9,8 @@ use serde_json::json;
 
 use crate::pages::BlogIndexer;
 use crate::util;
+
+pub type SharedSite<'a> = Arc<Site<'a>>;
 
 pub struct Site<'a> {
     pub config: SiteConfig,

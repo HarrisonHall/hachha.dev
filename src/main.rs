@@ -42,7 +42,10 @@ async fn main() {
     app = app.route("/fonts/*path", get(font));
     app = app.route("/blog", get(pages::visit_blog_index));
     app = app.route("/blog/", get(pages::visit_blog_index));
-    app = app.route("/blog/*path", get(pages::visit_blog));
+    app = app.route("/blog/:path", get(pages::visit_blog));
+    app = app.route("/blog/:path/*resource", get(pages::get_blog_resource));
+    app = app.route("/favicon.ico", get(get_favicon));
+    app = app.fallback(get(pages::visit_404));
     let app = app.with_state(site.clone());
 
     // Serve
@@ -64,6 +67,21 @@ async fn main() {
                 .unwrap();
         }
     };
+}
+
+#[derive(RustEmbed)]
+#[folder = "content/media"]
+#[exclude = "*/*"]
+#[include = "favicon.ico"]
+pub struct Favicon;
+async fn get_favicon() -> Vec<u8> {
+    match util::read_embedded_data::<Favicon>("favicon.ico") {
+        Ok(data) => data,
+        Err(_) => {
+            error!("Favicon missing!");
+            vec![]
+        }
+    }
 }
 
 #[derive(RustEmbed)]
