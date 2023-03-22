@@ -38,10 +38,12 @@ async fn main() {
     app = app.route("/", get(pages::visit_index));
     app = app.route("/styles/*path", get(style));
     app = app.route("/fonts/*path", get(font));
+    app = app.route("/media/*path", get(get_media));
     app = app.route("/blog", get(pages::visit_blog_index));
     app = app.route("/blog/", get(pages::visit_blog_index));
     app = app.route("/blog/:path", get(pages::visit_blog));
     app = app.route("/blog/:path/*resource", get(pages::get_blog_resource));
+    app = app.route("/projects", get(pages::visit_projects));
     app = app.route("/favicon.ico", get(get_favicon));
     app = app.fallback(get(pages::visit_404));
     let app = app.with_state(site.clone());
@@ -77,6 +79,20 @@ async fn get_favicon() -> Vec<u8> {
         Ok(data) => data,
         Err(_) => {
             error!("Favicon missing!");
+            vec![]
+        }
+    }
+}
+
+#[derive(RustEmbed)]
+#[folder = "content/media"]
+#[exclude = "favicon.ico"]
+pub struct Media;
+async fn get_media(Path(path): Path<String>) -> Vec<u8> {
+    match util::read_embedded_data::<Media>(&path) {
+        Ok(data) => data,
+        Err(_) => {
+            error!("Asked for missing media {path}");
             vec![]
         }
     }

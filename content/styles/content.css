@@ -91,6 +91,11 @@ a:visited {
     border-color: var(--flavor2);
 }
 
+.blog_card:hover {
+    background-color: var(--selection);
+    cursor: pointer;
+}
+
 .btn, .btn-primary, .btn-primary:hover, .btn-primary:focus, .btn.btn-primary, .btn.btn-primary:hover, .btn.btn-primary:focus {
     color: var(--text);
     background: var(--flavor1);
@@ -103,4 +108,13 @@ code, code.code, pre.code, .code code {
     font-family: MPLUS1Code;
     font-weight: 400;
     font-size: 0.8rem;
+}
+
+
+
+/* Images */
+img.image_circle {
+    border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
 }
