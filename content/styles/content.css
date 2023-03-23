@@ -111,10 +111,15 @@ code, code.code, pre.code, .code code {
 }
 
 
-
 /* Images */
 img.image_circle {
     border-radius: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+img.image_square {
+    border-radius: 0%;
     margin-left: auto;
     margin-right: auto;
 }

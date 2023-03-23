@@ -1,43 +1,37 @@
-use std::path::PathBuf;
-use std::sync::Arc;
+use axum::{extract::State, response::Html};
 
-use axum::{
-    extract::Path,
-    extract::State,
-    response::Html,
-    routing::{get, get_service, post},
-    Json, Router,
-};
-use clap::Parser;
-use handlebars::Handlebars;
-use log::*;
 use rust_embed::RustEmbed;
 use serde_json::json;
 
-use crate::site::Site;
+use crate::site::SharedSite;
+use crate::util;
 
 #[derive(RustEmbed)]
 #[folder = "content/pages/"]
 #[exclude = "*/*"]
 #[include = "index.html"]
-pub struct IndexPage;
+pub struct EmbeddedIndexPage;
 
-pub async fn visit_index<'a>(State(site): State<Arc<Site<'a>>>) -> Html<String> {
-    let index_page = std::str::from_utf8(&IndexPage::get("index.html").unwrap().data)
-        .unwrap()
-        .to_string(); // TODO avoid unwraps here
-    return Html(site.render_page(&index_page, &json!({})));
+pub struct IndexPage {
+    pub raw_page: String,
+    pub index_context: serde_json::Value,
 }
 
-#[derive(RustEmbed)]
-#[folder = "content/pages/"]
-#[exclude = "*/*"]
-#[include = "404.html"]
-pub struct ErrorPage;
+impl IndexPage {
+    pub fn new() -> Self {
+        IndexPage {
+            raw_page: util::read_embedded_text::<EmbeddedIndexPage>("index.html").unwrap(),
+            index_context: json!({}),
+        }
+    }
+}
 
-pub async fn visit_404<'a>(State(site): State<Arc<Site<'a>>>) -> Html<String> {
-    let index_page = std::str::from_utf8(&ErrorPage::get("404.html").unwrap().data)
-        .unwrap()
-        .to_string(); // TODO avoid unwraps here
-    return Html(site.render_page(&index_page, &json!({})));
+pub async fn visit_index<'a>(State(site): State<SharedSite<'a>>) -> Html<String> {
+    match site.page_cache.retrieve("index") {
+        Ok(page) => page,
+        Err(_) => site.page_cache.update(
+            "index",
+            Html(site.render_page(&site.pages.index.raw_page, &json!({}))),
+        ),
+    }
 }

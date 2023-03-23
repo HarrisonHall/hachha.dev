@@ -11,6 +11,10 @@ use crate::util;
 pub struct ProjectsFiles;
 
 pub async fn visit_projects<'a>(State(site): State<SharedSite<'a>>) -> Html<String> {
+    let projects_manifest: serde_json::Value = util::read_yaml_to_json(
+        &util::read_embedded_text::<ProjectsFiles>("projects.yaml").unwrap(),
+    )
+    .unwrap();
     let projects_page = util::read_embedded_text::<ProjectsFiles>("projects.html").unwrap();
-    return Html(site.render_page(&projects_page, &json!({})));
+    return Html(site.render_page(&projects_page, &projects_manifest));
 }

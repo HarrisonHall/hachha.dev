@@ -11,6 +11,7 @@ use axum_server::tls_rustls::RustlsConfig;
 use log::*;
 use rust_embed::RustEmbed;
 
+mod cache;
 mod pages;
 mod site;
 mod util;

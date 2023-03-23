@@ -90,8 +90,8 @@ impl BlogIndexer {
 
 /// Visit blog page
 pub async fn visit_blog_index<'a>(State(site): State<SharedSite<'a>>) -> Html<String> {
-    let blog_metadata = site.blog_indexer.blog_metadata();
-    Html(site.render_page(&site.blog_indexer.index, &blog_metadata))
+    let blog_metadata = site.pages.blog_indexer.blog_metadata();
+    Html(site.render_page(&site.pages.blog_indexer.index, &blog_metadata))
 }
 
 /// Visit individual blog
@@ -99,10 +99,11 @@ pub async fn visit_blog<'a>(
     Path(blog): Path<String>,
     State(site): State<SharedSite<'a>>,
 ) -> Html<String> {
-    for other_blog in site.blog_indexer.blogs.iter() {
+    for other_blog in site.pages.blog_indexer.blogs.iter() {
         if blog == other_blog.path {
             let blog_metadata = other_blog.metadata();
-            let rendered_page = site.render_page(&site.blog_indexer.blog_page, &blog_metadata);
+            let rendered_page =
+                site.render_page(&site.pages.blog_indexer.blog_page, &blog_metadata);
             return Html(rendered_page);
         }
     }

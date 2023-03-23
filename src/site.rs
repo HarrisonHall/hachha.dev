@@ -1,21 +1,28 @@
 use std::sync::Arc;
 
+use axum::response::Html;
 use chrono::Datelike;
 use clap::Parser;
 use handlebars::Handlebars;
 use log::*;
 use rust_embed::RustEmbed;
 use serde_json::json;
+use std::sync::RwLock;
 
-use crate::pages::BlogIndexer;
+use crate::cache::Cache;
+use crate::pages::Pages;
 use crate::util;
+
+const DEFAULT_CACHE_TIMEOUT: f32 = 5.0 * 60.0;
 
 pub type SharedSite<'a> = Arc<Site<'a>>;
 
 pub struct Site<'a> {
     pub config: SiteConfig,
     pub templater: Handlebars<'a>,
-    pub blog_indexer: BlogIndexer,
+    pub pages: Pages,
+    pub page_cache: Cache<Html<String>>,
+    pub content_cache: Cache<Vec<u8>>,
 }
 
 impl<'a> Site<'a> {
@@ -34,7 +41,9 @@ impl<'a> Site<'a> {
         Site {
             config: args,
             templater: create_templater(),
-            blog_indexer: BlogIndexer::new(),
+            pages: Pages::new(),
+            page_cache: Cache::new(DEFAULT_CACHE_TIMEOUT),
+            content_cache: Cache::new(DEFAULT_CACHE_TIMEOUT),
         }
     }
 
@@ -46,6 +55,7 @@ impl<'a> Site<'a> {
         });
     }
 
+    /// TODO - cache results for time limit
     pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> String {
         let mut render_context = self.get_base_context();
         util::merge_json(&mut render_context, metadata);

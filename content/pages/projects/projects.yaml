@@ -1,0 +1,18 @@
+projects:
+  - name: hachha.dev
+    date: 2023-3-18
+    description: My personal website 2.0
+    links:
+      website: https://hachha.dev
+      github: https://github.com/HarrisonHall/hachha.dev
+  - name: configW
+    date: 2023-2-1
+    description: New .configs
+    links:
+      github: https://github.com/HarrisonHall/configW
+  - name: fpsi
+    date: 2022-11-1
+    description: Data and state control software with dynamic plugin support for use with single or multi-node systems. 
+    links:
+      github: https://github.com/HarrisonHall/fpsi
+    image: https://github.com/HarrisonHall/fpsi/raw/master/docs/media/srock_example.png
