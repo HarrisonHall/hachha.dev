@@ -13,7 +13,7 @@
         </div>
 
         {{#each blogs}}
-            {{> templates/generic/section.html section-content="templates/pages/blog/blog_card.html" blog-title=name blog-blurb=blurb blog-path=path }}
+            {{> templates/generic/section.html section-content="templates/pages/blog/blog_card.html" blog-title=name blog-blurb=blurb blog-path=path blog-date=date }}
         {{/each}}
 
         {{> templates/footer.html }}

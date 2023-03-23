@@ -3,6 +3,8 @@ articles:
   - name: Launching hachha.dev
     blurb: A new site with new features!
     path: site_launch
+    date: 2023-3-15
   - name: Designing hachha.dev
     blurb: Why this is the way it is.
     path: site_design
+    date: 2023-3-20

@@ -1,97 +1,118 @@
 use axum::{extract::Path, extract::State, response::Html};
 use log::*;
 use rust_embed::RustEmbed;
+use serde::{Deserialize, Serialize};
 use serde_json::json;
 
+use crate::pages::error::visit_404;
 use crate::site::SharedSite;
 use crate::util::*;
 
 #[derive(RustEmbed)]
 #[folder = "content/pages/blog"]
-pub struct BlogFiles;
+pub struct EmbeddedBlogFiles;
 
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(default)]
 pub struct BlogData {
     /// Title of the blog
     name: String,
     /// Description of blog
     blurb: String,
+    /// Date
+    date: String, // TODO - another format?
     /// Actual local path to blog
     path: String,
+
     /// Read markdown of blog entry
     markdown: String,
+    /// Raw cached blog json
+    cached_json: serde_json::Value,
 }
 
-impl BlogData {
-    pub fn metadata(&self) -> serde_json::Value {
-        json!({
-            "name": self.name,
-            "blurb": self.blurb,
-            "path": self.path,
-            "markdown": self.markdown,
-            "blog-content": self.markdown,
-        })
+impl Default for BlogData {
+    fn default() -> Self {
+        BlogData {
+            name: "".to_string(),
+            blurb: "".to_string(),
+            date: "".to_string(),
+            path: "".to_string(),
+            markdown: "".to_string(),
+            cached_json: json!({}),
+        }
     }
 }
 
 pub struct BlogIndexer {
     index: String,
-    blog_page: String,
+    article: String,
     blogs: Vec<BlogData>,
 }
 
 impl BlogIndexer {
     pub fn new() -> Self {
         // Parse pages
-        let index = read_embedded_text::<BlogFiles>("blog.html").unwrap();
-        let blog_page = read_embedded_text::<BlogFiles>("blog_article.html").unwrap();
+        let index = read_embedded_text::<EmbeddedBlogFiles>("blogs.html").unwrap();
+        let article = read_embedded_text::<EmbeddedBlogFiles>("article.html").unwrap();
 
         // Parse blogs
         //// Read yaml metadata
-        let article_metadata: serde_json::Value =
-            read_yaml_to_json(&read_embedded_text::<BlogFiles>("article_metadata.yaml").unwrap())
-                .unwrap();
-
-        //// Convert to array
+        let article_metadata: serde_json::Value = read_yaml_to_json(
+            &read_embedded_text::<EmbeddedBlogFiles>("article_metadata.yaml").unwrap(),
+        )
+        .unwrap();
+        //// Read articles list
         let mut blogs: Vec<BlogData> = Vec::new();
         let articles = &article_metadata["articles"].as_array().unwrap();
         for article_data in articles.iter().rev() {
-            let article_data = article_data.as_object().unwrap();
-            let name = article_data["name"].as_str().unwrap_or("").to_string();
-            let blurb = article_data["blurb"].as_str().unwrap_or("").to_string();
-            let path = article_data["path"].as_str().unwrap_or("").to_string();
-            let markdown =
-                read_embedded_text::<BlogFiles>(&format!("articles/{path}/{path}.md")).unwrap();
-
-            blogs.push(BlogData {
-                name: name,
-                blurb: blurb,
-                path: path,
-                markdown: markdown,
-            });
+            let mut blog: BlogData = serde_json::value::from_value(article_data.clone()).unwrap();
+            let path = blog.path.clone();
+            blog.markdown =
+                read_embedded_text::<EmbeddedBlogFiles>(&format!("articles/{path}/{path}.md"))
+                    .unwrap();
+            blog.cached_json = article_data.clone();
+            blogs.push(blog);
         }
 
         BlogIndexer {
             index: index,
-            blog_page: blog_page,
+            article: article,
             blogs: blogs,
         }
     }
 
-    pub fn blog_metadata(&self) -> serde_json::Value {
+    fn blog_metadata(&self) -> serde_json::Value {
         let mut metadata = json!({});
         let mut blogs: Vec<serde_json::Value> = Vec::new();
         for blog in self.blogs.iter() {
-            blogs.push(blog.metadata());
+            blogs.push(blog.cached_json.clone());
         }
         metadata["blogs"] = serde_json::Value::Array(blogs);
         metadata
+    }
+
+    fn get_blog(&self, path: &str) -> Option<&BlogData> {
+        for other_blog in self.blogs.iter() {
+            if path == other_blog.path {
+                return Some(other_blog);
+            }
+        }
+        None
     }
 }
 
 /// Visit blog page
 pub async fn visit_blog_index<'a>(State(site): State<SharedSite<'a>>) -> Html<String> {
-    let blog_metadata = site.pages.blog_indexer.blog_metadata();
-    Html(site.render_page(&site.pages.blog_indexer.index, &blog_metadata))
+    match site.page_cache.retrieve("blog") {
+        Ok(page) => page,
+        Err(_) => {
+            let blog_metadata = site.pages.blog_indexer.blog_metadata();
+            site.page_cache.update(
+                "blog",
+                Html(site.render_page(&site.pages.blog_indexer.index, &blog_metadata)),
+            )
+        }
+    }
 }
 
 /// Visit individual blog
@@ -99,17 +120,25 @@ pub async fn visit_blog<'a>(
     Path(blog): Path<String>,
     State(site): State<SharedSite<'a>>,
 ) -> Html<String> {
-    for other_blog in site.pages.blog_indexer.blogs.iter() {
-        if blog == other_blog.path {
-            let blog_metadata = other_blog.metadata();
-            let rendered_page =
-                site.render_page(&site.pages.blog_indexer.blog_page, &blog_metadata);
-            return Html(rendered_page);
+    let full_blog_path: String = format!("blog/{blog}");
+    match site.page_cache.retrieve(&full_blog_path) {
+        Ok(page) => {
+            return page;
         }
-    }
+        Err(_) => {
+            if let Some(blog) = site.pages.blog_indexer.get_blog(&blog) {
+                let mut blog_metadata = blog.cached_json.clone();
+                blog_metadata["blog-content"] = serde_json::Value::String(blog.markdown.clone());
+                return site.page_cache.update(
+                    &full_blog_path,
+                    Html(site.render_page(&site.pages.blog_indexer.article, &blog_metadata)),
+                );
+            };
+        }
+    };
 
-    error!("Visiting invalid blog {}", blog);
-    Html("".to_owned())
+    error!("Visiting invalid blog {}", full_blog_path);
+    return visit_404(State(site)).await;
 }
 
 /// Get local blog resource
@@ -118,7 +147,7 @@ pub async fn get_blog_resource<'a>(
     State(_site): State<SharedSite<'a>>,
 ) -> Vec<u8> {
     let blog_resource: String = format!("articles/{blog}/{resource}");
-    match read_embedded_data::<BlogFiles>(&blog_resource) {
+    match read_embedded_data::<EmbeddedBlogFiles>(&blog_resource) {
         Ok(data) => data,
         Err(_) => {
             error!("Unable to render blog resource {blog_resource}");

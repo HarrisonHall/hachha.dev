@@ -7,13 +7,10 @@ use handlebars::Handlebars;
 use log::*;
 use rust_embed::RustEmbed;
 use serde_json::json;
-use std::sync::RwLock;
 
 use crate::cache::Cache;
-use crate::pages::Pages;
+use crate::pages::{visit_404, Pages};
 use crate::util;
-
-const DEFAULT_CACHE_TIMEOUT: f32 = 5.0 * 60.0;
 
 pub type SharedSite<'a> = Arc<Site<'a>>;
 
@@ -39,11 +36,11 @@ impl<'a> Site<'a> {
 
         // Configure site struct
         Site {
-            config: args,
             templater: create_templater(),
             pages: Pages::new(),
-            page_cache: Cache::new(DEFAULT_CACHE_TIMEOUT),
-            content_cache: Cache::new(DEFAULT_CACHE_TIMEOUT),
+            page_cache: Cache::new(args.cache_timeout),
+            content_cache: Cache::new(args.cache_timeout),
+            config: args,
         }
     }
 
@@ -55,7 +52,6 @@ impl<'a> Site<'a> {
         });
     }
 
-    /// TODO - cache results for time limit
     pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> String {
         let mut render_context = self.get_base_context();
         util::merge_json(&mut render_context, metadata);
@@ -64,8 +60,7 @@ impl<'a> Site<'a> {
             Ok(rendered_page) => rendered_page,
             Err(e) => {
                 error!("Error rendering page: {e}");
-                // TODO 404 page
-                "".to_owned()
+                return "".to_owned(); // TODO - render 404 page
             }
         }
     }
@@ -76,10 +71,12 @@ impl<'a> Site<'a> {
 pub struct SiteConfig {
     #[arg(short, long, value_name = "PORT", default_value_t = 443)]
     pub port: u16,
-    #[arg(short, long, value_name = "CERT_DIR", default_value_t = String::from("/etc/letsencrypt/live/hachha.dev"))]
+    #[arg(long, value_name = "CERT_DIR", default_value_t = String::from("/etc/letsencrypt/live/hachha.dev"))]
     pub cert_dir: String,
-    #[arg(short, long, value_name = "LOG_PATH")]
+    #[arg(long, value_name = "LOG_PATH")]
     pub log: Option<String>,
+    #[arg(long, default_value_t = 5.0 * 60.0)] // Default cache every 5 minutes
+    pub cache_timeout: f32,
     #[arg(short, long, default_value_t = false)]
     pub debug: bool,
 }
