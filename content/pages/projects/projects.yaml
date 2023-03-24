@@ -7,12 +7,12 @@ projects:
     image: https://github.com/HarrisonHall/fpsi/raw/master/docs/media/srock_example.png
   - name: configW
     date: 2023-2-1
-    description: New .configs
+    description: New .configs. Designed for nixos and wayland.
     links:
       github: https://github.com/HarrisonHall/configW
   - name: hachha.dev
     date: 2023-3-18
-    description: My personal website 2.0
+    description: My personal website 2.0. You're already here!
     links:
       website: https://hachha.dev
       github: https://github.com/HarrisonHall/hachha.dev

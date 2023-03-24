@@ -8,6 +8,10 @@ use std::collections::HashMap;
 use crate::site::SharedSite;
 use crate::util;
 
+#[derive(RustEmbed)]
+#[folder = "content/pages/projects"]
+pub struct EmbeddedProjectsFiles;
+
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(default)]
 pub struct ProjectData {
@@ -26,6 +30,18 @@ pub struct ProjectData {
     cached_json: serde_json::Value,
 }
 
+impl ProjectData {
+    fn metadata(&self) -> serde_json::Value {
+        json!({
+            "name": self.name,
+            "description": self.description,
+            "date": self.date,
+            "image": self.image,
+            "links": self.links,
+        })
+    }
+}
+
 impl Default for ProjectData {
     fn default() -> Self {
         ProjectData {
@@ -38,10 +54,6 @@ impl Default for ProjectData {
         }
     }
 }
-
-#[derive(RustEmbed)]
-#[folder = "content/pages/projects"]
-pub struct EmbeddedProjectsFiles;
 
 pub struct ProjectPage {
     index: String,
@@ -69,7 +81,9 @@ impl ProjectPage {
     }
 
     pub fn project_metadata(&self) -> serde_json::Value {
-        return self.raw_projects.clone();
+        return json!({
+            "projects": self.projects.iter().map(|proj| proj.metadata()).collect::<Vec<serde_json::Value>>()
+        });
     }
 }
 
