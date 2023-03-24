@@ -1,0 +1,12 @@
+<div class="card project_card">
+    <div class="card-header">
+        <div class="card-title h5">{{project-name}}</div>
+    </div>
+    <div class="card-body">
+        <p>{{project-description}}</p>
+        {{> templates/generic/date_badge.html date=project-date }}
+        {{#each project-links}}
+            <button class="btn" onclick="window.location.href='{{this}}';">{{@key}}</button>
+        {{/each}}
+    </div>
+</div>

@@ -16,19 +16,44 @@ axum for its 1) `tokio` integration, 2) `async` support, and
 3) 2023 support.
 
 Ultimately, the site (will) build into a simple struct at launch.
-If there are any gotchas (panics), they should happen during the creation
+If there are any gotchas (`panics`), they should happen during the creation
 of this struct or while attempting to bind to the specified port.
+As far as the site struct goes, I only expect `panic`s to occur
+when creating the `Pages` struct by parsing embedded files.
 
 ```rust
 pub struct Site<'a> {
     pub config: SiteConfig,
     pub templater: Handlebars<'a>,
-    pub blog_indexer: BlogIndexer,
+    pub pages: Pages,
+    pub page_cache: Cache<Html<String>>,
+    pub content_cache: Cache<Vec<u8>>,
 }
 ```
 
 The entire project is designed to compile into a single binary- content
 included.
+
+### Cache
+Templating the same information onto the same page over and over is a
+cpu-time-waster. I developed a [cache](https://github.com/HarrisonHall/hachha.dev/blob/master/src/cache.rs)
+system that can be used by different routes to check if the page has
+already been filled out recently. You can figure the cache timeout on
+the command-line, but the default is 5 minutes.
+The cache struct has safe async support built in, so it can be called
+by different routes handling different requests at the same time.
+If some page needs to be rendered every time, I just won't deal with
+the cache at all.
+
+```rust
+/// Cache
+pub struct Cache<T> {
+    /// Statefull entries
+    entries: RwLock<HashMap<String, CacheEntry<T>>>,
+    /// Time until an entry expires (in seconds)
+    timeout: f32,
+}
+```
 
 ## Design
 ### Index

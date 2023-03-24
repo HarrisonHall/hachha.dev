@@ -6,7 +6,15 @@
     <body class="projects_page">
         {{> templates/navbar.html }}
 
-        <p>Github?!?!?</p>
+        <div class="container grid-md empty">
+            {{> templates/pages/projects/github_banner.html }}
+        </div>
+
+        {{> templates/generic/divider_hor.html }}
+
+        {{#each projects}}
+            {{> templates/generic/section.html section-content="templates/pages/projects/project_card.html" project-name=name project-description=description project-date=date project-links=links}}
+        {{/each}}
  
         {{> templates/footer.html }}
     </body>

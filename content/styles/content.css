@@ -93,6 +93,9 @@ a:visited {
 
 .blog_card:hover {
     background-color: var(--selection);
+}
+
+.click_box:hover {
     cursor: pointer;
 }
 
@@ -108,6 +111,11 @@ code, code.code, pre.code, .code code {
     font-family: MPLUS1Code;
     font-weight: 400;
     font-size: 0.8rem;
+}
+
+.chip {
+    background: var(--flavor1);
+    font-weight: 500;
 }
 
 

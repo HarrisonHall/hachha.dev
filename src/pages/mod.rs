@@ -12,6 +12,7 @@ pub struct Pages {
     pub index: IndexPage,
     pub error: ErrorPage,
     pub blog_indexer: BlogIndexer,
+    pub projects: ProjectPage,
 }
 
 impl Pages {
@@ -20,6 +21,7 @@ impl Pages {
             index: IndexPage::new(),
             error: ErrorPage::new(),
             blog_indexer: BlogIndexer::new(),
+            projects: ProjectPage::new(),
         }
     }
 }
