@@ -13,6 +13,5 @@ You're already here!
 I still have a bunch of this to do here:
 - [ ] Styling
 - [ ] Resume
-- [ ] Projects page
 - [ ] Landing page information
 - [ ] Games page (link to [trackl.space](trackl.space)?)

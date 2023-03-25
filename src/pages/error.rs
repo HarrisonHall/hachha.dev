@@ -9,7 +9,7 @@ use crate::util;
 #[folder = "content/pages/"]
 #[exclude = "*/*"]
 #[include = "404.html"]
-pub struct EmbeddedErrorPage;
+struct EmbeddedErrorPage;
 
 pub struct ErrorPage {
     pub raw_page: String,

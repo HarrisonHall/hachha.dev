@@ -1,5 +1,4 @@
-use axum::{extract::Path, extract::State, response::Html};
-use log::*;
+use axum::{extract::State, response::Html};
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -10,11 +9,11 @@ use crate::util;
 
 #[derive(RustEmbed)]
 #[folder = "content/pages/projects"]
-pub struct EmbeddedProjectsFiles;
+struct EmbeddedProjectsFiles;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(default)]
-pub struct ProjectData {
+struct ProjectData {
     /// Title of the blog
     name: String,
     /// Description of blog
@@ -58,6 +57,7 @@ impl Default for ProjectData {
 pub struct ProjectPage {
     index: String,
     projects: Vec<ProjectData>,
+    #[allow(dead_code)]
     raw_projects: serde_json::Value,
 }
 

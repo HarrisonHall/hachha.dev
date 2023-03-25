@@ -5,7 +5,7 @@ use std::sync::RwLock;
 use std::time::Instant;
 
 /// State for cached item
-#[derive(PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum CachedItemState {
     /// Item is not in cache
     Missing,
@@ -21,6 +21,7 @@ pub enum CachedItemState {
 struct CacheEntry<T> {
     entry: T,
     update_time: Instant,
+    timeout_override: Option<f32>,
 }
 
 impl<T> CacheEntry<T> {
@@ -28,10 +29,12 @@ impl<T> CacheEntry<T> {
         CacheEntry {
             entry: item,
             update_time: Instant::now(),
+            timeout_override: None,
         }
     }
 
     fn is_expired(&self, timeout: f32) -> bool {
+        let timeout = self.timeout_override.unwrap_or(timeout);
         let time_since_update: f32 = self.update_time.elapsed().as_secs_f32();
         return time_since_update > timeout;
     }
@@ -50,6 +53,7 @@ pub struct Cache<T> {
     timeout: f32,
 }
 
+#[allow(dead_code)]
 impl<T: Clone> Cache<T> {
     pub fn new(timeout: f32) -> Self {
         Cache {
@@ -99,14 +103,43 @@ impl<T: Clone> Cache<T> {
     }
 
     pub fn update(&self, name: &str, item: T) -> T {
+        return self.update_override(name, item, None);
+    }
+
+    pub fn update_override(&self, name: &str, item: T, custom_timeout: Option<f32>) -> T {
         if let Ok(mut entries) = self.entries.write() {
             match entries.get_mut(name) {
                 Some(entry) => entry.update(item.clone()),
                 None => {
-                    entries.insert(name.to_string(), CacheEntry::new(item.clone()));
+                    let mut entry = CacheEntry::new(item.clone());
+                    entry.timeout_override = custom_timeout;
+                    entries.insert(name.to_string(), entry);
                 }
             };
         }
         return item; // Return original for one-line update
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::cache::*;
+
+    #[test]
+    fn general_cacheing() {
+        let cache: Cache<i8> = Cache::new(f32::INFINITY);
+        cache.update("foo", 8);
+        cache.update("bar", -16);
+
+        let foo_result = cache.retrieve("foo");
+        assert!(foo_result.is_ok());
+        assert_eq!(cache.get_state("foo"), CachedItemState::Active);
+
+        assert!(cache.in_cache("bar"));
+        assert_eq!(cache.retrieve_force("bar"), Some(-16));
+
+        let baz_result = cache.retrieve("baz");
+        assert_eq!(baz_result, Err(CachedItemState::Missing));
+        assert_eq!(cache.retrieve_force("baz"), None);
     }
 }

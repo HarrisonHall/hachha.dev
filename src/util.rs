@@ -1,8 +1,6 @@
 use handlebars::handlebars_helper;
-use log::*;
 use markdown;
 use rust_embed::RustEmbed;
-use serde_json::json;
 use serde_yaml;
 
 pub fn read_embedded_text<Embed: RustEmbed>(path: &str) -> Result<String, String> {

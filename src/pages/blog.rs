@@ -10,7 +10,7 @@ use crate::util::*;
 
 #[derive(RustEmbed)]
 #[folder = "content/pages/blog"]
-pub struct EmbeddedBlogFiles;
+struct EmbeddedBlogFiles;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(default)]

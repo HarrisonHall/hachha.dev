@@ -10,7 +10,7 @@ use crate::util;
 #[folder = "content/pages/"]
 #[exclude = "*/*"]
 #[include = "index.html"]
-pub struct EmbeddedIndexPage;
+struct EmbeddedIndexPage;
 
 pub struct IndexPage {
     pub raw_page: String,
