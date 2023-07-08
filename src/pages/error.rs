@@ -5,6 +5,8 @@ use serde_json::json;
 use crate::site::SharedSite;
 use crate::util;
 
+pub const WORST_CASE_404: &str = "<html>404</html>";
+
 #[derive(RustEmbed)]
 #[folder = "content/pages/"]
 #[exclude = "*/*"]

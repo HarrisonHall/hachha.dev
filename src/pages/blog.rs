@@ -20,7 +20,7 @@ pub struct BlogData {
     /// Description of blog
     blurb: String,
     /// Date
-    date: String, // TODO - another format?
+    date: String,
     /// Actual local path to blog
     path: String,
 

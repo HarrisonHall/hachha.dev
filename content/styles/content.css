@@ -125,11 +125,11 @@ a:visited {
     border-width: none;
 }
 
-code, code.code, pre.code, .code code {
+code, code.code, pre.code, .code code, pre > code, .hljs {
     color: var(--text);
     background: var(--panel);
     font-family: MPLUS1Code;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 0.8rem;
 }
 

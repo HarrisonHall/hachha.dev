@@ -1,18 +1,14 @@
 # hachha.dev
 2023 attempt at a new personal website.
-Site compiles into a single executable.
+Site compiles into a single executable w/ embedded content.
 View it at [hachha.dev](http://hachha.dev)!
-
-> **Warning**
-> This site is still under construction
 
 ## Building & Serving
 ```fish
 cargo build --release
 patchelf --set-interpreter /usr/lib64/ld-linux-x86-64.so.2 target/release/hachha-dev
-set IP "CUSTOM_IP"
-scp target/release/hachha-dev root@$IP:~/hachha-dev
-SSH $IP
+scp target/release/hachha-dev root@$<SERVER>:~/hachha-dev
+SSH root@$<SERVER>
 ./hachha-dev [--debug]
 ```
 
@@ -27,10 +23,5 @@ Styling is thanks to spectre.css.
     serving are checked
 
 ## TODO
-- [ ] Styling
-- [ ] Blog styling
-- [ ] Resume
-- [ ] Projects page
-  - [ ] Projects modal
-- [ ] Landing page information
+- [ ] Add rss/atom support for blog
 - [ ] Games page (link to [trackl.space](trackl.space)?)

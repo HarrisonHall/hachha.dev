@@ -9,7 +9,7 @@ use rust_embed::RustEmbed;
 use serde_json::json;
 
 use crate::cache::Cache;
-use crate::pages::{visit_404, Pages};
+use crate::pages::Pages;
 use crate::util;
 
 pub type SharedSite<'a> = Arc<Site<'a>>;
@@ -60,7 +60,7 @@ impl<'a> Site<'a> {
             Ok(rendered_page) => rendered_page,
             Err(e) => {
                 error!("Error rendering page: {e}");
-                return "".to_owned(); // TODO - render 404 page
+                return crate::pages::WORST_CASE_404.to_owned();
             }
         }
     }

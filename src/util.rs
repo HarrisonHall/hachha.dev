@@ -1,7 +1,10 @@
 use handlebars::handlebars_helper;
+use log::*;
 use markdown;
 use rust_embed::RustEmbed;
 use serde_yaml;
+
+const MD_RENDERING_ERROR: &str = "<p>Unable to render markdown :(</p>";
 
 pub fn read_embedded_text<Embed: RustEmbed>(path: &str) -> Result<String, String> {
     match Embed::get(path) {
@@ -26,7 +29,13 @@ pub fn read_yaml_to_json(yaml: &str) -> Result<serde_json::Value, Box<dyn std::e
 
 handlebars_helper!(markdown_helper: |content: String| {
     let md_options = markdown::Options::gfm();
-    let mut compiled_markdown = markdown::to_html_with_options(&content, &md_options).unwrap();  // TODO - remove unwrap
+    let mut compiled_markdown = match markdown::to_html_with_options(&content, &md_options) {
+        Ok(compiled_markdown) => compiled_markdown,
+        Err(e) => {
+            error!("Markdown rendering error: {}", e);
+            MD_RENDERING_ERROR.to_string()
+        }
+    };
     compiled_markdown = compiled_markdown.replace("<pre>", "<pre class=\"code\">");  // Replace code blocks
     compiled_markdown
 });

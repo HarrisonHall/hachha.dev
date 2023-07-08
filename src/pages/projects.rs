@@ -19,7 +19,7 @@ struct ProjectData {
     /// Description of blog
     description: String,
     /// Date
-    date: String, // TODO - another format?
+    date: String,
     /// Path to image (if existent)
     image: Option<String>,
     /// Links to project
@@ -76,7 +76,7 @@ impl ProjectPage {
         ProjectPage {
             index: util::read_embedded_text::<EmbeddedProjectsFiles>("projects.html").unwrap(),
             projects: project_list,
-            raw_projects: raw_projects,
+            raw_projects,
         }
     }
 

@@ -451,7 +451,7 @@ dependencies = [
 
 [[package]]
 name = "hachha-dev"
-version = "0.5.0"
+version = "0.6.0"
 dependencies = [
  "axum",
  "axum-server",
@@ -698,9 +698,9 @@ dependencies = [
 
 [[package]]
 name = "markdown"
-version = "1.0.0-alpha.7"
+version = "1.0.0-alpha.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "98de49c677e95e00eaa74c42a0b07ea55e1e0b1ebca5b2cbc7657f288cd714eb"
+checksum = "b1bd98c3b68451b0390a289c58c856adb4e2b50cc40507ce2a105d5b00eafc80"
 dependencies = [
  "unicode-id",
 ]

@@ -10,8 +10,5 @@ I will likely eventually make it redirect here.
 You're already here!
 
 ### The Future
-I still have a bunch of this to do here:
-- [ ] Styling
-- [ ] Resume
-- [ ] Landing page information
-- [ ] Games page (link to [trackl.space](trackl.space)?)
+At some point, I'd like to make a similar website for some of my work on games and have
+the games page link there. 
