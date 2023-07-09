@@ -1,5 +1,6 @@
 use axum::{extract::Path, extract::State, response::Html};
 use log::*;
+use rss::{ChannelBuilder, Item, ItemBuilder};
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -47,6 +48,7 @@ pub struct BlogIndexer {
     index: String,
     article: String,
     blogs: Vec<BlogData>,
+    cached_rss: String,
 }
 
 impl BlogIndexer {
@@ -73,11 +75,45 @@ impl BlogIndexer {
             blog.cached_json = article_data.clone();
             blogs.push(blog);
         }
+        //// Parse into rss feed
+        let mut channel = ChannelBuilder::default();
+        channel
+            .title("hachha.dev".to_string())
+            .link("https://hachha.dev".to_string())
+            .description("hachha.dev blog feed".to_string());
+        let mut items = Vec::new();
+        for blog in blogs.iter() {
+            let item: Item = ItemBuilder::default()
+                .title(Some(blog.name.clone()))
+                .description(Some(blog.blurb.clone()))
+                .link(Some(format!(
+                    "https://hachha.dev/blog/{}",
+                    blog.path.as_str()
+                )))
+                .pub_date(Some(
+                    (match chrono::DateTime::parse_from_str(
+                        &format!("{} 00:00:00+0000", blog.date.as_str()),
+                        "%F %H:%M:%S%z",
+                    ) {
+                        Ok(pub_date) => pub_date,
+                        Err(e) => {
+                            error!("Blog date error: {} -> {}", blog.date, e);
+                            chrono::offset::Utc::now().into()
+                        }
+                    })
+                    .to_rfc2822(),
+                ))
+                .build();
+            items.push(item);
+        }
+        channel.items(items);
+        let cached_rss = channel.build().to_string();
 
         BlogIndexer {
-            index: index,
-            article: article,
-            blogs: blogs,
+            index,
+            article,
+            blogs,
+            cached_rss,
         }
     }
 
@@ -120,6 +156,10 @@ pub async fn visit_blog<'a>(
     Path(blog): Path<String>,
     State(site): State<SharedSite<'a>>,
 ) -> Html<String> {
+    // Visit index
+    if blog.is_empty() {
+        return visit_blog_index(State(site)).await;
+    }
     let full_blog_path: String = format!("blog/{blog}");
     match site.page_cache.retrieve(&full_blog_path) {
         Ok(page) => {
@@ -154,4 +194,9 @@ pub async fn get_blog_resource<'a>(
             vec![]
         }
     }
+}
+
+/// Get blog as rss
+pub async fn visit_blog_rss<'a>(State(site): State<SharedSite<'a>>) -> String {
+    site.pages.blog_indexer.cached_rss.clone()
 }

@@ -37,7 +37,7 @@ async fn main() {
     app = app.route("/fonts/*path", get(resources::get_font));
     app = app.route("/media/*path", get(resources::get_media));
     app = app.route("/blog", get(pages::visit_blog_index));
-    app = app.route("/blog/", get(pages::visit_blog_index));
+    app = app.route("/blog.rss", get(pages::visit_blog_rss));
     app = app.route("/blog/:path", get(pages::visit_blog));
     app = app.route("/blog/:path/*resource", get(pages::get_blog_resource));
     app = app.route("/projects", get(pages::visit_projects));

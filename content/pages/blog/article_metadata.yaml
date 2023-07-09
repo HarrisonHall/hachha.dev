@@ -3,12 +3,12 @@ articles:
   - name: Launching hachha.dev
     blurb: A new site with new features!
     path: site_launch
-    date: 2023-3-15
+    date: "2023-03-15"
   - name: Designing hachha.dev
     blurb: Why this is the way it is.
     path: site_design
-    date: 2023-3-20
+    date: "2023-03-20"
   - name: nix, hx, & cdtest
     blurb: Recent explorations
     path: nix1
-    date: 2023-7-7
+    date: "2023-07-07"
