@@ -1,14 +1,14 @@
 # Article ordering: oldest to newest
 articles:
-  - name: Launching hachha.dev
-    blurb: A new site with new features!
-    path: site_launch
-    date: "2023-03-15"
-  - name: Designing hachha.dev
+  - name: Launching and Designing hachha.dev
     blurb: Why this is the way it is.
-    path: site_design
+    path: site_launch_design
     date: "2023-03-20"
   - name: nix, hx, & cdtest
-    blurb: Recent explorations
+    blurb: Recent explorations - July 2023
     path: nix1
     date: "2023-07-07"
+  - name: Services, Hobbies, & Productivity
+    blurb: Recent explorations - October 2023
+    path: services1
+    date: "2023-10-01"

@@ -21,7 +21,3 @@ Styling is thanks to spectre.css.
 - Site should only panic before launch
   - `unwrap()`s are only used during `Site` creation, all `Results` during
     serving are checked
-
-## TODO
-- [ ] Add rss/atom support for blog
-- [ ] Games page (link to [trackl.space](trackl.space)?)
