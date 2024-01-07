@@ -1,16 +1,17 @@
 [package]
 name = "hachha-dev"
-version = "0.6.0"
+version = "0.7.0"
 edition = "2021"
 authors = ["Harrison Hall <harrisonchristianhall@gmail.com>"]
 description = "Personal website 2.0"
 readme = "README.md"
 homepage = "https://hachha.dev"
 repository = "https://github.com/harrisonhall/hachha.dev"
-keywords = ["website"]
+keywords = ["website", "hachha"]
 
 
 [dependencies]
+anyhow = "1.0.79"
 axum = "0.6.11"
 axum-server = { version = "0.4.7", features = ["tls-rustls"] }
 chrono = "0.4.26"
