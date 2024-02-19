@@ -1,12 +1,16 @@
+use std::path::PathBuf;
 use std::sync::Arc;
+use std::time::Duration;
 
 use axum::response::Html;
+use axum_server::tls_rustls::RustlsConfig;
 use chrono::Datelike;
 use clap::Parser;
 use handlebars::Handlebars;
 use log::*;
 use rust_embed::RustEmbed;
 use serde_json::json;
+use tokio::time::sleep;
 
 use crate::cache::Cache;
 use crate::pages::Pages;
@@ -103,4 +107,16 @@ fn create_templater<'a>() -> Handlebars<'a> {
     templater.register_helper("markdown", Box::new(util::markdown_helper));
 
     return templater;
+}
+
+/// Reload site by reloading config
+pub async fn reload_tls(config: RustlsConfig, cert: PathBuf, priv_key: PathBuf) {
+    loop {
+        sleep(Duration::from_secs(48 * 60 * 60)).await; // Every 48 hours
+        config
+            .reload_from_pem_file(cert.clone(), priv_key.clone())
+            .await
+            .unwrap();
+        debug!("Reloaded rustls configuration");
+    }
 }

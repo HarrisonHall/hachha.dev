@@ -22,11 +22,17 @@ async fn main() {
     // Try to set up TLS/HTTPS
     let cert_dir = PathBuf::from(&site.config.cert_dir);
     let tls_config: Option<RustlsConfig> = match cert_dir.is_dir() {
-        true => Some(
-            RustlsConfig::from_pem_file(cert_dir.join("cert.pem"), cert_dir.join("privkey.pem"))
+        true => Some({
+            let cert = cert_dir.join("cert.pem");
+            let priv_key = cert_dir.join("privkey.pem");
+            // Create config
+            let config = RustlsConfig::from_pem_file(cert.clone(), priv_key.clone())
                 .await
-                .unwrap(),
-        ),
+                .unwrap();
+            // Spawn a task to reload tls
+            tokio::spawn(site::reload_tls(config.clone(), cert, priv_key));
+            config
+        }),
         false => None,
     };
 
