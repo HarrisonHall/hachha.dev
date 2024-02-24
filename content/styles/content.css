@@ -127,7 +127,7 @@ a:visited {
 
 code, code.code, pre.code, .code code, pre > code, .hljs {
     color: var(--text);
-    background: var(--panel);
+    background: var(--panel) !important;
     font-family: MPLUS1Code;
     font-weight: 500;
     font-size: 0.8rem;
