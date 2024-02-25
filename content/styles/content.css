@@ -80,8 +80,16 @@ footer p {
     background-color: inherit;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h4 {
     color: var(--headers);
+}
+
+h2, h5 {
+    color: var(--flavor1);
+}
+
+h3, h6 {
+    color: var(--flavor2);
 }
 
 p, a, li {
