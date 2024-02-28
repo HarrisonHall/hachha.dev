@@ -1,28 +1,28 @@
 <html>
-    <head>
-        {{> templates/head.html }}
-    </head>
+  <head>
+    {{> templates/head.html }}
+  </head>
 
-    <body class="index-page">
-        {{> templates/navbar.html }}
+  <body class="index-page">
+    {{> templates/navbar.html }}
 
-        <div class="hero">
-            <div class="container grid-lg text-center">
-                <h1 style="font-size: 4em;"><b>Harrison Hall</b></h1>
-                <p>2024! Exciting!</p>
-            </div>
-        </div>
+    <div class="hero">
+      <div class="container grid-lg text-center">
+        <h1 style="font-size: 4em"><b>Harrison Hall</b></h1>
+        <p>2024! Exciting!</p>
+      </div>
+    </div>
 
-        {{> templates/generic/image/profile_circle.html image="/media/profile-a.png" max-size="256px" }}
+    {{> templates/generic/image/profile_circle.html image="/media/profile-a.png"
+    max-size="256px" }} {{> templates/generic/section.html
+    section-content="templates/pages/index/links.html" }} {{>
+    templates/generic/divider_hor.html }}
 
-        {{> templates/generic/section.html section-content="templates/pages/index/links.html" }}
+    <div style="text-align: center">
+      {{> templates/generic/section.html
+      section-content="templates/pages/index/about.html" }}
+    </div>
 
-        {{> templates/generic/divider_hor.html }}
-
-        <div style="text-align: center;">
-            {{> templates/generic/section.html section-content="templates/pages/index/about.html" }}
-        </div>
-
-        {{> templates/footer.html }}
-    </body>
+    {{> templates/footer.html }}
+  </body>
 </html>

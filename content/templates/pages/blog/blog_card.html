@@ -1,10 +1,12 @@
-
-<div class="card blog_card click_box" onclick="window.location.href='/blog/{{blog-path}}';">
-    <div class="card-header">
-        <div class="card-title h5">{{blog-title}}</div>
-    </div>
-    <div class="card-body">
-        <p>{{blog-blurb}}</p>
-        {{> templates/generic/date_badge.html date=blog-date }}
-    </div>
+<div
+  class="card blog_card click_box"
+  onclick="window.location.href='/blog/{{blog-path}}';"
+>
+  <div class="card-header">
+    <div class="card-title h5">{{blog-title}}</div>
+  </div>
+  <div class="card-body">
+    <p>{{blog-blurb}}</p>
+    {{> templates/generic/date_badge.html date=blog-date }}
+  </div>
 </div>

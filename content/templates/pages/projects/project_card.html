@@ -1,12 +1,19 @@
 <div class="card project_card">
-    <div class="card-header">
-        <div class="card-title h5">{{project-name}}</div>
-    </div>
-    <div class="card-body">
-        <p>{{project-description}}</p>
-        {{> templates/generic/date_badge.html date=project-date }}
-        {{#each project-links}}
-            <a href="{{this}}"><button class="btn btn-link" onclick="//window.location.href='{{this}}';">{{@key}}</button></a>
-        {{/each}}
-    </div>
+  <div class="card-header">
+    <div class="card-title h5">{{project-name}}</div>
+  </div>
+  <div class="card-body">
+    <p>{{project-description}}</p>
+    {{> templates/generic/date_badge.html date=project-date }} {{#each
+    project-links}}
+    <a href="{{this}}"
+      ><button
+        class="btn btn-link"
+        onclick="//window.location.href='{{this}}';"
+      >
+        {{@key}}
+      </button></a
+    >
+    {{/each}}
+  </div>
 </div>

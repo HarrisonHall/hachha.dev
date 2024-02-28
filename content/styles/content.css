@@ -1,161 +1,182 @@
+/* Style for all custom site content. */
+
 body * {
-    font-family: MPLUS1;
-    /*font-weight: 500;*/
+  font-family: MPLUS1;
+  /*font-weight: 500;*/
 }
 
 body {
-    color: var(--text);
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: var(--background);
+  color: var(--text);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--background);
 }
 
-body *:focus { 
-    outline-width: 1px !important;
-    outline-color: var(--flavor1) !important;
-    outline-style: solid;
-    border-color: var(--flavor1) !important;
-    box-shadow: 0 0 var(--flavor1) !important;
-}
-
-@font-face {
-    font-family: FiraSans;
-    src: url("/fonts/fira_sans/FiraSans-Regular.otf") format("opentype");
+body *:focus {
+  outline-width: 1px !important;
+  outline-color: var(--flavor1) !important;
+  outline-style: solid;
+  border-color: var(--flavor1) !important;
+  box-shadow: 0 0 var(--flavor1) !important;
 }
 
 @font-face {
-    font-family: MPLUS1;
-    src: url("/fonts/mplus1/MPLUS1-VariableFont_wght.ttf") format("truetype");
+  font-family: FiraSans;
+  src: url("/fonts/fira_sans/FiraSans-Regular.otf") format("opentype");
 }
 
 @font-face {
-    font-family: MPLUS1Code;
-    src: url("/fonts/mplus1/MPLUS1Code-VariableFont_wght.ttf") format("truetype");
+  font-family: MPLUS1;
+  src: url("/fonts/mplus1/MPLUS1-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: MPLUS1Code;
+  src: url("/fonts/mplus1/MPLUS1Code-VariableFont_wght.ttf") format("truetype");
 }
 
 .navbar {
-    position: sticky;
-    width: 100vw;
-    top: 0;
-    background-color: var(--navbar);
+  position: sticky;
+  width: 100vw;
+  top: 0;
+  background-color: var(--navbar);
 }
 
 footer {
-    padding-bottom: .5em;
+  padding-bottom: 0.5em;
 }
 footer p {
-    margin-bottom: 0px;
+  margin-bottom: 0px;
 }
 
 .footer-spacer {
-    flex: 1;
+  flex: 1;
 }
 
 .box {
-    background-color: var(--panel);
+  background-color: var(--panel);
 }
 
 .section {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .empty {
-    padding-top: 1rem;
-    padding-bottom: 1rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .hero {
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
 }
 
 .divider {
-    border-top-color: var(--text);
-    height: 0.1rem;
+  border-top-color: var(--text);
+  height: 0.1rem;
 }
 
 .empty {
-    background-color: inherit;
+  background-color: inherit;
 }
 
-h1, h4 {
-    color: var(--headers);
+h1,
+h4 {
+  color: var(--headers);
 }
 
-h2, h5 {
-    color: var(--flavor1);
+h2,
+h5 {
+  color: var(--flavor1);
 }
 
-h3, h6 {
-    color: var(--flavor2);
+h3,
+h6 {
+  color: var(--flavor2);
 }
 
-p, a, li {
-    color: var(--text);
-    font-weight: 500;
-    font-size: 0.8rem;
+p,
+a,
+li {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.8rem;
 }
 
 a:visited {
-    color: var(--text);
+  color: var(--text);
 }
 
 .card {
-    background-color: var(--panel);
-    border-color: var(--flavor2);
+  background-color: var(--panel);
+  border-color: var(--flavor2);
 }
 
 .blog_card:hover {
-    background-color: var(--selection);
+  background-color: var(--selection);
 }
 
 .click_box:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.btn, .btn-primary, .btn-primary:hover, .btn-primary:focus, .btn.btn-primary, .btn.btn-primary:hover, .btn.btn-primary:focus {
-    color: var(--text);
-    background: var(--flavor1);
-    border-color: var(--flavor1);
+.btn,
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn.btn-primary,
+.btn.btn-primary:hover,
+.btn.btn-primary:focus {
+  color: var(--text);
+  background: var(--flavor1);
+  border-color: var(--flavor1);
 }
 
-.btn.btn-link, .btn-link {
-    color: var(--flavor2);
-    border: none;
-    border-width: none;
+.btn.btn-link,
+.btn-link {
+  color: var(--flavor2);
+  border: none;
+  border-width: none;
 }
 
-.btn.btn-link:hover, .btn-link:hover, .btn.btn-link:active, .btn.btn-link:focus {
-    color: var(--flavor1);
-    border: none;
-    border-width: none;
+.btn.btn-link:hover,
+.btn-link:hover,
+.btn.btn-link:active,
+.btn.btn-link:focus {
+  color: var(--flavor1);
+  border: none;
+  border-width: none;
 }
 
-code, code.code, pre.code, .code code, pre > code, .hljs {
-    color: var(--text);
-    background: var(--panel) !important;
-    font-family: MPLUS1Code;
-    font-weight: 500;
-    font-size: 0.8rem;
+code,
+code.code,
+pre.code,
+.code code,
+pre > code,
+.hljs {
+  color: var(--text);
+  background: var(--panel) !important;
+  font-family: MPLUS1Code;
+  font-weight: 500;
+  font-size: 0.8rem;
 }
 
 .chip {
-    background: var(--flavor1);
-    font-weight: 500;
+  background: var(--flavor1);
+  font-weight: 500;
 }
-
 
 /* Images */
 img.image_circle {
-    border-radius: 50%;
-    margin-left: auto;
-    margin-right: auto;
+  border-radius: 50%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 img.image_square {
-    border-radius: 0%;
-    margin-left: auto;
-    margin-right: auto;
+  border-radius: 0%;
+  margin-left: auto;
+  margin-right: auto;
 }

@@ -1,21 +1,20 @@
 <html>
-    <head>
-        {{> templates/head.html }}
-    </head>
+  <head>
+    {{> templates/head.html }}
+  </head>
 
-    <body class="blog-page">
-        {{> templates/navbar.html }}
+  <body class="blog-page">
+    {{> templates/navbar.html }}
 
-        <div class="hero">
-            <div class="container grid-lg text-center">
-                <h1 style="font-size: 4em;"><b>Blog</b></h1>
-            </div>
-        </div>
+    <div class="hero">
+      <div class="container grid-lg text-center">
+        <h1 style="font-size: 4em"><b>Blog</b></h1>
+      </div>
+    </div>
 
-        {{#each blogs}}
-            {{> templates/generic/section.html section-content="templates/pages/blog/blog_card.html" blog-title=name blog-blurb=blurb blog-path=path blog-date=date }}
-        {{/each}}
-
-        {{> templates/footer.html }}
-    </body>
+    {{#each blogs}} {{> templates/generic/section.html
+    section-content="templates/pages/blog/blog_card.html" blog-title=name
+    blog-blurb=blurb blog-path=path blog-date=date }} {{/each}} {{>
+    templates/footer.html }}
+  </body>
 </html>

@@ -1,7 +1,9 @@
 projects:
   - name: fpsi
     date: 2022-11-1
-    description: Data and state control software with dynamic plugin support for use with single or multi-node systems. 
+    description:
+      Data and state control software with dynamic plugin support for use with
+      single or multi-node systems.
     links:
       github: https://github.com/HarrisonHall/fpsi
     image: https://github.com/HarrisonHall/fpsi/raw/master/docs/media/srock_example.png

@@ -2,32 +2,31 @@
 
 /* Catppuccin Macchiato */
 :root {
-    --navbar: #181926;
-    --background: #24273a;
-    --text: #cad3f5;
-    --headers: #91d7e3;
-    --flavor1: #c6a0f6;
-    --flavor2: #a6da95;
-    --panel: #363a4f;
-    --selection: #6e738d;
-    --banner: #f5a97f;
-    --warning: #eed49f;
-    --alert: #ed8796;
+  --navbar: #181926;
+  --background: #24273a;
+  --text: #cad3f5;
+  --headers: #91d7e3;
+  --flavor1: #c6a0f6;
+  --flavor2: #a6da95;
+  --panel: #363a4f;
+  --selection: #6e738d;
+  --banner: #f5a97f;
+  --warning: #eed49f;
+  --alert: #ed8796;
 }
 
-/* Nord *//*
+/* Original */ /*
 :root {
-    --navbar: #292a2d;
-    --background: #252627;
-    --text: #d8dee9;
-    --headers: #55bde2;
-    --flavor1: #b48ead;
-    --flavor2: #a3be8c;
-    --panel: #292a2d;
-    --selection: #1c2128;
-    --banner: #dddddd;
-    --warning: #ebcb8b;
-    --alert: #bf616a;
+  --navbar: #292a2d;
+  --background: #252627;
+  --text: #d8dee9;
+  --headers: #55bde2;
+  --flavor1: #b48ead;
+  --flavor2: #a3be8c;
+  --panel: #292a2d;
+  --selection: #1c2128;
+  --banner: #dddddd;
+  --warning: #ebcb8b;
+  --alert: #bf616a;
 }
 */
-
