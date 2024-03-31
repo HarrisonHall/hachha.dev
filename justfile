@@ -3,6 +3,9 @@
 help:
 	just --list
 
+test:
+	cargo run -- --port 8180
+
 build-release:
 	cargo build --release
 	patchelf --set-interpreter /usr/lib64/ld-linux-x86-64.so.2 target/release/hachha-dev

@@ -12,6 +12,8 @@
       </div>
     </div>
 
+    <div>{{> templates/pages/blog/rss.html }}</div>
+
     {{#each blogs}} {{> templates/generic/section.html
     section-content="templates/pages/blog/blog_card.html" blog-title=name
     blog-blurb=blurb blog-path=path blog-date=date }} {{/each}} {{>
