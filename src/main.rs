@@ -53,6 +53,7 @@ async fn main() {
 
     // Serve
     info!("Serving haccha.dev on {}", site.config.port);
+    debug!("Debug @ http://127.0.0.1:{}", site.config.port);
     let addr = SocketAddr::from(([0, 0, 0, 0], site.config.port));
     match tls_config {
         Some(tls_config) => {

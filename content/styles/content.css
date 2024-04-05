@@ -97,6 +97,30 @@ h6 {
   color: var(--flavor2);
 }
 
+.blog_markdown h1::before {
+  content: "# ";
+}
+
+.blog_markdown h2::before {
+  content: "## ";
+}
+
+.blog_markdown h3::before {
+  content: "### ";
+}
+
+.blog_markdown h4::before {
+  content: "#### ";
+}
+
+.blog_markdown h5::before {
+  content: "##### ";
+}
+
+.blog_markdown h6::before {
+  content: "###### ";
+}
+
 p,
 a,
 li {

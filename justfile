@@ -1,15 +1,15 @@
+# Actions for hachha.dev
 
-# Get help
-help:
-	just --list
-
+# Test locally
 test:
-	cargo run -- --port 8180
+	cargo run -- --port 8180 -d
 
+# Build release
 build-release:
 	cargo build --release
 	patchelf --set-interpreter /usr/lib64/ld-linux-x86-64.so.2 target/release/hachha-dev
 
+# Upload to server
 upload: build-release
 	#!/usr/bin/env sh
 	server_ip=$(host hachha.dev | head -1 | cut -f4 -d" ")
