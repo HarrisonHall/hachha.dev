@@ -2,7 +2,8 @@
 
 # Test locally
 test:
-	cargo run -- --port 8180 -d
+	(sleep 1 && firefox 127.0.0.1:8180) &
+	cargo run -- --port 8180 --debug
 
 # Build release
 build-release:
