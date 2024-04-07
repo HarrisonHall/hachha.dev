@@ -58,6 +58,10 @@ footer p {
   background-color: var(--panel);
 }
 
+.container {
+  overflow-wrap: break-word;
+}
+
 .section {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -121,6 +125,18 @@ h6 {
   content: "###### ";
 }
 
+.blog_markdown strong {
+  color: var(--headers);
+}
+
+.blog_markdown em {
+  color: var(--flavor2);
+}
+
+.blog_markdown img {
+  max-width: 100%;
+}
+
 p,
 a,
 li {
@@ -135,7 +151,7 @@ a:visited {
 
 .card {
   background-color: var(--panel);
-  border-color: var(--flavor2);
+  border-color: var(--headers);
 }
 
 .blog_card:hover {
@@ -188,6 +204,7 @@ pre > code,
 }
 
 .chip {
+  color: var(--background);
   background: var(--flavor1);
   font-weight: 500;
 }
