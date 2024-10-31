@@ -1,16 +1,20 @@
-use axum::extract::{Path, State};
+use actix_web::{get, web, App, HttpServer};
 use log::*;
 use rust_embed::RustEmbed;
 
-use crate::site::SharedSite;
+use crate::site::Site;
 use crate::util;
 
+/// Embedded site favicon.
 #[derive(RustEmbed)]
 #[folder = "content/media"]
 #[exclude = "*/*"]
 #[include = "favicon.ico"]
 struct EmbeddedFavicon;
-pub async fn get_favicon<'a>(State(_site): State<SharedSite<'a>>) -> Vec<u8> {
+
+/// Get site favicon.
+#[get("/favicon.ico")]
+async fn get_favicon(_site: web::Data<Site>) -> Vec<u8> {
     match util::read_embedded_data::<EmbeddedFavicon>("favicon.ico") {
         Ok(data) => data,
         Err(_) => {
@@ -20,10 +24,12 @@ pub async fn get_favicon<'a>(State(_site): State<SharedSite<'a>>) -> Vec<u8> {
     }
 }
 
+/// Embedded site media.
 #[derive(RustEmbed)]
 #[folder = "content/media"]
 #[exclude = "favicon.ico"]
 struct EmbeddedMedia;
+
 pub async fn get_media<'a>(
     Path(path): Path<String>,
     State(_site): State<SharedSite<'a>>,

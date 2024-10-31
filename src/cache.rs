@@ -1,22 +1,22 @@
-/// Synchronous blocking cache
+/// Synchronous blocking cache.
 use std::collections::HashMap;
 use std::sync::RwLock;
 use std::time::Instant;
 
-/// State for cached item
+/// State for cached item.
 #[derive(Debug, PartialEq)]
 pub enum CachedItemState {
-    /// Item is not in cache
+    /// Item is not in cache.
     Missing,
-    /// Item is currently in cache and hasn't reached timeout
+    /// Item is currently in cache and hasn't reached timeout.
     Active,
-    /// Item is in cache, but is expired
+    /// Item is in cache, but is expired.
     Expired,
-    /// Error, something like lock poisoning occured
+    /// Error, something like lock poisoning occured.
     Error,
 }
 
-/// Entry inside of cache
+/// Entry inside of cache.
 struct CacheEntry<T> {
     entry: T,
     update_time: Instant,
@@ -24,6 +24,7 @@ struct CacheEntry<T> {
 }
 
 impl<T> CacheEntry<T> {
+    /// Generate new entry for cache.
     fn new(item: T) -> Self {
         CacheEntry {
             entry: item,
@@ -32,6 +33,7 @@ impl<T> CacheEntry<T> {
         }
     }
 
+    /// Check if entry is expired.
     fn is_expired(&self, timeout: f32) -> bool {
         // Always reload in debug
         if cfg!(debug_assertions) {
@@ -43,22 +45,24 @@ impl<T> CacheEntry<T> {
         return time_since_update > timeout;
     }
 
+    /// Update and replace entry.
     fn update(&mut self, new_entry: T) -> () {
         self.entry = new_entry;
         self.update_time = Instant::now();
     }
 }
 
-/// Cache
+/// Cache.
 pub struct Cache<T> {
-    /// Statefull entries
+    /// Statefull entries.
     entries: RwLock<HashMap<String, CacheEntry<T>>>,
-    /// Time until an entry expires (in seconds)
+    /// Time until an entry expires (in seconds).
     timeout: f32,
 }
 
 #[allow(dead_code)]
 impl<T: Clone> Cache<T> {
+    /// Create a new cache.
     pub fn new(timeout: f32) -> Self {
         Cache {
             entries: RwLock::new(HashMap::new()),
@@ -66,6 +70,7 @@ impl<T: Clone> Cache<T> {
         }
     }
 
+    /// Get state of cache item.
     pub fn get_state(&self, name: &str) -> CachedItemState {
         if let Ok(entries) = self.entries.read() {
             return match entries.get(name) {
@@ -79,10 +84,12 @@ impl<T: Clone> Cache<T> {
         return CachedItemState::Error;
     }
 
+    /// Check if item is in the cache and not expired.
     pub fn in_cache(&self, name: &str) -> bool {
         return self.get_state(name) == CachedItemState::Active;
     }
 
+    /// Retrieve item from the cache.
     pub fn retrieve(&self, name: &str) -> Result<T, CachedItemState> {
         if let Ok(entries) = self.entries.read() {
             return match entries.get(name) {
@@ -96,6 +103,7 @@ impl<T: Clone> Cache<T> {
         return Err(CachedItemState::Error);
     }
 
+    /// Retrieve item from the cache, even if expired.
     pub fn retrieve_force(&self, name: &str) -> Option<T> {
         if let Ok(entries) = self.entries.read() {
             return match entries.get(name) {
@@ -106,10 +114,12 @@ impl<T: Clone> Cache<T> {
         return None;
     }
 
+    /// Update item in cache.
     pub fn update(&self, name: &str, item: T) -> T {
         return self.update_override(name, item, None);
     }
 
+    //// Update item in cache, with custom timeout.
     pub fn update_override(&self, name: &str, item: T, custom_timeout: Option<f32>) -> T {
         if let Ok(mut entries) = self.entries.write() {
             match entries.get_mut(name) {

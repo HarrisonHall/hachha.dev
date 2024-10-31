@@ -13,12 +13,13 @@ keywords = ["website", "blog", "hachha"]
 [dependencies]
 anyhow = "1.0.79"
 atom_syndication = "0.12"
-axum = "0.7.0"
-axum-server = { version = "0.6.0", features = ["tls-rustls"] }
+actix-web = {version = "4", features = ["rustls"]}
+# axum = "0.7.0"
+# axum-server = { version = "0.6.0", features = ["tls-rustls"] }
 chrono = "0.4.26"
 clap = { version = "4.1.8", features = ["derive"] }
 handlebars = "4.3.6"
-log = "0.4.17"
+log = "0.4"
 markdown = "1.0.0-alpha.17"
 pretty_env_logger = "0.4.0"
 rust-embed = { version = "6.6.0", features = ["include-exclude"] }

@@ -2,8 +2,8 @@ use std::path::PathBuf;
 use std::sync::Arc;
 use std::time::Duration;
 
-use axum::response::Html;
-use axum_server::tls_rustls::RustlsConfig;
+// use axum::response::Html;
+// use axum_server::tls_rustls::RustlsConfig;
 use chrono::Datelike;
 use clap::Parser;
 use handlebars::Handlebars;
@@ -16,11 +16,11 @@ use crate::cache::Cache;
 use crate::pages::Pages;
 use crate::util;
 
-pub type SharedSite<'a> = Arc<Site<'a>>;
+// pub type SharedSite<'a> = Arc<Site<'a>>;
 
-pub struct Site<'a> {
+pub struct Site {
     pub config: SiteConfig,
-    pub templater: Handlebars<'a>,
+    pub templater: Handlebars,
     pub pages: Pages,
     pub page_cache: Cache<Html<String>>,
     pub content_cache: Cache<Vec<u8>>,

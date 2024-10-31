@@ -1,33 +1,35 @@
+use actix_web::{get, web, App, HttpServer};
 use atom_syndication as atom;
-use axum::{extract::Path, extract::State, response::Html};
 use log::*;
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 
 use crate::pages::error::visit_404;
-use crate::site::SharedSite;
+use crate::site::Site;
 use crate::util::*;
 
+/// Embedded blog files.
 #[derive(RustEmbed)]
 #[folder = "content/pages/blog"]
 struct EmbeddedBlogFiles;
 
+/// Parsed blog.
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(default)]
 pub struct BlogData {
-    /// Title of the blog
+    /// Title of the blog.
     name: String,
-    /// Description of blog
+    /// Description of blog.
     blurb: String,
-    /// Date
+    /// Date of blog.
     date: String,
-    /// Actual local path to blog
+    /// Actual local path to blog.
     path: String,
 
-    /// Read markdown of blog entry
+    /// Read markdown of blog entry.
     markdown: String,
-    /// Raw cached blog json
+    /// Raw cached blog json.
     cached_json: serde_json::Value,
 }
 
@@ -44,6 +46,7 @@ impl Default for BlogData {
     }
 }
 
+/// Blog parsing mechanism.
 pub struct BlogIndexer {
     index: String,
     article: String,
@@ -52,6 +55,7 @@ pub struct BlogIndexer {
 }
 
 impl BlogIndexer {
+    /// Create the blog indexer.
     pub fn new() -> Self {
         // Parse pages
         let index = read_embedded_text::<EmbeddedBlogFiles>("blogs.html").unwrap();
@@ -124,6 +128,7 @@ impl BlogIndexer {
         }
     }
 
+    /// Get metadata of blog.
     fn blog_metadata(&self) -> serde_json::Value {
         let mut metadata = json!({});
         let mut blogs: Vec<serde_json::Value> = Vec::new();
@@ -134,6 +139,7 @@ impl BlogIndexer {
         metadata
     }
 
+    /// Get blog from path.
     fn get_blog(&self, path: &str) -> Option<&BlogData> {
         for other_blog in self.blogs.iter() {
             if path == other_blog.path {
@@ -144,8 +150,9 @@ impl BlogIndexer {
     }
 }
 
-/// Visit blog page
-pub async fn visit_blog_index<'a>(State(site): State<SharedSite<'a>>) -> Html<String> {
+/// Visit blog page.
+#[get("/blog")]
+pub async fn visit_blog_index(site: web::Data<Site>) -> Html<String> {
     match site.page_cache.retrieve("blog") {
         Ok(page) => page,
         Err(_) => {

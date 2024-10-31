@@ -17,7 +17,7 @@ use crate::site::Site;
 #[tokio::main]
 async fn main() {
     // Generate site data
-    let site: Arc<Site> = Arc::new(Site::new());
+    let site: Site = Site::new();
 
     // Try to set up TLS/HTTPS
     let cert_dir = PathBuf::from(&site.config.cert_dir);
