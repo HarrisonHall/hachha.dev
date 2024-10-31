@@ -5,6 +5,7 @@ with pkgs;
 mkShell rec {
   buildInputs = [
     just
+    rustup
     patchelf
     nodePackages.prettier
   ];

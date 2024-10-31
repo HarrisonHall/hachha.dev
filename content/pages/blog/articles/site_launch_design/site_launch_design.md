@@ -3,7 +3,7 @@
 I launched a new site with a new changes:
 
 - De-emphasized resume
-- A blog (with an [rss](https://hachha.dev/blog.rss) feed)
+- A blog (with a [feed](https://hachha.dev/blog.feed))
 - Streamlined design
 
 Most of this is subject to change as most of the design isn't finalized. I even
@@ -13,7 +13,7 @@ probably exist in _some_ form in the future.
 My last personal site has been updated to redirect here
 ([harrisonchristianhall.com](https://www.harrisonchristianhall.com)). The site
 content should still be viewable in some form for the time being on
-(github)[https://github.com/HarrisonHall/harrisonhall.github.io].
+[github](https://github.com/HarrisonHall/harrisonhall.github.io).
 
 Updating my old website was a pain. Static webpages (with any nontrivial
 styling) aren't easy to update manually. I wanted a system where I could update
@@ -47,7 +47,7 @@ pub struct Site<'a> {
 }
 ```
 
-The entire project is designed to compile into a single binary- content
+The entire project is designed to compile into a single binary-- content
 included. The CLI provided allows for specifying things like the port, certs,
 logging, cacheing, etc.
 
@@ -104,6 +104,6 @@ There isn't too much to describe.
 
 ### Misc.
 
-Other top-level pages in the header currently link to pages outside of
-hachha.dev. This should change in the future, but motivation comes and goes and
-this isn't important enough to waste energy on.
+Other top-level pages in the header currently link to pages outside hachha.dev.
+This should change in the future, but motivation comes and goes and this isn't
+important enough to waste energy on.

@@ -10,6 +10,10 @@ build-release:
 	cargo build --release
 	patchelf --set-interpreter /usr/lib64/ld-linux-x86-64.so.2 target/release/hachha-dev
 
+# SSH to server
+ssh:
+	ssh root@50.116.32.107
+
 # Upload to server
 upload: build-release
 	#!/usr/bin/env sh

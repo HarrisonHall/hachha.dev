@@ -1,6 +1,6 @@
+use atom_syndication as atom;
 use axum::{extract::Path, extract::State, response::Html};
 use log::*;
-use rss::{ChannelBuilder, Item, ItemBuilder};
 use rust_embed::RustEmbed;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -48,7 +48,7 @@ pub struct BlogIndexer {
     index: String,
     article: String,
     blogs: Vec<BlogData>,
-    cached_rss: String,
+    cached_feed: String,
 }
 
 impl BlogIndexer {
@@ -75,45 +75,52 @@ impl BlogIndexer {
             blog.cached_json = article_data.clone();
             blogs.push(blog);
         }
-        //// Parse into rss feed
-        let mut channel = ChannelBuilder::default();
-        channel
-            .title("hachha.dev".to_string())
-            .link("https://hachha.dev".to_string())
-            .description("hachha.dev blog feed".to_string());
-        let mut items = Vec::new();
+        //// Parse into atom feed
+        let mut feed = atom::FeedBuilder::default();
+        feed.title("hachha.dev")
+            .author(atom::PersonBuilder::default().name("Harrison Hall").build())
+            .link(
+                atom::LinkBuilder::default()
+                    .href("https://hachha.dev")
+                    .title("hachha.dev".to_string())
+                    .build(),
+            )
+            .icon("https://hachha.dev/media/catman.png".to_string())
+            .subtitle(Some("hachha.dev blog feed".to_string().into()));
+        let mut entries = Vec::new();
         for blog in blogs.iter() {
-            let item: Item = ItemBuilder::default()
-                .title(Some(blog.name.clone()))
-                .description(Some(blog.blurb.clone()))
-                .link(Some(format!(
-                    "https://hachha.dev/blog/{}",
-                    blog.path.as_str()
-                )))
-                .pub_date(Some(
-                    (match chrono::DateTime::parse_from_str(
-                        &format!("{} 00:00:00+0000", blog.date.as_str()),
-                        "%F %H:%M:%S%z",
-                    ) {
-                        Ok(pub_date) => pub_date,
-                        Err(e) => {
-                            error!("Blog date error: {} -> {}", blog.date, e);
-                            chrono::offset::Utc::now().into()
-                        }
-                    })
-                    .to_rfc2822(),
-                ))
+            let timestamp = match chrono::DateTime::parse_from_str(
+                &format!("{} 00:00:00+0000", blog.date.as_str()),
+                "%F %H:%M:%S%z",
+            ) {
+                Ok(pub_date) => pub_date,
+                Err(e) => {
+                    error!("Blog date error: {} -> {}", blog.date, e);
+                    chrono::offset::Utc::now().into()
+                }
+            };
+            let entry: atom::Entry = atom::EntryBuilder::default()
+                .title(blog.name.clone())
+                .summary(Some(blog.blurb.clone().into()))
+                .link(
+                    atom::LinkBuilder::default()
+                        .href(format!("https://hachha.dev/blog/{}", blog.path.as_str()))
+                        .title(blog.name.clone())
+                        .build(),
+                )
+                .published(timestamp)
+                .updated(timestamp)
                 .build();
-            items.push(item);
+            entries.push(entry);
         }
-        channel.items(items);
-        let cached_rss = channel.build().to_string();
+        feed.entries(entries);
+        let cached_feed = feed.build().to_string();
 
         BlogIndexer {
             index,
             article,
             blogs,
-            cached_rss,
+            cached_feed,
         }
     }
 
@@ -196,7 +203,12 @@ pub async fn get_blog_resource<'a>(
     }
 }
 
-/// Get blog as rss
-pub async fn visit_blog_rss<'a>(State(site): State<SharedSite<'a>>) -> String {
-    site.pages.blog_indexer.cached_rss.clone()
+/// Get blog as atom feed
+pub async fn visit_blog_feed<'a>(
+    State(site): State<SharedSite<'a>>,
+) -> impl axum::response::IntoResponse {
+    (
+        [(axum::http::header::CONTENT_TYPE, "application/rss+xml")],
+        site.pages.blog_indexer.cached_feed.clone(),
+    )
 }

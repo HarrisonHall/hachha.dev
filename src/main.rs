@@ -43,7 +43,7 @@ async fn main() {
     app = app.route("/fonts/*path", get(resources::get_font));
     app = app.route("/media/*path", get(resources::get_media));
     app = app.route("/blog", get(pages::visit_blog_index));
-    app = app.route("/blog.rss", get(pages::visit_blog_rss));
+    app = app.route("/blog.feed", get(pages::visit_blog_feed));
     app = app.route("/blog/:path", get(pages::visit_blog));
     app = app.route("/blog/:path/*resource", get(pages::get_blog_resource));
     app = app.route("/projects", get(pages::visit_projects));
@@ -56,16 +56,16 @@ async fn main() {
     debug!("Debug @ http://127.0.0.1:{}", site.config.port);
     let addr = SocketAddr::from(([0, 0, 0, 0], site.config.port));
     match tls_config {
-        Some(tls_config) => {
+        Some(config) => {
             debug!("Serving HTTPS");
-            axum_server::bind_rustls(addr, tls_config)
+            axum_server::bind_rustls(addr, config)
                 .serve(app.into_make_service())
                 .await
                 .unwrap();
         }
         None => {
             debug!("Serving HTTP");
-            axum::Server::bind(&addr)
+            axum_server::bind(addr)
                 .serve(app.into_make_service())
                 .await
                 .unwrap();

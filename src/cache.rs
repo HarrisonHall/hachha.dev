@@ -1,5 +1,4 @@
 /// Synchronous blocking cache
-///
 use std::collections::HashMap;
 use std::sync::RwLock;
 use std::time::Instant;
@@ -34,6 +33,11 @@ impl<T> CacheEntry<T> {
     }
 
     fn is_expired(&self, timeout: f32) -> bool {
+        // Always reload in debug
+        if cfg!(debug_assertions) {
+            return true;
+        }
+        // Check timeout
         let timeout = self.timeout_override.unwrap_or(timeout);
         let time_since_update: f32 = self.update_time.elapsed().as_secs_f32();
         return time_since_update > timeout;
@@ -58,7 +62,7 @@ impl<T: Clone> Cache<T> {
     pub fn new(timeout: f32) -> Self {
         Cache {
             entries: RwLock::new(HashMap::new()),
-            timeout: timeout,
+            timeout,
         }
     }
 

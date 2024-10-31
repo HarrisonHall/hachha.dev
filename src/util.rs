@@ -28,7 +28,9 @@ pub fn read_yaml_to_json(yaml: &str) -> Result<serde_json::Value, Box<dyn std::e
 }
 
 handlebars_helper!(markdown_helper: |content: String| {
-    let md_options = markdown::Options::gfm();
+    let mut md_options = markdown::Options::gfm();
+    md_options.compile.allow_dangerous_html = true;
+    md_options.compile.allow_dangerous_protocol = true;
     let mut compiled_markdown = match markdown::to_html_with_options(&content, &md_options) {
         Ok(compiled_markdown) => compiled_markdown,
         Err(e) => {

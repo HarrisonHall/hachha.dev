@@ -7,14 +7,15 @@ Tech. Despite taking a single course at a time, and doing the work remotely
 (mostly asynchronously), ultimately the work required exceeded my willingness to
 continue. Each course was unique, but sadly the tight schedules around
 assignment deadlines added unnecessary stress to learning which ultimately
-killed my passion for the subject. I'm still interested in some of fields I had
-originally intended to study, but I've decided that I'll study them at my own
-pace on my own time. Much more thought went into the original pursuit and the
-decision to quit than I've expressed here, but it really was a tough decision.
+killed my passion for the subject. I'm still interested in some of the fields I
+had originally intended to study, but I've decided that I'll study them at my
+own pace on my own time. Much more thought went into the original pursuit and
+the decision to quit than I've expressed here, but it really was a tough
+decision.
 
 ## N3
 
-As originally expected, I failed the N3. I'm not terribly dissapointed. I didn't
+As originally expected, I failed the N3. I'm not terribly disappointed. I didn't
 have too much time to study directly before it (mostly due to schooling and a
 packed November), but I gave it my best shot. As I thought, listening was by far
 the most difficult subject. My vocabulary and reading scores were lower than
@@ -46,7 +47,7 @@ grammar on BunPro, so I have 6 months to practice before the December exam.
   - _Lazy Fluency_ and _The Konnichiwa Podcast_ are great resources
   - The _Tofugu Podcast_ was great, but they haven't put anything out in a long
     time
-  - _Learn Japanese with Noriko_ and _YuYuの日本語Podcast_ are also also worth
+  - _Learn Japanese with Noriko_ and _YuYuの日本語Podcast_ are also worth
     mentioning
 - **Anki** NX decks are always great
   - I've been utilizing the takoboto -> anki pipeline

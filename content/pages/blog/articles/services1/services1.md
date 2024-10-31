@@ -1,7 +1,7 @@
 I've been in a slow-burn period of my life where I'm only able to slowly chip
-away at my goals. Its been this way for about 2 years, and I think it will
+away at my goals. It's been this way for about 2 years, and I think it will
 continue for about another 3. While I understand this, sometimes it does feel
-like I'm not making progress- especially when I see friends and family go
+like I'm not making progress-- especially when I see friends and family go
 through major life events.
 
 ## Productivity
@@ -14,7 +14,7 @@ now.
 
 ### Notes
 
-I've always wanted a note taking system that respected the connection between
+I've always wanted a note-taking system that respected the connection between
 ideas. I tried writing this myself in university, but eventually settled on a
 system utilizing org-mode in a git repo. For a few reasons I've basically
 abandoned org-mode and returned to markdown: collaboration with others, ditching
@@ -43,7 +43,7 @@ single notebook can last a few months (where a I use a single sheet for a single
 week). I usually allocate other pages if I have any other big project ideas I
 want to explore. I usually start the journal with a pseudo-toc which tracks any
 special pages/events that occurred while using it. I store my older notes in a
-vans shoe box and it is nostalgic to go back and look through it every few
+vans shoebox, and it is nostalgic to go back and look through it every few
 months.
 
 ### News
@@ -73,7 +73,7 @@ I've decided to go back to RSS for most of my news. I have found some great
 feeds which I may write about later. I keep track of my feeds manually using the
 free app feeder, and any content that I want to save I simply share to pocket
 for note-taking/bookmarking at a later time. No service necessary (other than a
-free pocket account), but I am looking forward to self hosting my own "pocket"
+free pocket account), but I am looking forward to self-hosting my own "pocket"
 (shiori/wallabag) and may consider using a service that one-ups this process
 (feedly/readwise).
 
@@ -129,7 +129,7 @@ motivation and measuring progress.
 
 Like most people, I pay for **too** many services. I'm pretty aware of the
 services I pay for and actually use, but I still think I should slim it down. If
-I actually _use_ the service (and its actually a service, I'm not going to pay a
-monthly fee for a product I "own!"), then I have no problem paying for it
+I actually _use_ the service (and it's actually a service, I'm not going to pay
+a monthly fee for a product I "own!"), then I have no problem paying for it
 (especially if the provider is a "small" company). Since I host my own website,
 I think it may be time to start hosting some of my own services.
