@@ -17,6 +17,14 @@ articles:
       Dropping out of school, failing the N3, fitness, theming, and optimization
     path: 2023_retro
     date: "2024-04-07"
+  - name: A Year on Game Engines
+    path: a_year_on_game_engines
+    blurb: There a many ways to crack an egg.
+    date: "2024-11-12"
+  - name: Slipstream
+    path: slipstream
+    blurb: Fetching and filtering and aggregating, oh my
+    date: "2024-11-29"
   # - name: Gamertags
   #   blurb: They're pretty neat
   #   path: gamertags

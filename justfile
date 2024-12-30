@@ -1,5 +1,10 @@
 # Actions for hachha.dev
 
+# List directives
+[private]
+default:
+	@just --list -u
+
 # Test locally
 test:
 	(sleep 1 && firefox 127.0.0.1:8180) &

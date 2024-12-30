@@ -101,43 +101,47 @@ h6 {
   color: var(--flavor2);
 }
 
-.blog_markdown h1::before {
+.blog-markdown h1::before {
   content: "# ";
 }
 
-.blog_markdown h2::before {
+.blog-markdown h2 {
+  color: var(--flavor1);
+}
+
+.blog-markdown h2::before {
   content: "## ";
 }
 
-.blog_markdown h3::before {
+.blog-markdown h3::before {
   content: "### ";
 }
 
-.blog_markdown h4::before {
+.blog-markdown h4::before {
   content: "#### ";
 }
 
-.blog_markdown h5::before {
+.blog-markdown h5::before {
   content: "##### ";
 }
 
-.blog_markdown h6::before {
+.blog-markdown h6::before {
   content: "###### ";
 }
 
-.blog_markdown strong {
+.blog-markdown strong {
   color: var(--headers);
 }
 
-.blog_markdown em {
+.blog-markdown em {
   color: var(--flavor2);
 }
 
-.blog_markdown img {
+.blog-markdown img {
   max-width: 100%;
 }
 
-.blog_markdown a {
+.blog-markdown a {
   color: var(--headers) !important;
 }
 
@@ -158,11 +162,11 @@ a:visited {
   border-color: var(--headers);
 }
 
-.blog_card:hover {
+.blog-card:hover {
   background-color: var(--selection);
 }
 
-.click_box:hover {
+.click-box:hover {
   cursor: pointer;
 }
 
@@ -214,13 +218,13 @@ pre > code,
 }
 
 /* Images */
-img.image_circle {
+img.image-circle {
   border-radius: 50%;
   margin-left: auto;
   margin-right: auto;
 }
 
-img.image_square {
+img.image-square {
   border-radius: 0%;
   margin-left: auto;
   margin-right: auto;

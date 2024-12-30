@@ -208,7 +208,7 @@ pub async fn visit_blog_feed<'a>(
     State(site): State<SharedSite<'a>>,
 ) -> impl axum::response::IntoResponse {
     (
-        [(axum::http::header::CONTENT_TYPE, "application/rss+xml")],
+        [(axum::http::header::CONTENT_TYPE, "application/atom+xml")],
         site.pages.blog_indexer.cached_feed.clone(),
     )
 }
