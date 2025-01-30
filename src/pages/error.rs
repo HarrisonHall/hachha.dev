@@ -13,8 +13,10 @@ struct EmbeddedErrorPage;
 
 /// Error page.
 pub struct ErrorPage {
-    pub raw_page: String,
-    pub error_context: serde_json::Value,
+    /// Unrendered page.
+    raw_page: String,
+    /// Json context for rendering page.
+    context: serde_json::Value,
 }
 
 impl ErrorPage {
@@ -22,20 +24,20 @@ impl ErrorPage {
     pub fn new() -> Result<Self> {
         Ok(ErrorPage {
             raw_page: util::read_embedded_text::<EmbeddedErrorPage>("404.html")?,
-            error_context: json!({}),
+            context: json!({}),
         })
     }
 }
 
-/// Endpoint for visiting the error 404 page.
-pub async fn visit_404(State(site): State<SharedSite>) -> RenderedHtml {
+/// Endpoint for error 404 page.
+pub async fn visit_404(State(site): State<Site>) -> RenderedHtml {
     match site.page_cache().retrieve("404").await {
         Ok(page) => page,
         Err(_) => {
             site.page_cache()
                 .update(
                     "404",
-                    site.render_page(&site.pages().error.raw_page, &json!({})),
+                    site.render_page(&site.pages().error.raw_page, &site.pages().error.context),
                 )
                 .await
         }

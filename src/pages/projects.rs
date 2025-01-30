@@ -7,6 +7,34 @@ use super::*;
 #[folder = "content/pages/projects"]
 struct EmbeddedProjectsFiles;
 
+/// The project page.
+#[derive(Clone)]
+pub struct ProjectsPage {
+    /// Unrendered index page.
+    raw_index: String,
+    /// Project list.
+    projects: Projects,
+    /// All projects metadata.
+    metadata: serde_json::Value,
+}
+
+impl ProjectsPage {
+    /// Generate new projects page.
+    pub fn new() -> Result<Self> {
+        let raw_index = util::read_embedded_text::<EmbeddedProjectsFiles>("projects.html")?;
+        let projects =
+            util::read_embedded_toml::<Projects, EmbeddedProjectsFiles>("projects.toml")?;
+        let metadata = json!({
+            "projects": projects.iter().map(|proj| proj.to_json()).collect::<Vec<serde_json::Value>>()
+        });
+        Ok(ProjectsPage {
+            raw_index,
+            projects,
+            metadata,
+        })
+    }
+}
+
 /// Parsed project list.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct Projects {
@@ -60,36 +88,18 @@ impl Default for Project {
     }
 }
 
-#[derive(Clone)]
-pub struct ProjectPage {
-    index: String,
-    projects: Projects,
-}
-
-impl ProjectPage {
-    pub fn new() -> Result<Self> {
-        let index = util::read_embedded_text::<EmbeddedProjectsFiles>("projects.html")?;
-        let projects =
-            util::read_embedded_toml::<Projects, EmbeddedProjectsFiles>("projects.toml")?;
-        Ok(ProjectPage { index, projects })
-    }
-
-    pub fn project_metadata(&self) -> serde_json::Value {
-        return json!({
-            "projects": self.projects.iter().map(|proj| proj.to_json()).collect::<Vec<serde_json::Value>>()
-        });
-    }
-}
-
-pub async fn visit_projects(State(site): State<SharedSite>) -> RenderedHtml {
+/// Endpoint for project index page.
+pub async fn visit_projects(State(site): State<Site>) -> RenderedHtml {
     match site.page_cache().retrieve("projects").await {
         Ok(page) => page,
         Err(_) => {
-            let proj_metadata = site.pages().projects.project_metadata();
             site.page_cache()
                 .update(
                     "projects",
-                    site.render_page(&site.pages().projects.index, &proj_metadata),
+                    site.render_page(
+                        &site.pages().projects.raw_index,
+                        &site.pages().projects.metadata,
+                    ),
                 )
                 .await
         }

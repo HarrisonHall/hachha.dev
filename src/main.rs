@@ -25,7 +25,7 @@ mod util;
 
 use crate::cache::Cache;
 use crate::pages::Pages;
-use crate::site::SharedSite;
+use crate::site::Site;
 use crate::util::EmbeddedData;
 use crate::util::RenderedHtml;
 
@@ -33,7 +33,7 @@ use crate::util::RenderedHtml;
 #[tokio::main]
 async fn main() -> Result<()> {
     // Generate site data.
-    let site = SharedSite::new()?;
+    let site = Site::new()?;
 
     // Set up routing.
     let mut app = Router::new();

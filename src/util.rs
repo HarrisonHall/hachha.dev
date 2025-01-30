@@ -1,12 +1,8 @@
 //! Utils.
 
-use handlebars::handlebars_helper;
-use markdown;
 use rust_embed::RustEmbed;
 
 use super::*;
-
-const MD_RENDERING_ERROR: &str = "<p>Unable to render markdown :(</p>";
 
 /// Embedded data type.
 #[derive(Clone)]
@@ -80,21 +76,6 @@ pub fn read_embedded_toml<T: DeserializeOwned, Embed: RustEmbed>(
 pub fn to_json<T: Serialize>(value: &T) -> Result<serde_json::Value> {
     Ok(serde_json::to_value(value)?)
 }
-
-handlebars_helper!(markdown_helper: |content: String| {
-    let mut md_options = markdown::Options::gfm();
-    md_options.compile.allow_dangerous_html = true;
-    md_options.compile.allow_dangerous_protocol = true;
-    let mut compiled_markdown = match markdown::to_html_with_options(&content, &md_options) {
-        Ok(compiled_markdown) => compiled_markdown,
-        Err(e) => {
-            error!("Markdown rendering error: {}", e);
-            MD_RENDERING_ERROR.to_string()
-        }
-    };
-    compiled_markdown = compiled_markdown.replace("<pre>", "<pre class=\"code\">");  // Replace code blocks
-    compiled_markdown
-});
 
 /// Merge json values.
 pub fn merge_json(a: &mut serde_json::Value, b: &serde_json::Value) -> Result<()> {

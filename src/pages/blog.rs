@@ -4,73 +4,17 @@ use super::*;
 
 use atom_syndication as atom;
 
-/// Parsed blog list.
-#[derive(Clone, Debug, Serialize, Deserialize)]
-struct Blogs {
-    articles: Vec<Blog>,
-}
-
-impl std::ops::Deref for Blogs {
-    type Target = Vec<Blog>;
-    fn deref(&self) -> &Self::Target {
-        &self.articles
-    }
-}
-
-impl std::ops::DerefMut for Blogs {
-    fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.articles
-    }
-}
-
-/// Embedded blog files.
-#[derive(RustEmbed)]
-#[folder = "content/pages/blog"]
-struct EmbeddedBlogFiles;
-
-/// Parsed blog data.
-#[derive(Clone, Debug, Serialize, Deserialize)]
-#[serde(default)]
-pub struct Blog {
-    /// Title of the blog.
-    name: String,
-    /// Description of blog.
-    blurb: String,
-    /// Date blog was written.
-    date: String,
-    /// Actual local path to blog.
-    path: String,
-
-    /// Read markdown of blog entry
-    #[serde(skip)]
-    markdown: String,
-    /// Raw cached blog json
-    #[serde(skip)]
-    cached_json: serde_json::Value,
-}
-
-impl Default for Blog {
-    fn default() -> Self {
-        Blog {
-            name: "".to_string(),
-            blurb: "".to_string(),
-            date: "".to_string(),
-            path: "".to_string(),
-            markdown: "".to_string(),
-            cached_json: json!({}),
-        }
-    }
-}
-
-pub struct BlogIndexer {
+/// The blogs page and subpages.
+pub struct BlogsPages {
     index: String,
     article: String,
     blogs: Blogs,
-    cached_feed: String,
+    feed: String,
+    metadata: serde_json::Value,
 }
 
-impl BlogIndexer {
-    /// Get new blog indexer.
+impl BlogsPages {
+    /// Generate new blogs pages.
     pub fn new() -> Result<Self> {
         // Parse pages.
         let index = util::read_embedded_text::<EmbeddedBlogFiles>("blogs.html")?;
@@ -86,12 +30,13 @@ impl BlogIndexer {
             let raw_path = &blog.path;
             let path = format!("articles/{raw_path}/{raw_path}.md");
             blog.markdown = util::read_embedded_text::<EmbeddedBlogFiles>(&path)?;
-            blog.cached_json = util::to_json(blog)?;
+            blog.metadata = util::to_json(blog)?;
         }
 
         // Parse into atom feed.
-        let mut feed = atom::FeedBuilder::default();
-        feed.title("hachha.dev")
+        let mut feed_builder = atom::FeedBuilder::default();
+        feed_builder
+            .title("hachha.dev")
             .author(atom::PersonBuilder::default().name("Harrison Hall").build())
             .link(
                 atom::LinkBuilder::default()
@@ -127,25 +72,24 @@ impl BlogIndexer {
                 .build();
             entries.push(entry);
         }
-        feed.entries(entries);
-        let cached_feed = feed.build().to_string();
+        feed_builder.entries(entries);
+        let feed = feed_builder.build().to_string();
 
-        Ok(BlogIndexer {
+        // Generate metadata.
+        let mut metadata = json!({});
+        let mut blog_metadata: Vec<serde_json::Value> = Vec::new();
+        for blog in blogs.iter() {
+            blog_metadata.push(blog.metadata.clone());
+        }
+        metadata["blogs"] = serde_json::Value::Array(blog_metadata);
+
+        Ok(BlogsPages {
             index,
             article,
             blogs,
-            cached_feed,
+            feed,
+            metadata,
         })
-    }
-
-    fn blog_metadata(&self) -> serde_json::Value {
-        let mut metadata = json!({});
-        let mut blogs: Vec<serde_json::Value> = Vec::new();
-        for blog in self.blogs.iter() {
-            blogs.push(blog.cached_json.clone());
-        }
-        metadata["blogs"] = serde_json::Value::Array(blogs);
-        metadata
     }
 
     fn get_blog(&self, path: &str) -> Option<&Blog> {
@@ -158,24 +102,84 @@ impl BlogIndexer {
     }
 }
 
-/// Visit blog page
-pub async fn visit_blog_index(State(site): State<SharedSite>) -> RenderedHtml {
+/// Parsed blog list.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+struct Blogs {
+    /// Blog articles.
+    articles: Vec<Blog>,
+}
+
+impl std::ops::Deref for Blogs {
+    type Target = Vec<Blog>;
+    fn deref(&self) -> &Self::Target {
+        &self.articles
+    }
+}
+
+impl std::ops::DerefMut for Blogs {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.articles
+    }
+}
+
+/// Embedded blog files.
+#[derive(RustEmbed)]
+#[folder = "content/pages/blog"]
+struct EmbeddedBlogFiles;
+
+/// Parsed blog data.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(default)]
+pub struct Blog {
+    /// Title of the blog.
+    name: String,
+    /// Description of blog.
+    blurb: String,
+    /// Date blog was written.
+    date: String,
+    /// Actual local path to blog.
+    path: String,
+    /// Read markdown of blog entry.
+    #[serde(skip)]
+    markdown: String,
+    /// Raw cached blog json.
+    #[serde(skip)]
+    metadata: serde_json::Value,
+}
+
+impl Default for Blog {
+    fn default() -> Self {
+        Blog {
+            name: "".to_string(),
+            blurb: "".to_string(),
+            date: "".to_string(),
+            path: "".to_string(),
+            markdown: "".to_string(),
+            metadata: json!({}),
+        }
+    }
+}
+
+/// Endpoint for blogs index page.
+pub async fn visit_blog_index(State(site): State<Site>) -> RenderedHtml {
     match site.page_cache().retrieve("blog").await {
         Ok(page) => page,
         Err(_) => {
-            let blog_metadata = site.pages().blog_indexer.blog_metadata();
             site.page_cache()
                 .update(
                     "blog",
-                    site.render_page(&site.pages().blog_indexer.index, &blog_metadata),
+                    site.render_page(
+                        &site.pages().blog_indexer.index,
+                        &site.pages().blog_indexer.metadata,
+                    ),
                 )
                 .await
         }
     }
 }
 
-/// Visit individual blog
-pub async fn visit_blog(Path(blog): Path<String>, State(site): State<SharedSite>) -> RenderedHtml {
+/// Endpoint for individual blogs.
+pub async fn visit_blog(Path(blog): Path<String>, State(site): State<Site>) -> RenderedHtml {
     // Visit index
     if blog.is_empty() {
         return visit_blog_index(State(site)).await;
@@ -187,7 +191,7 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<SharedSite>
         }
         Err(_) => {
             if let Some(blog) = site.pages().blog_indexer.get_blog(&blog) {
-                let mut blog_metadata = blog.cached_json.clone();
+                let mut blog_metadata = blog.metadata.clone();
                 blog_metadata["blog-content"] = serde_json::Value::String(blog.markdown.clone());
                 return site
                     .page_cache()
@@ -207,7 +211,7 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<SharedSite>
 /// Get local blog resource.
 pub async fn get_blog_resource(
     Path((blog, resource)): Path<(String, String)>,
-    State(_site): State<SharedSite>,
+    State(_site): State<Site>,
 ) -> EmbeddedData {
     let blog_resource: String = format!("articles/{blog}/{resource}");
     match util::read_embedded_data::<EmbeddedBlogFiles>(&blog_resource) {
@@ -220,9 +224,9 @@ pub async fn get_blog_resource(
 }
 
 /// Get blog as atom feed.
-pub async fn visit_blog_feed(State(site): State<SharedSite>) -> impl axum::response::IntoResponse {
+pub async fn visit_blog_feed(State(site): State<Site>) -> impl axum::response::IntoResponse {
     (
         [(axum::http::header::CONTENT_TYPE, "application/atom+xml")],
-        site.pages().blog_indexer.cached_feed.clone(),
+        site.pages().blog_indexer.feed.clone(),
     )
 }

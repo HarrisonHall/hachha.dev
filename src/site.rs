@@ -5,14 +5,14 @@ use super::*;
 use clap::Parser;
 use handlebars::Handlebars;
 
-/// Shared type representing site.
+/// Shareable site state wrapper.
 #[derive(Clone)]
-pub struct SharedSite(Arc<Site>);
+pub struct Site(Arc<SiteWrapped>);
 
-impl SharedSite {
+impl Site {
     /// Generate shared site.
     pub fn new() -> Result<Self> {
-        Ok(SharedSite(Arc::new(Site::new()?)))
+        Ok(Site(Arc::new(SiteWrapped::new()?)))
     }
 
     /// Get config.
@@ -35,11 +35,6 @@ impl SharedSite {
         &self.0.page_cache
     }
 
-    /// Get content cache.
-    pub fn content_cache(&self) -> &Cache<EmbeddedData> {
-        &self.0.content_cache
-    }
-
     /// Generate base context.
     pub fn base_context(&self) -> serde_json::Value {
         let current_time = chrono::Utc::now();
@@ -50,7 +45,7 @@ impl SharedSite {
     }
 
     /// Render page with templater given json values.
-    pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> RenderedHtml {
+    pub fn render_page(&self, page: impl AsRef<str>, metadata: &serde_json::Value) -> RenderedHtml {
         // Compute complete json to render page.
         let mut render_context = self.base_context();
         if util::merge_json(&mut render_context, metadata).is_err() {
@@ -59,7 +54,10 @@ impl SharedSite {
         };
 
         RenderedHtml::new(
-            match self.templater().render_template(&page, &render_context) {
+            match self
+                .templater()
+                .render_template(page.as_ref(), &render_context)
+            {
                 Ok(rendered_page) => rendered_page,
                 Err(e) => {
                     error!("Error rendering page: {e}");
@@ -70,18 +68,17 @@ impl SharedSite {
     }
 }
 
-/// Site struct.
-pub struct Site {
-    pub config: SiteConfig,
-    pub templater: Arc<Handlebars<'static>>,
-    pub pages: Pages,
-    pub page_cache: Cache<RenderedHtml>,
-    pub content_cache: Cache<EmbeddedData>,
+/// Site state.
+struct SiteWrapped {
+    config: SiteConfig,
+    templater: Arc<Handlebars<'static>>,
+    pages: Pages,
+    page_cache: Cache<RenderedHtml>,
 }
 
-impl Site {
+impl SiteWrapped {
     /// Generate new site object.
-    pub fn new() -> Result<Self> {
+    fn new() -> Result<Self> {
         // Parse arguments
         let args: SiteConfig = SiteConfig::parse();
 
@@ -93,11 +90,10 @@ impl Site {
         pretty_env_logger::init();
 
         // Configure site struct
-        Ok(Site {
+        Ok(SiteWrapped {
             templater: Arc::new(create_templater()?),
             pages: Pages::new()?,
             page_cache: Cache::new(args.cache_timeout),
-            content_cache: Cache::new(args.cache_timeout),
             config: args,
         })
     }
@@ -107,14 +103,16 @@ impl Site {
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct SiteConfig {
-    #[arg(short, long, value_name = "PORT", default_value_t = 443)]
+    /// Port to serve on.
+    #[arg(short, long, value_name = "PORT", default_value_t = 8443)]
     pub port: u16,
-    #[arg(long, value_name = "CERT_DIR", default_value_t = String::from("/etc/letsencrypt/live/hachha.dev"))]
-    pub cert_dir: String,
+    /// Log file path.
     #[arg(long, value_name = "LOG_PATH")]
     pub log: Option<String>,
-    #[arg(long, default_value_t = 5.0 * 60.0)] // Default cache every 5 minutes
+    /// Timeout for cache (seconds).
+    #[arg(long, default_value_t = 5.0 * 60.0)]
     pub cache_timeout: f32,
+    /// Debug logging.
     #[arg(short, long, default_value_t = false)]
     pub debug: bool,
 }
@@ -123,7 +121,13 @@ pub struct SiteConfig {
 #[folder = "content/templates/"]
 pub struct Templates;
 
+/// Create handlebars templater for the site.
 fn create_templater<'a>() -> Result<Handlebars<'a>> {
+    use handlebars::handlebars_helper;
+    use markdown;
+
+    static MD_RENDERING_ERROR: &str = "<p>Unable to render markdown :(</p>";
+
     let mut templater = Handlebars::new();
 
     // Register templates.
@@ -140,8 +144,23 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         }
     }
 
+    handlebars_helper!(markdown_helper: |content: String| {
+        let mut md_options = markdown::Options::gfm();
+        md_options.compile.allow_dangerous_html = true;
+        md_options.compile.allow_dangerous_protocol = true;
+        let mut compiled_markdown = match markdown::to_html_with_options(&content, &md_options) {
+            Ok(compiled_markdown) => compiled_markdown,
+            Err(e) => {
+                error!("Markdown rendering error: {}", e);
+                MD_RENDERING_ERROR.to_string()
+            }
+        };
+        compiled_markdown = compiled_markdown.replace("<pre>", "<pre class=\"code\">");  // Replace code blocks
+        compiled_markdown
+    });
+
     // Register helpers.
-    templater.register_helper("markdown", Box::new(util::markdown_helper));
+    templater.register_helper("markdown", Box::new(markdown_helper));
 
     Ok(templater)
 }

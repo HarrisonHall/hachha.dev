@@ -8,7 +8,7 @@ use super::*;
 #[exclude = "*/*"]
 #[include = "favicon.ico"]
 struct EmbeddedFavicon;
-pub async fn get_favicon(State(_site): State<SharedSite>) -> util::EmbeddedData {
+pub async fn get_favicon(State(_site): State<Site>) -> util::EmbeddedData {
     match util::read_embedded_data::<EmbeddedFavicon>("favicon.ico") {
         Ok(data) => data,
         Err(_) => {
@@ -23,10 +23,7 @@ pub async fn get_favicon(State(_site): State<SharedSite>) -> util::EmbeddedData 
 #[folder = "content/media"]
 #[exclude = "favicon.ico"]
 struct EmbeddedMedia;
-pub async fn get_media(
-    Path(path): Path<String>,
-    State(_site): State<SharedSite>,
-) -> util::EmbeddedData {
+pub async fn get_media(Path(path): Path<String>, State(_site): State<Site>) -> util::EmbeddedData {
     match util::read_embedded_data::<EmbeddedMedia>(&path) {
         Ok(data) => data,
         Err(_) => {
@@ -40,10 +37,7 @@ pub async fn get_media(
 #[derive(RustEmbed)]
 #[folder = "content/styles/"]
 struct EmbeddedStyles;
-pub async fn get_style(
-    Path(path): Path<String>,
-    State(_site): State<SharedSite>,
-) -> util::EmbeddedData {
+pub async fn get_style(Path(path): Path<String>, State(_site): State<Site>) -> util::EmbeddedData {
     match util::read_embedded_data::<EmbeddedStyles>(&path) {
         Ok(data) => data,
         Err(e) => {
@@ -57,10 +51,7 @@ pub async fn get_style(
 #[derive(RustEmbed)]
 #[folder = "content/fonts/"]
 struct EmbeddedFonts;
-pub async fn get_font(
-    Path(path): Path<String>,
-    State(_site): State<SharedSite>,
-) -> util::EmbeddedData {
+pub async fn get_font(Path(path): Path<String>, State(_site): State<Site>) -> util::EmbeddedData {
     match util::read_embedded_data::<EmbeddedFonts>(&path) {
         Ok(data) => data,
         Err(e) => {
