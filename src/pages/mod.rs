@@ -19,9 +19,9 @@ impl Pages {
     /// Generate page struct.
     pub fn new() -> Result<Self> {
         Ok(Pages {
-            index: index::IndexPage::new(),
-            error: error::ErrorPage::new(),
-            blog_indexer: blog::BlogIndexer::new(),
+            index: index::IndexPage::new()?,
+            error: error::ErrorPage::new()?,
+            blog_indexer: blog::BlogIndexer::new()?,
             projects: projects::ProjectPage::new()?,
         })
     }

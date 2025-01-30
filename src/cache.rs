@@ -11,8 +11,6 @@ pub enum CachedItemState {
     Active,
     /// Item is in cache, but is expired
     Expired,
-    /// Error, something like lock poisoning occured
-    Error,
 }
 
 /// Entry inside of cache.
@@ -120,25 +118,25 @@ impl<T: Clone> Cache<T> {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     use crate::cache::*;
+#[cfg(test)]
+mod tests {
+    use crate::cache::*;
 
-//     #[test]
-//     fn general_cacheing() {
-//         let cache: Cache<i8> = Cache::new(f32::INFINITY);
-//         cache.update("foo", 8);
-//         cache.update("bar", -16);
+    #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
+    async fn general_cacheing() {
+        let cache: Cache<i8> = Cache::new(f32::INFINITY);
+        cache.update("foo", 8).await;
+        cache.update("bar", -16).await;
 
-//         let foo_result = cache.retrieve("foo");
-//         assert!(foo_result.is_ok());
-//         assert_eq!(cache.get_state("foo"), CachedItemState::Active);
+        let foo_result = cache.retrieve("foo").await;
+        assert!(foo_result.is_ok());
+        assert_eq!(cache.get_state("foo").await, CachedItemState::Active);
 
-//         assert!(cache.in_cache("bar"));
-//         assert_eq!(cache.retrieve_force("bar"), Some(-16));
+        assert!(cache.in_cache("bar").await);
+        assert_eq!(cache.retrieve_force("bar").await, Some(-16));
 
-//         let baz_result = cache.retrieve("baz");
-//         assert_eq!(baz_result, Err(CachedItemState::Missing));
-//         assert_eq!(cache.retrieve_force("baz"), None);
-//     }
-// }
+        let baz_result = cache.retrieve("baz").await;
+        assert_eq!(baz_result, Err(CachedItemState::Missing));
+        assert_eq!(cache.retrieve_force("baz").await, None);
+    }
+}

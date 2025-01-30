@@ -81,7 +81,7 @@ impl ProjectPage {
     }
 }
 
-pub async fn visit_projects(State(site): State<SharedSite>) -> Html<String> {
+pub async fn visit_projects(State(site): State<SharedSite>) -> RenderedHtml {
     match site.page_cache().retrieve("projects").await {
         Ok(page) => page,
         Err(_) => {
@@ -89,7 +89,7 @@ pub async fn visit_projects(State(site): State<SharedSite>) -> Html<String> {
             site.page_cache()
                 .update(
                     "projects",
-                    Html(site.render_page(&site.pages().projects.index, &proj_metadata)),
+                    site.render_page(&site.pages().projects.index, &proj_metadata),
                 )
                 .await
         }

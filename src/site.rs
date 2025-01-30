@@ -2,7 +2,6 @@
 
 use super::*;
 
-use axum_server::tls_rustls::RustlsConfig;
 use clap::Parser;
 use handlebars::Handlebars;
 
@@ -32,12 +31,12 @@ impl SharedSite {
     }
 
     /// Get page cache.
-    pub fn page_cache(&self) -> &Cache<Html<String>> {
+    pub fn page_cache(&self) -> &Cache<RenderedHtml> {
         &self.0.page_cache
     }
 
     /// Get content cache.
-    pub fn content_cache(&self) -> &Cache<Vec<u8>> {
+    pub fn content_cache(&self) -> &Cache<EmbeddedData> {
         &self.0.content_cache
     }
 
@@ -50,17 +49,24 @@ impl SharedSite {
         });
     }
 
-    pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> String {
+    /// Render page with templater given json values.
+    pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> RenderedHtml {
+        // Compute complete json to render page.
         let mut render_context = self.base_context();
-        util::merge_json(&mut render_context, metadata);
+        if util::merge_json(&mut render_context, metadata).is_err() {
+            error!("Unable to merge json to render page.");
+            return RenderedHtml::new(pages::error::WORST_CASE_404);
+        };
 
-        match self.templater().render_template(&page, &render_context) {
-            Ok(rendered_page) => rendered_page,
-            Err(e) => {
-                error!("Error rendering page: {e}");
-                return crate::pages::error::WORST_CASE_404.to_owned();
-            }
-        }
+        RenderedHtml::new(
+            match self.templater().render_template(&page, &render_context) {
+                Ok(rendered_page) => rendered_page,
+                Err(e) => {
+                    error!("Error rendering page: {e}");
+                    pages::error::WORST_CASE_404.to_string()
+                }
+            },
+        )
     }
 }
 
@@ -69,8 +75,8 @@ pub struct Site {
     pub config: SiteConfig,
     pub templater: Arc<Handlebars<'static>>,
     pub pages: Pages,
-    pub page_cache: Cache<Html<String>>,
-    pub content_cache: Cache<Vec<u8>>,
+    pub page_cache: Cache<RenderedHtml>,
+    pub content_cache: Cache<EmbeddedData>,
 }
 
 impl Site {
@@ -88,7 +94,7 @@ impl Site {
 
         // Configure site struct
         Ok(Site {
-            templater: Arc::new(create_templater()),
+            templater: Arc::new(create_templater()?),
             pages: Pages::new()?,
             page_cache: Cache::new(args.cache_timeout),
             content_cache: Cache::new(args.cache_timeout),
@@ -117,14 +123,16 @@ pub struct SiteConfig {
 #[folder = "content/templates/"]
 pub struct Templates;
 
-fn create_templater<'a>() -> Handlebars<'a> {
+fn create_templater<'a>() -> Result<Handlebars<'a>> {
     let mut templater = Handlebars::new();
 
     // Register templates.
     for item in Templates::iter() {
-        let raw_template = Templates::get(&item).expect("Unable to get item from templates!");
-        let template =
-            std::str::from_utf8(&raw_template.data).expect("Unable to convert template.");
+        let raw_template = match Templates::get(&item) {
+            Some(raw) => raw,
+            None => bail!("Unabel to get template for templater: {item:?}"),
+        };
+        let template = std::str::from_utf8(&raw_template.data)?;
         let template_name: String = item.to_string(); //.strip_prefix("templates/").expect("...").to_owned();
         let res = templater.register_partial(&format!("templates/{}", template_name), template);
         if res.is_err() {
@@ -135,17 +143,5 @@ fn create_templater<'a>() -> Handlebars<'a> {
     // Register helpers.
     templater.register_helper("markdown", Box::new(util::markdown_helper));
 
-    return templater;
-}
-
-/// Reload site by reloading config.
-pub async fn reload_tls(config: RustlsConfig, cert: PathBuf, priv_key: PathBuf) {
-    loop {
-        tokio::time::sleep(Duration::from_secs(48 * 60 * 60)).await; // Every 48 hours
-        config
-            .reload_from_pem_file(cert.clone(), priv_key.clone())
-            .await
-            .expect("Unable to reload TLS from pem file!");
-        debug!("Reloaded rustls configuration");
-    }
+    Ok(templater)
 }

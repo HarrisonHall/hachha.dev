@@ -71,27 +71,22 @@ pub struct BlogIndexer {
 
 impl BlogIndexer {
     /// Get new blog indexer.
-    pub fn new() -> Self {
+    pub fn new() -> Result<Self> {
         // Parse pages.
-        let index = util::read_embedded_text::<EmbeddedBlogFiles>("blogs.html")
-            .expect("Must have blogs.html page!");
-        let article = util::read_embedded_text::<EmbeddedBlogFiles>("article.html")
-            .expect("Must have article.html page!");
+        let index = util::read_embedded_text::<EmbeddedBlogFiles>("blogs.html")?;
+        let article = util::read_embedded_text::<EmbeddedBlogFiles>("article.html")?;
 
         // Parse blogs.
         let mut blogs =
-            util::read_embedded_toml::<Blogs, EmbeddedBlogFiles>("articles/articles.toml")
-                .expect("Unable to parse blogs!");
+            util::read_embedded_toml::<Blogs, EmbeddedBlogFiles>("articles/articles.toml")?;
         blogs.reverse();
 
         // Read articles list.
         for blog in blogs.iter_mut() {
             let raw_path = &blog.path;
             let path = format!("articles/{raw_path}/{raw_path}.md");
-            blog.markdown = util::read_embedded_text::<EmbeddedBlogFiles>(&path)
-                .expect(&format!("Blog path doesn't exist: {path}"));
-            blog.cached_json =
-                util::to_json(blog).expect(&format!("Unable to convert blog to json {blog:?}"));
+            blog.markdown = util::read_embedded_text::<EmbeddedBlogFiles>(&path)?;
+            blog.cached_json = util::to_json(blog)?;
         }
 
         // Parse into atom feed.
@@ -135,12 +130,12 @@ impl BlogIndexer {
         feed.entries(entries);
         let cached_feed = feed.build().to_string();
 
-        BlogIndexer {
+        Ok(BlogIndexer {
             index,
             article,
             blogs,
             cached_feed,
-        }
+        })
     }
 
     fn blog_metadata(&self) -> serde_json::Value {
@@ -164,7 +159,7 @@ impl BlogIndexer {
 }
 
 /// Visit blog page
-pub async fn visit_blog_index(State(site): State<SharedSite>) -> Html<String> {
+pub async fn visit_blog_index(State(site): State<SharedSite>) -> RenderedHtml {
     match site.page_cache().retrieve("blog").await {
         Ok(page) => page,
         Err(_) => {
@@ -172,7 +167,7 @@ pub async fn visit_blog_index(State(site): State<SharedSite>) -> Html<String> {
             site.page_cache()
                 .update(
                     "blog",
-                    Html(site.render_page(&site.pages().blog_indexer.index, &blog_metadata)),
+                    site.render_page(&site.pages().blog_indexer.index, &blog_metadata),
                 )
                 .await
         }
@@ -180,7 +175,7 @@ pub async fn visit_blog_index(State(site): State<SharedSite>) -> Html<String> {
 }
 
 /// Visit individual blog
-pub async fn visit_blog(Path(blog): Path<String>, State(site): State<SharedSite>) -> Html<String> {
+pub async fn visit_blog(Path(blog): Path<String>, State(site): State<SharedSite>) -> RenderedHtml {
     // Visit index
     if blog.is_empty() {
         return visit_blog_index(State(site)).await;
@@ -198,7 +193,7 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<SharedSite>
                     .page_cache()
                     .update(
                         &full_blog_path,
-                        Html(site.render_page(&site.pages().blog_indexer.article, &blog_metadata)),
+                        site.render_page(&site.pages().blog_indexer.article, &blog_metadata),
                     )
                     .await;
             };
@@ -213,13 +208,13 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<SharedSite>
 pub async fn get_blog_resource(
     Path((blog, resource)): Path<(String, String)>,
     State(_site): State<SharedSite>,
-) -> Vec<u8> {
+) -> EmbeddedData {
     let blog_resource: String = format!("articles/{blog}/{resource}");
     match util::read_embedded_data::<EmbeddedBlogFiles>(&blog_resource) {
         Ok(data) => data,
         Err(_) => {
             error!("Unable to render blog resource {blog_resource}");
-            vec![]
+            EmbeddedData::empty()
         }
     }
 }

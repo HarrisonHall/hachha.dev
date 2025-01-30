@@ -13,7 +13,6 @@ keywords = ["website", "blog", "hachha"]
 [dependencies]
 # Server
 axum = "0.7.0"
-axum-server = { version = "0.6.0", features = ["tls-rustls"] }
 
 # CLI
 clap = { version = "4.1.8", features = ["derive"] }

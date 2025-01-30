@@ -1,17 +1,15 @@
 //! Main.
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::net::SocketAddr;
-use std::path::PathBuf;
 use std::sync::Arc;
-use std::time::Duration;
 use std::time::Instant;
 
 use anyhow::{anyhow, bail, Result};
 use axum::extract::{Path, State};
 use axum::response::Html;
 use axum::{routing::get, Router};
-use axum_server::tls_rustls::RustlsConfig;
 use chrono::Datelike;
 use log::*;
 use rust_embed::RustEmbed;
@@ -28,29 +26,14 @@ mod util;
 use crate::cache::Cache;
 use crate::pages::Pages;
 use crate::site::SharedSite;
+use crate::util::EmbeddedData;
+use crate::util::RenderedHtml;
 
 /// Server entry-point.
 #[tokio::main]
 async fn main() -> Result<()> {
     // Generate site data.
     let site = SharedSite::new()?;
-
-    // Try to set up TLS/HTTPS.
-    let cert_dir = PathBuf::from(&site.config().cert_dir);
-    let tls_config: Option<RustlsConfig> = match cert_dir.is_dir() {
-        true => Some({
-            let cert = cert_dir.join("cert.pem");
-            let priv_key = cert_dir.join("privkey.pem");
-            // Create config.
-            let config = RustlsConfig::from_pem_file(cert.clone(), priv_key.clone())
-                .await
-                .expect("TLS config is invalid.");
-            // Spawn a task to reload tls.
-            tokio::spawn(site::reload_tls(config.clone(), cert, priv_key));
-            config
-        }),
-        false => None,
-    };
 
     // Set up routing.
     let mut app = Router::new();
@@ -71,22 +54,7 @@ async fn main() -> Result<()> {
     info!("Serving haccha.dev on {}", site.config().port);
     debug!("Debug @ http://127.0.0.1:{}", site.config().port);
     let addr = SocketAddr::from(([0, 0, 0, 0], site.config().port));
-    match tls_config {
-        Some(config) => {
-            debug!("Serving HTTPS");
-            axum_server::bind_rustls(addr, config)
-                .serve(app.into_make_service())
-                .await
-                .expect("Unable to bind for TLS.");
-        }
-        None => {
-            debug!("Serving HTTP");
-            axum_server::bind(addr)
-                .serve(app.into_make_service())
-                .await
-                .expect("Unable to serve.");
-        }
-    };
-
+    let listener = tokio::net::TcpListener::bind(addr).await?;
+    axum::serve(listener, app.into_make_service()).await?;
     Ok(())
 }
