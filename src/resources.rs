@@ -1,16 +1,14 @@
-use axum::extract::{Path, State};
-use log::*;
-use rust_embed::RustEmbed;
+//! Site resources.
 
-use crate::site::SharedSite;
-use crate::util;
+use super::*;
 
+/// Get media from resource data.
 #[derive(RustEmbed)]
 #[folder = "content/media"]
 #[exclude = "*/*"]
 #[include = "favicon.ico"]
 struct EmbeddedFavicon;
-pub async fn get_favicon<'a>(State(_site): State<SharedSite<'a>>) -> Vec<u8> {
+pub async fn get_favicon(State(_site): State<SharedSite>) -> Vec<u8> {
     match util::read_embedded_data::<EmbeddedFavicon>("favicon.ico") {
         Ok(data) => data,
         Err(_) => {
@@ -20,14 +18,12 @@ pub async fn get_favicon<'a>(State(_site): State<SharedSite<'a>>) -> Vec<u8> {
     }
 }
 
+/// Get favicon from resource data.
 #[derive(RustEmbed)]
 #[folder = "content/media"]
 #[exclude = "favicon.ico"]
 struct EmbeddedMedia;
-pub async fn get_media<'a>(
-    Path(path): Path<String>,
-    State(_site): State<SharedSite<'a>>,
-) -> Vec<u8> {
+pub async fn get_media(Path(path): Path<String>, State(_site): State<SharedSite>) -> Vec<u8> {
     match util::read_embedded_data::<EmbeddedMedia>(&path) {
         Ok(data) => data,
         Err(_) => {
@@ -37,13 +33,11 @@ pub async fn get_media<'a>(
     }
 }
 
+/// Get styles from resource data.
 #[derive(RustEmbed)]
 #[folder = "content/styles/"]
 struct EmbeddedStyles;
-pub async fn get_style<'a>(
-    Path(path): Path<String>,
-    State(_site): State<SharedSite<'a>>,
-) -> Vec<u8> {
+pub async fn get_style(Path(path): Path<String>, State(_site): State<SharedSite>) -> Vec<u8> {
     match util::read_embedded_data::<EmbeddedStyles>(&path) {
         Ok(data) => data,
         Err(e) => {
@@ -53,13 +47,11 @@ pub async fn get_style<'a>(
     }
 }
 
+/// Get font from resource data.
 #[derive(RustEmbed)]
 #[folder = "content/fonts/"]
 struct EmbeddedFonts;
-pub async fn get_font<'a>(
-    Path(path): Path<String>,
-    State(_site): State<SharedSite<'a>>,
-) -> Vec<u8> {
+pub async fn get_font(Path(path): Path<String>, State(_site): State<SharedSite>) -> Vec<u8> {
     match util::read_embedded_data::<EmbeddedFonts>(&path) {
         Ok(data) => data,
         Err(e) => {

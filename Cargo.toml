@@ -11,20 +11,33 @@ keywords = ["website", "blog", "hachha"]
 
 
 [dependencies]
-anyhow = "1.0.79"
-atom_syndication = "0.12"
+# Server
 axum = "0.7.0"
 axum-server = { version = "0.6.0", features = ["tls-rustls"] }
-chrono = "0.4.26"
+
+# CLI
 clap = { version = "4.1.8", features = ["derive"] }
-handlebars = "4.3.6"
-log = "0.4.17"
-markdown = "1.0.0-alpha.17"
-pretty_env_logger = "0.4.0"
-rust-embed = { version = "6.6.0", features = ["include-exclude"] }
+
+# Serde
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version ="1.0.68", features = ["preserve_order"] }
-serde_yaml = "0.9"
+toml = "0.8"
+
+# Syndication
+atom_syndication = "0.12"
+
+# Markup
+handlebars = "4.3.6"
+markdown = "1.0.0-alpha.21"
+
+# Logging
+log = "0.4.17"
+pretty_env_logger = "0.4.0"
+
+# Util
+anyhow = "1.0.79"
+chrono = "0.4.26"
+rust-embed = { version = "8.4", features = ["include-exclude"] }
 tokio = { version = "1.0", features = ["full"] }
 
 

@@ -1,0 +1,34 @@
+# Project catalogue.
+
+[[projects]]
+name = "fpsi"
+date = "2022-11-1"
+description = """\
+  Data and state control software with dynamic plugin support for use with \
+  single or multi-node systems."""
+image = "https://github.com/HarrisonHall/fpsi/raw/master/docs/media/srock_example.png"
+
+[projects.links]
+github = "https://github.com/HarrisonHall/fpsi"
+
+[[projects]]
+name = "dotfiles"
+date = "2023-02-01"
+description = "Dotfiles."
+[projects.links]
+github = "https://github.com/HarrisonHall/dotfiles"
+
+[[projects]]
+name = "hachha.dev"
+date = "2023-03-18"
+description = "My personal website 2.0. You're already here!"
+[projects.links]
+website = "https://hachha.dev"
+github = "https://github.com/HarrisonHall/hachha.dev"
+
+[[projects]]
+name = "slipstream"
+date = "2024-11-29"
+description = "Feed fetcher, filterer, and aggregator."
+[projects.links]
+github = "https://github.com/HarrisonHall/slipstream"

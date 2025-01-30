@@ -1,38 +1,44 @@
-use axum::{extract::State, response::Html};
-use rust_embed::RustEmbed;
-use serde_json::json;
+//! Error pages.
 
-use crate::site::SharedSite;
-use crate::util;
+use super::*;
 
 pub const WORST_CASE_404: &str = "<html>404</html>";
 
+/// Raw embedded error page.
 #[derive(RustEmbed)]
 #[folder = "content/pages/"]
 #[exclude = "*/*"]
 #[include = "404.html"]
 struct EmbeddedErrorPage;
 
+/// Error page.
 pub struct ErrorPage {
     pub raw_page: String,
     pub error_context: serde_json::Value,
 }
 
 impl ErrorPage {
+    /// Generate new error page.
     pub fn new() -> Self {
         ErrorPage {
-            raw_page: util::read_embedded_text::<EmbeddedErrorPage>("404.html").unwrap(),
+            raw_page: util::read_embedded_text::<EmbeddedErrorPage>("404.html")
+                .expect("Must have 404.html page!"),
             error_context: json!({}),
         }
     }
 }
 
-pub async fn visit_404<'a>(State(site): State<SharedSite<'a>>) -> Html<String> {
-    match site.page_cache.retrieve("404") {
+/// Endpoint for visiting the error 404 page.
+pub async fn visit_404(State(site): State<SharedSite>) -> Html<String> {
+    match site.page_cache().retrieve("404").await {
         Ok(page) => page,
-        Err(_) => site.page_cache.update(
-            "404",
-            Html(site.render_page(&site.pages.error.raw_page, &json!({}))),
-        ),
+        Err(_) => {
+            site.page_cache()
+                .update(
+                    "404",
+                    Html(site.render_page(&site.pages().error.raw_page, &json!({}))),
+                )
+                .await
+        }
     }
 }

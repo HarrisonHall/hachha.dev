@@ -1,19 +1,34 @@
 /* Site colors - misc themes */
 
-/* Catppuccin Macchiato */
+/* Catppuccin Mocha */
 :root {
-  --navbar: #181926;
-  --background: #24273a;
-  --text: #cad3f5;
-  --headers: #91d7e3;
-  --flavor1: #c6a0f6;
-  --flavor2: #a6da95;
-  --panel: #363a4f;
-  --selection: #6e738d;
-  --banner: #f5a97f;
-  --warning: #eed49f;
-  --alert: #ed8796;
+  --navbar: #11111b;
+  --background: #1e1e2e;
+  --text: #cdd6f4;
+  --headers: #89dceb;
+  --flavor1: #cba6f7;
+  --flavor2: #a6e3a1;
+  --panel: #313244;
+  --selection: #6c7086;
+  --banner: #fab387;
+  --warning: #f9e2af;
+  --alert: #f38ba8;
 }
+
+/* Catppuccin Macchiato */
+/* :root { */
+/* --navbar: #181926; */
+/* --background: #24273a; */
+/* --text: #cad3f5; */
+/* --headers: #91d7e3; */
+/* --flavor1: #c6a0f6; */
+/* --flavor2: #a6da95; */
+/* --panel: #363a4f; */
+/* --selection: #6e738d; */
+/* --banner: #f5a97f; */
+/* --warning: #eed49f; */
+/* --alert: #ed8796; */
+/* } */
 
 /* Original */ /*
 :root {

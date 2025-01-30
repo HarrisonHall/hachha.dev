@@ -1,33 +1,81 @@
-use std::path::PathBuf;
-use std::sync::Arc;
-use std::time::Duration;
+//! Site helper.
 
-use axum::response::Html;
+use super::*;
+
 use axum_server::tls_rustls::RustlsConfig;
-use chrono::Datelike;
 use clap::Parser;
 use handlebars::Handlebars;
-use log::*;
-use rust_embed::RustEmbed;
-use serde_json::json;
-use tokio::time::sleep;
 
-use crate::cache::Cache;
-use crate::pages::Pages;
-use crate::util;
+/// Shared type representing site.
+#[derive(Clone)]
+pub struct SharedSite(Arc<Site>);
 
-pub type SharedSite<'a> = Arc<Site<'a>>;
+impl SharedSite {
+    /// Generate shared site.
+    pub fn new() -> Result<Self> {
+        Ok(SharedSite(Arc::new(Site::new()?)))
+    }
 
-pub struct Site<'a> {
+    /// Get config.
+    pub fn config(&self) -> &SiteConfig {
+        &self.0.config
+    }
+
+    /// Get templater.
+    pub fn templater(&self) -> &Handlebars {
+        &self.0.templater
+    }
+
+    /// Get pages.
+    pub fn pages(&self) -> &Pages {
+        &self.0.pages
+    }
+
+    /// Get page cache.
+    pub fn page_cache(&self) -> &Cache<Html<String>> {
+        &self.0.page_cache
+    }
+
+    /// Get content cache.
+    pub fn content_cache(&self) -> &Cache<Vec<u8>> {
+        &self.0.content_cache
+    }
+
+    /// Generate base context.
+    pub fn base_context(&self) -> serde_json::Value {
+        let current_time = chrono::Utc::now();
+        return json!({
+            "version": env!("CARGO_PKG_VERSION"),
+            "year": current_time.year(),
+        });
+    }
+
+    pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> String {
+        let mut render_context = self.base_context();
+        util::merge_json(&mut render_context, metadata);
+
+        match self.templater().render_template(&page, &render_context) {
+            Ok(rendered_page) => rendered_page,
+            Err(e) => {
+                error!("Error rendering page: {e}");
+                return crate::pages::error::WORST_CASE_404.to_owned();
+            }
+        }
+    }
+}
+
+/// Site struct.
+pub struct Site {
     pub config: SiteConfig,
-    pub templater: Handlebars<'a>,
+    pub templater: Arc<Handlebars<'static>>,
     pub pages: Pages,
     pub page_cache: Cache<Html<String>>,
     pub content_cache: Cache<Vec<u8>>,
 }
 
-impl<'a> Site<'a> {
-    pub fn new() -> Self {
+impl Site {
+    /// Generate new site object.
+    pub fn new() -> Result<Self> {
         // Parse arguments
         let args: SiteConfig = SiteConfig::parse();
 
@@ -39,37 +87,17 @@ impl<'a> Site<'a> {
         pretty_env_logger::init();
 
         // Configure site struct
-        Site {
-            templater: create_templater(),
-            pages: Pages::new(),
+        Ok(Site {
+            templater: Arc::new(create_templater()),
+            pages: Pages::new()?,
             page_cache: Cache::new(args.cache_timeout),
             content_cache: Cache::new(args.cache_timeout),
             config: args,
-        }
-    }
-
-    pub fn get_base_context(&self) -> serde_json::Value {
-        let current_time = chrono::Utc::now();
-        return json!({
-            "version": env!("CARGO_PKG_VERSION"),
-            "year": current_time.year(),
-        });
-    }
-
-    pub fn render_page(&self, page: &String, metadata: &serde_json::Value) -> String {
-        let mut render_context = self.get_base_context();
-        util::merge_json(&mut render_context, metadata);
-
-        match self.templater.render_template(&page, &render_context) {
-            Ok(rendered_page) => rendered_page,
-            Err(e) => {
-                error!("Error rendering page: {e}");
-                return crate::pages::WORST_CASE_404.to_owned();
-            }
-        }
+        })
     }
 }
 
+/// CLI arguments for server.
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
 pub struct SiteConfig {
@@ -92,31 +120,32 @@ pub struct Templates;
 fn create_templater<'a>() -> Handlebars<'a> {
     let mut templater = Handlebars::new();
 
-    // Register templates
+    // Register templates.
     for item in Templates::iter() {
-        let raw_template = Templates::get(&item).unwrap();
-        let template = std::str::from_utf8(&raw_template.data).unwrap();
-        let template_name: String = item.to_string(); //.strip_prefix("templates/").unwrap().to_owned();
+        let raw_template = Templates::get(&item).expect("Unable to get item from templates!");
+        let template =
+            std::str::from_utf8(&raw_template.data).expect("Unable to convert template.");
+        let template_name: String = item.to_string(); //.strip_prefix("templates/").expect("...").to_owned();
         let res = templater.register_partial(&format!("templates/{}", template_name), template);
         if res.is_err() {
             error!("Unable to register partial {}: {:?}", template_name, res);
         }
     }
 
-    // Register helpers
+    // Register helpers.
     templater.register_helper("markdown", Box::new(util::markdown_helper));
 
     return templater;
 }
 
-/// Reload site by reloading config
+/// Reload site by reloading config.
 pub async fn reload_tls(config: RustlsConfig, cert: PathBuf, priv_key: PathBuf) {
     loop {
-        sleep(Duration::from_secs(48 * 60 * 60)).await; // Every 48 hours
+        tokio::time::sleep(Duration::from_secs(48 * 60 * 60)).await; // Every 48 hours
         config
             .reload_from_pem_file(cert.clone(), priv_key.clone())
             .await
-            .unwrap();
+            .expect("Unable to reload TLS from pem file!");
         debug!("Reloaded rustls configuration");
     }
 }
