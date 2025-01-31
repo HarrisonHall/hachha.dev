@@ -36,6 +36,11 @@ body *:focus {
   src: url("/fonts/mplus1/MPLUS1Code-VariableFont_wght.ttf") format("truetype");
 }
 
+@font-face {
+  font-family: PhosphorFill;
+  src: url("/styles/phosphor/Phosphor-Fill.ttf") format("truetype");
+}
+
 .navbar {
   position: sticky;
   width: 100vw;

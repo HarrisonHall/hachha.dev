@@ -6,14 +6,9 @@
     <p>{{project-description}}</p>
     {{> templates/generic/date_badge.html date=project-date }} {{#each
     project-links}}
-    <a href="{{this}}"
-      ><button
-        class="btn btn-link"
-        onclick="//window.location.href='{{this}}';"
-      >
-        {{@key}}
-      </button></a
-    >
+    <a href="{{this}}" target="_blank">
+      <button class="btn btn-link">{{@key}}</button>
+    </a>
     {{/each}}
   </div>
 </div>

@@ -15,7 +15,7 @@ test:
 	#/usr/bin/env sh
 	cargo build
 	sh -c "sleep 2 && firefox 127.0.0.1:8180" &
-	cargo run -- --port 8180 --debug
+	cargo run -- --port 8180 --debug --cache-timeout 4
 
 # Build static release for many versions of linux via musl.
 build-release:
