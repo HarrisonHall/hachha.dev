@@ -4,7 +4,7 @@ use super::*;
 
 /// Get media from resource data.
 #[derive(RustEmbed)]
-#[folder = "content/media"]
+#[folder = "content/media/"]
 #[exclude = "*/*"]
 #[include = "favicon.ico"]
 struct EmbeddedFavicon;
@@ -20,7 +20,7 @@ pub async fn get_favicon(State(_site): State<Site>) -> util::EmbeddedData {
 
 /// Get favicon from resource data.
 #[derive(RustEmbed)]
-#[folder = "content/media"]
+#[folder = "content/media/"]
 #[exclude = "favicon.ico"]
 struct EmbeddedMedia;
 pub async fn get_media(Path(path): Path<String>, State(_site): State<Site>) -> util::EmbeddedData {
@@ -56,6 +56,22 @@ pub async fn get_font(Path(path): Path<String>, State(_site): State<Site>) -> ut
         Ok(data) => data,
         Err(e) => {
             error!("Asked for invalid asset at fonts/{path}: {e}");
+            util::EmbeddedData::empty()
+        }
+    }
+}
+
+/// Get robots.txt
+#[derive(RustEmbed)]
+#[folder = "content"]
+#[exclude = "*/*"]
+#[include = "robots.txt"]
+struct EmbeddedRobotsTxt;
+pub async fn get_robots_txt(State(_site): State<Site>) -> util::EmbeddedData {
+    match util::read_embedded_data::<EmbeddedRobotsTxt>("robots.txt") {
+        Ok(data) => data,
+        Err(_) => {
+            error!("robots.txt missing!");
             util::EmbeddedData::empty()
         }
     }

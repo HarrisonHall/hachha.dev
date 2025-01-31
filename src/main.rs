@@ -47,6 +47,7 @@ async fn main() -> Result<()> {
     app = app.route("/blog/:path/*resource", get(pages::blog::get_blog_resource));
     app = app.route("/projects", get(pages::projects::visit_projects));
     app = app.route("/favicon.ico", get(resources::get_favicon));
+    app = app.route("/robots.txt", get(resources::get_robots_txt));
     app = app.fallback(get(pages::error::visit_404));
     let app = app.with_state(site.clone());
 
