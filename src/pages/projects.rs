@@ -21,12 +21,21 @@ pub struct ProjectsPage {
 impl ProjectsPage {
     /// Generate new projects page.
     pub fn new() -> Result<Self> {
+        // Parse index file.
         let raw_index = util::read_embedded_text::<EmbeddedProjectsFiles>("projects.html")?;
-        let projects =
+
+        // Parse projects.
+        let mut projects =
             util::read_embedded_toml::<Projects, EmbeddedProjectsFiles>("projects.toml")?;
+        projects.sort();
+        projects.reverse();
+
+        // Compile metadata from projects.
         let metadata = json!({
             "projects": projects.iter().map(|proj| proj.to_json()).collect::<Vec<serde_json::Value>>()
         });
+
+        // Build projects page.
         Ok(ProjectsPage {
             raw_index,
             projects,
@@ -48,15 +57,21 @@ impl std::ops::Deref for Projects {
     }
 }
 
+impl std::ops::DerefMut for Projects {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.projects
+    }
+}
+
 /// Parsed project data.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 struct Project {
     /// Title of the blog.
     name: String,
     /// Description of blog.
     description: String,
     /// Date.
-    date: String,
+    date: chrono::NaiveDate,
     /// Path to image (if existent).
     image: Option<String>,
     /// Links to project.
@@ -81,10 +96,22 @@ impl Default for Project {
         Project {
             name: "".to_string(),
             description: "".to_string(),
-            date: "".to_string(),
+            date: chrono::NaiveDate::default(),
             image: None,
             links: HashMap::new(),
         }
+    }
+}
+
+impl std::cmp::PartialOrd for Project {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.date.partial_cmp(&other.date)
+    }
+}
+
+impl std::cmp::Ord for Project {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.date.cmp(&other.date)
     }
 }
 

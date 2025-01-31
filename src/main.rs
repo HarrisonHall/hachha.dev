@@ -38,13 +38,16 @@ async fn main() -> Result<()> {
     // Set up routing.
     let mut app = Router::new();
     app = app.route("/", get(pages::index::visit_index));
-    app = app.route("/styles/*path", get(resources::get_style));
-    app = app.route("/fonts/*path", get(resources::get_font));
-    app = app.route("/media/*path", get(resources::get_media));
+    app = app.route("/styles/{*path}", get(resources::get_style));
+    app = app.route("/fonts/{*path}", get(resources::get_font));
+    app = app.route("/media/{*path}", get(resources::get_media));
     app = app.route("/blog", get(pages::blog::visit_blog_index));
     app = app.route("/blog.feed", get(pages::blog::visit_blog_feed));
-    app = app.route("/blog/:path", get(pages::blog::visit_blog));
-    app = app.route("/blog/:path/*resource", get(pages::blog::get_blog_resource));
+    app = app.route("/blog/{:path}", get(pages::blog::visit_blog));
+    app = app.route(
+        "/blog/{:path}/{*resource}",
+        get(pages::blog::get_blog_resource),
+    );
     app = app.route("/projects", get(pages::projects::visit_projects));
     app = app.route("/favicon.ico", get(resources::get_favicon));
     app = app.route("/robots.txt", get(resources::get_robots_txt));
