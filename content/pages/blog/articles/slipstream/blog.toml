@@ -1,0 +1,4 @@
+name = "Slipstream"
+path = "slipstream"
+blurb = "Fetching and filtering and aggregating, oh my"
+date = "2024-11-29"

@@ -19,11 +19,19 @@ impl BlogsPages {
         // Parse pages.
         let index = util::read_embedded_text::<EmbeddedBlogFiles>("blogs.html")?;
         let article = util::read_embedded_text::<EmbeddedBlogFiles>("article.html")?;
+        let mut blogs = Blogs::default();
+        for path in EmbeddedBlogFiles::iter() {
+            if path.ends_with("blog.toml") {
+                blogs.push(util::read_embedded_toml::<Blog, EmbeddedBlogFiles>(path)?);
+            }
+        }
+        blogs.sort();
+        blogs.reverse();
 
         // Parse blogs.
-        let mut blogs =
-            util::read_embedded_toml::<Blogs, EmbeddedBlogFiles>("articles/articles.toml")?;
-        blogs.reverse();
+        // let mut blogs =
+        //     util::read_embedded_toml::<Blogs, EmbeddedBlogFiles>("articles/articles.toml")?;
+        // blogs.reverse();
 
         // Read articles list.
         for blog in blogs.iter_mut() {
@@ -48,16 +56,11 @@ impl BlogsPages {
             .subtitle(Some("hachha.dev blog feed".to_string().into()));
         let mut entries = Vec::new();
         for blog in blogs.iter() {
-            let timestamp = match chrono::DateTime::parse_from_str(
-                &format!("{} 00:00:00+0000", blog.date.as_str()),
-                "%F %H:%M:%S%z",
-            ) {
-                Ok(pub_date) => pub_date,
-                Err(e) => {
-                    error!("Blog date error: {} -> {}", blog.date, e);
-                    chrono::offset::Utc::now().into()
-                }
-            };
+            let timestamp: chrono::DateTime<chrono::FixedOffset> = blog
+                .date
+                .and_time(chrono::NaiveTime::default())
+                .and_utc()
+                .into();
             let entry: atom::Entry = atom::EntryBuilder::default()
                 .title(blog.name.clone())
                 .summary(Some(blog.blurb.clone().into()))
@@ -109,6 +112,14 @@ struct Blogs {
     articles: Vec<Blog>,
 }
 
+impl Default for Blogs {
+    fn default() -> Self {
+        Self {
+            articles: Vec::new(),
+        }
+    }
+}
+
 impl std::ops::Deref for Blogs {
     type Target = Vec<Blog>;
     fn deref(&self) -> &Self::Target {
@@ -128,7 +139,7 @@ impl std::ops::DerefMut for Blogs {
 struct EmbeddedBlogFiles;
 
 /// Parsed blog data.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct Blog {
     /// Title of the blog.
@@ -136,7 +147,7 @@ pub struct Blog {
     /// Description of blog.
     blurb: String,
     /// Date blog was written.
-    date: String,
+    date: chrono::NaiveDate,
     /// Actual local path to blog.
     path: String,
     /// Read markdown of blog entry.
@@ -152,11 +163,23 @@ impl Default for Blog {
         Blog {
             name: "".to_string(),
             blurb: "".to_string(),
-            date: "".to_string(),
+            date: chrono::NaiveDate::default(),
             path: "".to_string(),
             markdown: "".to_string(),
             metadata: json!({}),
         }
+    }
+}
+
+impl std::cmp::PartialOrd for Blog {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        self.date.partial_cmp(&other.date)
+    }
+}
+
+impl std::cmp::Ord for Blog {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.date.cmp(&other.date)
     }
 }
 
