@@ -227,7 +227,7 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<Site>) -> R
         }
     };
 
-    error!("Visiting invalid blog {}", full_blog_path);
+    log::error!("Visiting invalid blog {}", full_blog_path);
     return error::visit_404(State(site)).await;
 }
 
@@ -240,7 +240,7 @@ pub async fn get_blog_resource(
     match util::read_embedded_data::<EmbeddedBlogFiles>(&blog_resource) {
         Ok(data) => data,
         Err(_) => {
-            error!("Unable to render blog resource {blog_resource}");
+            log::error!("Unable to render blog resource {blog_resource}");
             EmbeddedData::empty()
         }
     }

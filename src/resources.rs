@@ -12,7 +12,7 @@ pub async fn get_favicon(State(_site): State<Site>) -> util::EmbeddedData {
     match util::read_embedded_data::<EmbeddedFavicon>("favicon.ico") {
         Ok(data) => data,
         Err(_) => {
-            error!("Favicon missing!");
+            log::error!("Favicon missing!");
             util::EmbeddedData::empty()
         }
     }
@@ -27,7 +27,7 @@ pub async fn get_media(Path(path): Path<String>, State(_site): State<Site>) -> u
     match util::read_embedded_data::<EmbeddedMedia>(&path) {
         Ok(data) => data,
         Err(_) => {
-            error!("Asked for missing media {path}");
+            log::error!("Asked for missing media {path}");
             util::EmbeddedData::empty()
         }
     }
@@ -41,7 +41,7 @@ pub async fn get_style(Path(path): Path<String>, State(_site): State<Site>) -> u
     match util::read_embedded_data::<EmbeddedStyles>(&path) {
         Ok(data) => data,
         Err(e) => {
-            error!("Asked for invalid asset at style/{path}: {e}");
+            log::error!("Asked for invalid asset at style/{path}: {e}");
             util::EmbeddedData::empty()
         }
     }
@@ -55,7 +55,7 @@ pub async fn get_font(Path(path): Path<String>, State(_site): State<Site>) -> ut
     match util::read_embedded_data::<EmbeddedFonts>(&path) {
         Ok(data) => data,
         Err(e) => {
-            error!("Asked for invalid asset at fonts/{path}: {e}");
+            log::error!("Asked for invalid asset at fonts/{path}: {e}");
             util::EmbeddedData::empty()
         }
     }
@@ -71,7 +71,7 @@ pub async fn get_robots_txt(State(_site): State<Site>) -> util::EmbeddedData {
     match util::read_embedded_data::<EmbeddedRobotsTxt>("robots.txt") {
         Ok(data) => data,
         Err(_) => {
-            error!("robots.txt missing!");
+            log::error!("robots.txt missing!");
             util::EmbeddedData::empty()
         }
     }

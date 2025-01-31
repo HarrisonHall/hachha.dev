@@ -4,6 +4,7 @@ use std::borrow::Cow;
 use std::collections::HashMap;
 use std::net::SocketAddr;
 use std::sync::Arc;
+use std::sync::Once;
 use std::time::Instant;
 
 use anyhow::{anyhow, bail, Result};
@@ -11,7 +12,6 @@ use axum::extract::{Path, State};
 use axum::response::Html;
 use axum::{routing::get, Router};
 use chrono::Datelike;
-use log::*;
 use rust_embed::RustEmbed;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use serde_json::json;
@@ -52,11 +52,14 @@ async fn main() -> Result<()> {
     app = app.route("/favicon.ico", get(resources::get_favicon));
     app = app.route("/robots.txt", get(resources::get_robots_txt));
     app = app.fallback(get(pages::error::visit_404));
+    // app = app.layer(util::Logger::layer());
+    app = app.layer(tower_http::trace::TraceLayer::new_for_http());
+
     let app = app.with_state(site.clone());
 
     // Serve.
-    info!("Serving haccha.dev on {}", site.config().port);
-    debug!("Debug @ http://127.0.0.1:{}", site.config().port);
+    log::info!("Serving haccha.dev on {}", site.config().port);
+    log::debug!("Debug @ http://127.0.0.1:{}", site.config().port);
     let addr = SocketAddr::from(([0, 0, 0, 0], site.config().port));
     let listener = tokio::net::TcpListener::bind(addr).await?;
     axum::serve(listener, app.into_make_service()).await?;

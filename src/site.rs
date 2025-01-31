@@ -26,8 +26,17 @@ impl Site {
     }
 
     /// Get pages.
-    pub fn pages(&self) -> &Pages {
-        &self.0.pages
+    pub fn pages(&self) -> Arc<Pages> {
+        match cfg!(debug_assertions) {
+            true => match pages::Pages::new() {
+                Ok(pages) => Arc::new(pages),
+                Err(e) => {
+                    log::error!("Unable to rebuild pages!");
+                    panic!("{e}");
+                }
+            },
+            false => self.0.pages.clone(),
+        }
     }
 
     /// Get page cache.
@@ -49,7 +58,7 @@ impl Site {
         // Compute complete json to render page.
         let mut render_context = self.base_context();
         if util::merge_json(&mut render_context, metadata).is_err() {
-            error!("Unable to merge json to render page.");
+            log::error!("Unable to merge json to render page.");
             return RenderedHtml::new(pages::error::WORST_CASE_404);
         };
 
@@ -60,7 +69,7 @@ impl Site {
             {
                 Ok(rendered_page) => rendered_page,
                 Err(e) => {
-                    error!("Error rendering page: {e}");
+                    log::error!("Error rendering page: {e}");
                     pages::error::WORST_CASE_404.to_string()
                 }
             },
@@ -72,7 +81,7 @@ impl Site {
 struct SiteWrapped {
     config: SiteConfig,
     templater: Arc<Handlebars<'static>>,
-    pages: Pages,
+    pages: Arc<Pages>,
     page_cache: Cache<RenderedHtml>,
 }
 
@@ -83,16 +92,15 @@ impl SiteWrapped {
         let args: SiteConfig = SiteConfig::parse();
 
         // Set logging
-        std::env::set_var("RUST_LOG", "info");
-        if args.debug {
-            std::env::set_var("RUST_LOG", "debug");
-        }
-        pretty_env_logger::init();
+        util::Logger::init(match args.debug {
+            true => "TRACE",
+            false => "INFO",
+        })?;
 
         // Configure site struct
         Ok(SiteWrapped {
             templater: Arc::new(create_templater()?),
-            pages: Pages::new()?,
+            pages: Arc::new(Pages::new()?),
             page_cache: Cache::new(args.cache_timeout),
             config: args,
         })
@@ -140,7 +148,7 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         let template_name: String = item.to_string(); //.strip_prefix("templates/").expect("...").to_owned();
         let res = templater.register_partial(&format!("templates/{}", template_name), template);
         if res.is_err() {
-            error!("Unable to register partial {}: {:?}", template_name, res);
+            log::error!("Unable to register partial {}: {:?}", template_name, res);
         }
     }
 
@@ -151,7 +159,7 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         let mut compiled_markdown = match markdown::to_html_with_options(&content, &md_options) {
             Ok(compiled_markdown) => compiled_markdown,
             Err(e) => {
-                error!("Markdown rendering error: {}", e);
+                log::error!("Markdown rendering error: {}", e);
                 MD_RENDERING_ERROR.to_string()
             }
         };

@@ -9,13 +9,15 @@ homepage = "https://hachha.dev"
 repository = "https://github.com/harrisonhall/hachha.dev"
 keywords = ["website", "blog", "hachha"]
 
-
 [dependencies]
 # Server
 axum = "0.8"
+tower-http = { version = "0.6", features = ["trace"] }
 
 # CLI
 clap = { version = "4.1", features = ["derive"] }
+colored = "3.0"
+log = "0.4"
 
 # Serde
 serde = { version = "1.0", features = ["derive"] }
@@ -29,16 +31,11 @@ atom_syndication = "0.12"
 handlebars = "4.3"
 markdown = "1.0.0-alpha.21"
 
-# Logging
-log = "0.4"
-pretty_env_logger = "0.4"
-
 # Util
 anyhow = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 rust-embed = { version = "8.4", features = ["include-exclude"] }
 tokio = { version = "1.0", features = ["full"] }
-
 
 [profile.release]
 strip = true
