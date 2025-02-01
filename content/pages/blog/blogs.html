@@ -6,17 +6,24 @@
   <body class="blog-page">
     {{> templates/navbar.html }}
 
-    <div class="hero">
+    <div class="hero" style="padding-bottom: 1rem">
       <div class="container grid-lg text-center">
-        <h1 style="font-size: 4em"><b>Blog</b></h1>
+        <h1 style="font-size: 4em; margin-bottom: 0px"><b>Blog</b></h1>
       </div>
     </div>
 
     <div>{{> templates/pages/blog/feed.html }}</div>
 
-    {{#each blogs}} {{> templates/generic/section.html
-    section-content="templates/pages/blog/blog_card.html" blog-title=name
-    blog-blurb=blurb blog-path=path blog-date=date }} {{/each}} {{>
-    templates/footer.html }}
+    <div class="section">
+      <div class="container">
+        {{#each blogs}}
+        <!-- -->
+        {{> templates/pages/blog/blog_card.html blog-title=name blog-blurb=blurb
+        blog-path=path blog-date=date darken=darken }}
+        <!-- -->
+        {{/each}}
+      </div>
+    </div>
+    {{> templates/footer.html }}
   </body>
 </html>

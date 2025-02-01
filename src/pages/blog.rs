@@ -78,11 +78,13 @@ impl BlogsPages {
         feed_builder.entries(entries);
         let feed = feed_builder.build().to_string();
 
-        // Generate metadata.
+        // Generate metadata. Darken every other entry.
         let mut metadata = json!({});
         let mut blog_metadata: Vec<serde_json::Value> = Vec::new();
-        for blog in blogs.iter() {
-            blog_metadata.push(blog.metadata.clone());
+        for (i, blog) in blogs.iter().enumerate() {
+            let mut meta = blog.metadata.clone();
+            util::merge_json(&mut meta, &json!({"darken": i % 2 == 0}))?;
+            blog_metadata.push(meta);
         }
         metadata["blogs"] = serde_json::Value::Array(blog_metadata);
 

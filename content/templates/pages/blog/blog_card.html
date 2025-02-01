@@ -1,12 +1,15 @@
 <div
-  class="card blog-card click-box"
+  class="click-box container grid-md"
   onclick="window.location.href='/blog/{{blog-path}}';"
+  style="padding-top: 0.5rem; padding-bottom: 0.5rem;{{#if darken}}background-color: var(--navbar);{{/if}}"
 >
-  <div class="card-header">
-    <div class="card-title h5">{{blog-title}}</div>
-  </div>
-  <div class="card-body">
-    <p>{{blog-blurb}}</p>
-    {{> templates/generic/date_badge.html date=blog-date }}
+  <div class="container grid-sm tile">
+    <div class="tile-content">
+      <h5 class="tile-title" style="margin-bottom: 0px">{{blog-title}}</h5>
+      <p class="tile-subtitle" style="margin-bottom: 0px">{{blog-blurb}}</p>
+    </div>
+    <div class="tile-action">
+      {{> templates/generic/date_badge.html date=blog-date }}
+    </div>
   </div>
 </div>

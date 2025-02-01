@@ -235,3 +235,8 @@ img.image-square {
   margin-left: auto;
   margin-right: auto;
 }
+
+/* Icons */
+.icon-link {
+  display: block;
+}
