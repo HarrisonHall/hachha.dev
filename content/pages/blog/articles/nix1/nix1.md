@@ -1,8 +1,9 @@
 I've finally gotten around to updating my
-[dotfiles](github.com/harrisonhall/dotfiles) after moving over to nixos/wayland.
-Despite being a dwm man, I've settled on sway as my wayland compositor of
-choice. I never got around to exploring river, but after trying out sway and
-seeing how everything _just worked_, I've decided not to break anything.
+[dotfiles](https://github.com/harrisonhall/dotfiles) after moving over to
+nixos/wayland. Despite being a dwm man, I've settled on sway as my wayland
+compositor of choice. I never got around to exploring river, but after trying
+out sway and seeing how everything _just worked_, I've decided not to break
+anything.
 
 I've been going through a period recently where I've been trying to update my
 toolset to be more modern (in general, this just means I've been replacing tools

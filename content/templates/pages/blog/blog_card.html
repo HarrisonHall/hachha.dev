@@ -3,13 +3,17 @@
   onclick="window.location.href='/blog/{{blog-path}}';"
   style="padding-top: 0.5rem; padding-bottom: 0.5rem;{{#if darken}}background-color: var(--navbar);{{/if}}"
 >
-  <div class="container grid-sm tile">
-    <div class="tile-content">
-      <h5 class="tile-title" style="margin-bottom: 0px">{{blog-title}}</h5>
-      <p class="tile-subtitle" style="margin-bottom: 0px">{{blog-blurb}}</p>
-    </div>
-    <div class="tile-action">
-      {{> templates/generic/date_badge.html date=blog-date }}
+  <div class="container grid-sm">
+    <div class="columns">
+      <div class="column col-9 col-mr-auto col-sm-12">
+        <div class="tile-content">
+          <h5 class="tile-title" style="margin-bottom: 0px">{{blog-title}}</h5>
+          <p class="tile-subtitle" style="margin-bottom: 0px">{{blog-blurb}}</p>
+        </div>
+      </div>
+      <div class="column col-auto col-sm-12">
+        {{> templates/generic/date_badge.html date=blog-date }}
+      </div>
     </div>
   </div>
 </div>

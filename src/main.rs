@@ -32,36 +32,8 @@ use crate::util::RenderedHtml;
 /// Server entry-point.
 #[tokio::main]
 async fn main() -> Result<()> {
-    // Generate site data.
+    // Build/parse site and serve.
     let site = Site::new()?;
-
-    // Set up routing.
-    let mut app = Router::new();
-    app = app.route("/", get(pages::index::visit_index));
-    app = app.route("/styles/{*path}", get(resources::get_style));
-    app = app.route("/fonts/{*path}", get(resources::get_font));
-    app = app.route("/media/{*path}", get(resources::get_media));
-    app = app.route("/blog", get(pages::blog::visit_blog_index));
-    app = app.route("/blog.feed", get(pages::blog::visit_blog_feed));
-    app = app.route("/blog/{:path}", get(pages::blog::visit_blog));
-    app = app.route(
-        "/blog/{:path}/{*resource}",
-        get(pages::blog::get_blog_resource),
-    );
-    app = app.route("/projects", get(pages::projects::visit_projects));
-    app = app.route("/favicon.ico", get(resources::get_favicon));
-    app = app.route("/robots.txt", get(resources::get_robots_txt));
-    app = app.fallback(get(pages::error::visit_404));
-    // app = app.layer(util::Logger::layer());
-    app = app.layer(tower_http::trace::TraceLayer::new_for_http());
-
-    let app = app.with_state(site.clone());
-
-    // Serve.
-    log::info!("Serving haccha.dev on {}", site.config().port);
-    log::debug!("Debug @ http://127.0.0.1:{}", site.config().port);
-    let addr = SocketAddr::from(([0, 0, 0, 0], site.config().port));
-    let listener = tokio::net::TcpListener::bind(addr).await?;
-    axum::serve(listener, app.into_make_service()).await?;
+    site.serve().await?;
     Ok(())
 }

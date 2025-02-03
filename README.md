@@ -1,7 +1,7 @@
 # hachha.dev
 
 202X attempt at a new personal website. Site compiles into a single executable
-w/ embedded content. View it at [hachha.dev](http://hachha.dev)! An
+w/ embedded content. View it at [hachha.dev](https://hachha.dev)! An
 [Atom](https://hachha.dev/blog.feed) feed is available.
 
 ## Stack

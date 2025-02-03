@@ -62,9 +62,9 @@ max = 5
 
 The example config above (from the `slipstream` repo) works well enough. My
 [personal configuration](https://github.com/HarrisonHall/dotfiles/blob/master/dotfiles/.config/slipknot/slipknot.toml)
-now has 68 feeds! `slipknot` supports log files, utilizes the
-`If-Modified-Since` HTTP header, XXX.
+now has 68 feeds! `slipknot` supports log files, varying request rates, and
+utilizes the `If-Modified-Since` HTTP header.
 
 I'm continuing to use `slipknot` with
 [`newsraft`](https://codeberg.org/grisha/newsraft) locally, but I plan on
-creating both a web and tui viewer for `slipstream`... eventually.
+creating my own tui viewer as part of `slipstream`... eventually.

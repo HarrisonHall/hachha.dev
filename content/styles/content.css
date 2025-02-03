@@ -74,6 +74,7 @@ footer p {
 }
 
 .empty {
+  color: var(--text);
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
@@ -223,6 +224,11 @@ pre > code,
   font-weight: 500;
 }
 
+dl dd {
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
+}
+
 /* Images */
 img.image-circle {
   border-radius: 50%;
@@ -238,5 +244,17 @@ img.image-square {
 
 /* Icons */
 .icon-link {
+  font-size: 6rem;
   display: block;
+}
+
+/* Adjustments on smaller screens. */
+@media (max-width: 840px) {
+}
+
+/* Adjustments on tiny screens. */
+@media (max-width: 600px) {
+  .icon-link i {
+    font-size: 3rem;
+  }
 }

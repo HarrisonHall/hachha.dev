@@ -15,14 +15,43 @@ impl Site {
         Ok(Site(Arc::new(SiteWrapped::new()?)))
     }
 
+    /// Serve site.
+    pub async fn serve(&self) -> Result<()> {
+        // Set up routing.
+        let mut app = Router::new();
+        app = app.route("/", get(pages::index::visit_index));
+        app = app.route("/styles/{*path}", get(resources::get_style));
+        app = app.route("/fonts/{*path}", get(resources::get_font));
+        app = app.route("/media/{*path}", get(resources::get_media));
+        app = app.route("/blog", get(pages::blog::visit_blog_index));
+        app = app.route("/blog.feed", get(pages::blog::visit_blog_feed));
+        app = app.route("/blog/{:path}", get(pages::blog::visit_blog));
+        app = app.route(
+            "/blog/{:path}/{*resource}",
+            get(pages::blog::get_blog_resource),
+        );
+        app = app.route("/projects", get(pages::projects::visit_projects));
+        app = app.route("/favicon.ico", get(resources::get_favicon));
+        app = app.route("/robots.txt", get(resources::get_robots_txt));
+        app = app.fallback(get(pages::error::visit_404));
+        app = app.layer(tower_http::trace::TraceLayer::new_for_http());
+
+        // Add self as state.
+        let app = app.with_state(self.clone());
+
+        // Serve.
+        log::info!("Serving haccha.dev on {}", self.config().port);
+        log::debug!("Debug @ http://127.0.0.1:{}", self.config().port);
+        let addr = SocketAddr::from(([0, 0, 0, 0], self.config().port));
+        let listener = tokio::net::TcpListener::bind(addr).await?;
+        axum::serve(listener, app.into_make_service()).await?;
+
+        Ok(())
+    }
+
     /// Get config.
     pub fn config(&self) -> &SiteConfig {
         &self.0.config
-    }
-
-    /// Get templater.
-    pub fn templater(&self) -> &Handlebars {
-        &self.0.templater
     }
 
     /// Get pages.
@@ -64,7 +93,8 @@ impl Site {
 
         RenderedHtml::new(
             match self
-                .templater()
+                .0
+                .templater
                 .render_template(page.as_ref(), &render_context)
             {
                 Ok(rendered_page) => rendered_page,

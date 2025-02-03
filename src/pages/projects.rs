@@ -31,8 +31,19 @@ impl ProjectsPage {
         projects.reverse();
 
         // Compile metadata from projects.
+        let mut project_metadata = Vec::<serde_json::Value>::new();
+        for (i, project) in projects.iter().enumerate() {
+            let mut j = project.to_json();
+            util::merge_json(
+                &mut j,
+                &json!({
+                    "darken": i % 2 == 0,
+                }),
+            )?;
+            project_metadata.push(j);
+        }
         let metadata = json!({
-            "projects": projects.iter().map(|proj| proj.to_json()).collect::<Vec<serde_json::Value>>()
+            "projects": project_metadata,
         });
 
         // Build projects page.
