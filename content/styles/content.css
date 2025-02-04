@@ -248,6 +248,12 @@ img.image-square {
   display: block;
 }
 
+/* Icons */
+.icon-link-inline {
+  font-size: 6rem;
+  display: inline-block;
+}
+
 /* Adjustments on smaller screens. */
 @media (max-width: 840px) {
 }

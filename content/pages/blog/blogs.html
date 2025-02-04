@@ -7,12 +7,25 @@
     {{> templates/navbar.html }}
 
     <div class="hero" style="padding-bottom: 1rem">
-      <div class="container grid-lg text-center">
-        <h1 style="font-size: 4em; margin-bottom: 0px"><b>Blog</b></h1>
-      </div>
+      <h1
+        style="
+          font-size: 3rem;
+          margin-bottom: 0px;
+          margin-left: auto;
+          margin-right: auto;
+        "
+      >
+        <b>Blog</b
+        ><a
+          href="/blog.feed"
+          class="icon-link-inline"
+          target="_blank"
+          style="margin-top: auto; margin-bottom: auto; margin-left: 0.5rem"
+        >
+          <i class="ph-fill ph-rss-simple" style="font-size: 2.5rem"></i>
+        </a>
+      </h1>
     </div>
-
-    <div>{{> templates/pages/blog/feed.html }}</div>
 
     <div class="section">
       <div class="container">
