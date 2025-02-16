@@ -1,4 +1,4 @@
 name = "Slipknot"
 path = "slipknot"
-blurb = "Basic CLI slipfeed server utilizing a simple config."
+blurb = "Basic CLI slipfeed server utilizing a simple config"
 date = "2025-01-29"
