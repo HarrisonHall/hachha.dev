@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+  <head>
+    {{> templates/head.html }}
+  </head>
+
+  <body class="links-page">
+    {{> templates/navbar.html }}
+
+    <div class="hero" style="padding-bottom: 1rem">
+      <h1
+        style="
+          font-size: 3rem;
+          margin-bottom: 0px;
+          margin-left: auto;
+          margin-right: auto;
+        "
+      >
+        <b>Links</b>
+        <a
+          href="/links.feed"
+          class="icon-link-inline"
+          target="_blank"
+          style="margin-top: auto; margin-bottom: auto; margin-left: 0.5rem"
+        >
+          <i class="ph-fill ph-rss-simple" style="font-size: 2.5rem"></i>
+        </a>
+      </h1>
+      <div class="container grid-xs">
+        <p>
+          This <i>link blog</i> is a collection of fun, interesting, or
+          educational links That I think are worth sharing (I probably found
+          them from something in
+          <a href="https://feeds.hachha.dev/" target="_blank">my slipfeed</a>).
+          While the links available are mostly agreeable, I may not necessarily
+          agree myself with the content or authors-- but that doesn't mean the
+          ideas aren't worth thinking about.
+          <i>Hope you learn something neat!</i>
+        </p>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="container">
+        {{#each links}}
+        <div
+          class="click-box container grid-md"
+          onclick="window.open('{{url}}', '_blank');"
+          style="padding-top: 0.5rem; padding-bottom: 0.5rem;{{#if darken}}background-color: var(--navbar);{{/if}}"
+        >
+          <div class="container grid-sm">
+            <div class="columns">
+              <div class="column col-9 col-mr-auto col-sm-12">
+                <div class="tile-content">
+                  <h3
+                    class="tile-title"
+                    style="font-size: 1rem; margin-bottom: 0px"
+                  >
+                    {{title}}
+                  </h3>
+                  <p class="tile-subtitle" style="margin-bottom: 0px">
+                    {{description}}
+                  </p>
+                </div>
+              </div>
+              <div class="column col-auto col-sm-12">
+                {{> templates/generic/date_badge.html date=date }}
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+    {{> templates/footer.html }}
+  </body>
+</html>

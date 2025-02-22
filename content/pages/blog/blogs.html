@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
   <head>
     {{> templates/head.html }}
@@ -15,8 +16,8 @@
           margin-right: auto;
         "
       >
-        <b>Blog</b
-        ><a
+        <b>Blog</b>
+        <a
           href="/blog.feed"
           class="icon-link-inline"
           target="_blank"
@@ -30,10 +31,10 @@
     <div class="section">
       <div class="container">
         {{#each blogs}}
-        <!-- -->
+        </>
         {{> templates/pages/blog/blog_card.html blog-title=name blog-blurb=blurb
         blog-path=path blog-date=date darken=darken }}
-        <!-- -->
+        </>
         {{/each}}
       </div>
     </div>

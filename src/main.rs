@@ -26,8 +26,7 @@ mod util;
 use crate::cache::Cache;
 use crate::pages::Pages;
 use crate::site::Site;
-use crate::util::EmbeddedData;
-use crate::util::RenderedHtml;
+use crate::util::*;
 
 /// Server entry-point.
 #[tokio::main]

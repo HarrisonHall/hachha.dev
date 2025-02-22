@@ -3,6 +3,7 @@
 use super::*;
 
 use atom_syndication as atom;
+use util::adjust_content_header;
 
 /// The blogs page and subpages.
 pub struct BlogsPages {
@@ -18,7 +19,7 @@ impl BlogsPages {
     pub fn new() -> Result<Self> {
         // Parse pages.
         let index = util::read_embedded_text::<EmbeddedBlogFiles>("blogs.html")?;
-        let article = util::read_embedded_text::<EmbeddedBlogFiles>("article.html")?;
+        let article = util::read_embedded_text::<EmbeddedBlogFiles>("articles/article.html")?;
         let mut blogs = Blogs::default();
         for path in EmbeddedBlogFiles::iter() {
             if path.ends_with("blog.toml") {
@@ -27,11 +28,6 @@ impl BlogsPages {
         }
         blogs.sort();
         blogs.reverse();
-
-        // Parse blogs.
-        // let mut blogs =
-        //     util::read_embedded_toml::<Blogs, EmbeddedBlogFiles>("articles/articles.toml")?;
-        // blogs.reverse();
 
         // Read articles list.
         for blog in blogs.iter_mut() {
@@ -59,7 +55,9 @@ impl BlogsPages {
             let timestamp: chrono::DateTime<chrono::FixedOffset> = blog
                 .date
                 .and_time(chrono::NaiveTime::default())
-                .and_utc()
+                .and_local_timezone(chrono::Utc)
+                .latest()
+                .ok_or(anyhow!("Unable to convert dt {} to utc.", blog.date))?
                 .into();
             let entry: atom::Entry = atom::EntryBuilder::default()
                 .title(blog.name.clone())
@@ -138,6 +136,7 @@ impl std::ops::DerefMut for Blogs {
 /// Embedded blog files.
 #[derive(RustEmbed)]
 #[folder = "content/pages/blog"]
+#[exclude = "content/pages/links"]
 struct EmbeddedBlogFiles;
 
 /// Parsed blog data.
@@ -193,10 +192,7 @@ pub async fn visit_blog_index(State(site): State<Site>) -> RenderedHtml {
             site.page_cache()
                 .update(
                     "blog",
-                    site.render_page(
-                        &site.pages().blog_indexer.index,
-                        &site.pages().blog_indexer.metadata,
-                    ),
+                    site.render_page(&site.pages().blogs.index, &site.pages().blogs.metadata),
                 )
                 .await
         }
@@ -215,14 +211,14 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<Site>) -> R
             return page;
         }
         Err(_) => {
-            if let Some(blog) = site.pages().blog_indexer.get_blog(&blog) {
+            if let Some(blog) = site.pages().blogs.get_blog(&blog) {
                 let mut blog_metadata = blog.metadata.clone();
                 blog_metadata["blog-content"] = serde_json::Value::String(blog.markdown.clone());
                 return site
                     .page_cache()
                     .update(
                         &full_blog_path,
-                        site.render_page(&site.pages().blog_indexer.article, &blog_metadata),
+                        site.render_page(&site.pages().blogs.article, &blog_metadata),
                     )
                     .await;
             };
@@ -237,21 +233,22 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<Site>) -> R
 pub async fn get_blog_resource(
     Path((blog, resource)): Path<(String, String)>,
     State(_site): State<Site>,
-) -> EmbeddedData {
+) -> impl axum::response::IntoResponse {
     let blog_resource: String = format!("articles/{blog}/{resource}");
-    match util::read_embedded_data::<EmbeddedBlogFiles>(&blog_resource) {
+    let data = match util::read_embedded_data::<EmbeddedBlogFiles>(&blog_resource) {
         Ok(data) => data,
         Err(_) => {
             log::error!("Unable to render blog resource {blog_resource}");
             EmbeddedData::empty()
         }
-    }
+    };
+    return adjust_content_header(resource, data);
 }
 
 /// Get blog as atom feed.
 pub async fn visit_blog_feed(State(site): State<Site>) -> impl axum::response::IntoResponse {
     (
         [(axum::http::header::CONTENT_TYPE, "application/atom+xml")],
-        site.pages().blog_indexer.feed.clone(),
+        site.pages().blogs.feed.clone(),
     )
 }

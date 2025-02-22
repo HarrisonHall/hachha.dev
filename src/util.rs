@@ -207,3 +207,45 @@ pub fn merge_json(a: &mut serde_json::Value, b: &serde_json::Value) -> Result<()
     }
     Ok(())
 }
+
+/// Add correct header for file.
+pub fn adjust_content_header(
+    resource: impl AsRef<str>,
+    response: impl axum::response::IntoResponse,
+) -> impl axum::response::IntoResponse {
+    let resource = resource.as_ref();
+    let content_type = if resource.ends_with(".css") {
+        "text/css"
+    } else if resource.ends_with(".gif") {
+        "image/gif"
+    } else if resource.ends_with(".html") {
+        "text/html"
+    } else if resource.ends_with(".ico") {
+        "image/vdn.microsoft.icon"
+    } else if resource.ends_with(".jpg") {
+        "image/jpeg"
+    } else if resource.ends_with(".jpeg") {
+        "image/jpeg"
+    } else if resource.ends_with(".js") {
+        "text/javascript"
+    } else if resource.ends_with(".md") {
+        "text/plain"
+    } else if resource.ends_with(".otf") {
+        "font/otf"
+    } else if resource.ends_with(".png") {
+        "image/png"
+    } else if resource.ends_with(".toml") {
+        "text/plain"
+    } else if resource.ends_with(".ttf") {
+        "font/ttf"
+    } else if resource.ends_with(".txt") {
+        "text/plain"
+    } else if resource.ends_with(".woff") {
+        "font/woff"
+    } else if resource.ends_with(".woff2") {
+        "font/woff2"
+    } else {
+        "application/octet-stream"
+    };
+    return ([(axum::http::header::CONTENT_TYPE, content_type)], response);
+}

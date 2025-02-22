@@ -30,6 +30,8 @@ impl Site {
             "/blog/{:path}/{*resource}",
             get(pages::blog::get_blog_resource),
         );
+        app = app.route("/links", get(pages::links::visit_links_index));
+        app = app.route("/links.feed", get(pages::links::visit_links_feed));
         app = app.route("/projects", get(pages::projects::visit_projects));
         app = app.route("/favicon.ico", get(resources::get_favicon));
         app = app.route("/robots.txt", get(resources::get_robots_txt));
