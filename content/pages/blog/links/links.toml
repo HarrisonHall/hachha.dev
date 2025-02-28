@@ -48,7 +48,7 @@ date = "2025-02-22"
 
 [[links]]
 title = "Full Of Themselves"
-description = "An analysis of title drops in movies"
+description = "An analysis of title drops in movies."
 url = "https://www.titledrops.net/"
 date = "2025-02-22"
 
@@ -81,3 +81,21 @@ title = "File Over App: A Philosophy for Digital Longevity"
 description = "> If you want to create digital artifacts that last, they must be files you can control, in formats that are easy to retrieve and read."
 url = "https://rishikeshs.com/file-over-app/"
 date = "2025-02-22"
+
+[[links]]
+title = "Unexpected Benefits of Building Your Own Tools"
+description = "> And often, you will find that these tools will let you work in new and surprising ways."
+url = "https://tiniuc.com/make-more-tools/"
+date = "2025-02-22"
+
+[[links]]
+title = "A Cypherpunk's Manifesto"
+description = "\"Cypherpunks write code.\""
+url = "https://activism.net/cypherpunk/manifesto.html"
+date = "2025-02-24"
+
+[[links]]
+title = "The Act of Creation"
+description = "Everyone should create."
+url = "https://sheep.horse/2025/1/the_act_of_creation.html"
+date = "2025-02-26"

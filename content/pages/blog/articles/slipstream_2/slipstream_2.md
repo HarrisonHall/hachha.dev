@@ -1,6 +1,7 @@
 You heard it here first, `slipstream` is
 [_out_](https://github.com/HarrisonHall/slipstream/releases/tag/slipstream-1.0.0),
-just in time for [cat day](https://en.wikipedia.org/wiki/National_Cat_Day)!
+just in time for
+[cat day](https://en.wikipedia.org/wiki/National_Cat_Day#Japan)!
 
 ![slipstream](/blog/slipstream_2/web_ui.png)
 

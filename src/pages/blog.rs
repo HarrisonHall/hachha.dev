@@ -23,19 +23,25 @@ impl BlogsPages {
         let mut blogs = Blogs::default();
         for path in EmbeddedBlogFiles::iter() {
             if path.ends_with("blog.toml") {
-                blogs.push(util::read_embedded_toml::<Blog, EmbeddedBlogFiles>(path)?);
+                let path = String::from(path);
+                let mut blog = util::read_embedded_toml::<Blog, EmbeddedBlogFiles>(&path)?;
+                let dir = String::from(match std::path::Path::new(&path).parent() {
+                    Some(dir) => dir.to_string_lossy(),
+                    None => bail!("Unable to find directory for blog at {path}"),
+                });
+                let article = match std::path::Path::new(&dir).file_name() {
+                    Some(article) => article.to_string_lossy(),
+                    None => bail!("Unable to find directory for blog at {article}"),
+                };
+                let article_path = format!("{dir}/{article}.md");
+                blog.markdown = util::read_embedded_text::<EmbeddedBlogFiles>(&article_path)?;
+                blog.metadata = util::to_json(&blog)?;
+                blog.uri = article.into_owned();
+                blogs.push(blog);
             }
         }
         blogs.sort();
         blogs.reverse();
-
-        // Read articles list.
-        for blog in blogs.iter_mut() {
-            let raw_path = &blog.path;
-            let path = format!("articles/{raw_path}/{raw_path}.md");
-            blog.markdown = util::read_embedded_text::<EmbeddedBlogFiles>(&path)?;
-            blog.metadata = util::to_json(blog)?;
-        }
 
         // Parse into atom feed.
         let mut feed_builder = atom::FeedBuilder::default();
@@ -64,7 +70,7 @@ impl BlogsPages {
                 .summary(Some(blog.blurb.clone().into()))
                 .link(
                     atom::LinkBuilder::default()
-                        .href(format!("https://hachha.dev/blog/{}", blog.path.as_str()))
+                        .href(format!("https://hachha.dev/blog/{}", blog.uri.as_str()))
                         .title(blog.name.clone())
                         .build(),
                 )
@@ -81,7 +87,7 @@ impl BlogsPages {
         let mut blog_metadata: Vec<serde_json::Value> = Vec::new();
         for (i, blog) in blogs.iter().enumerate() {
             let mut meta = blog.metadata.clone();
-            util::merge_json(&mut meta, &json!({"darken": i % 2 == 0}))?;
+            util::merge_json(&mut meta, &json!({"darken": i % 2 == 0, "path": blog.uri}))?;
             blog_metadata.push(meta);
         }
         metadata["blogs"] = serde_json::Value::Array(blog_metadata);
@@ -97,7 +103,7 @@ impl BlogsPages {
 
     fn get_blog(&self, path: &str) -> Option<&Blog> {
         for other_blog in self.blogs.iter() {
-            if path == other_blog.path {
+            if path == other_blog.uri {
                 return Some(other_blog);
             }
         }
@@ -149,8 +155,9 @@ pub struct Blog {
     blurb: String,
     /// Date blog was written.
     date: chrono::NaiveDate,
-    /// Actual local path to blog.
-    path: String,
+    /// URI for blog.
+    #[serde(alias = "article")]
+    uri: String,
     /// Read markdown of blog entry.
     #[serde(skip)]
     markdown: String,
@@ -165,7 +172,7 @@ impl Default for Blog {
             name: "".to_string(),
             blurb: "".to_string(),
             date: chrono::NaiveDate::default(),
-            path: "".to_string(),
+            uri: "".to_string(),
             markdown: "".to_string(),
             metadata: json!({}),
         }
