@@ -10,21 +10,21 @@
     <div class="hero">
       <div class="container grid-lg text-center">
         <h1 style="font-size: 4em"><b>Harrison Hall</b></h1>
-        <p>
-          Check out
-          <a href="https://github.com/harrisonhall/slipstream">slipstream</a>!
-        </p>
+        <p>{{{html phrase}}}</p>
       </div>
     </div>
 
-    {{> templates/generic/image/profile_circle.html image="/media/profile-b.png" max-size="256px" }}
-    </>
-    {{> templates/generic/section.html section-content="templates/pages/index/link_tree.html" }}
-    </>
+    {{> templates/generic/image/profile_circle.html image="/media/profile-b.png"
+    max-size="256px" }}
+    <!-- -->
+    {{> templates/generic/section.html
+    section-content="templates/pages/index/link_tree.html" }}
+    <!-- -->
     {{> templates/generic/divider_hor.html }}
 
     <div style="text-align: center">
-      {{> templates/generic/section.html section-content="templates/pages/index/about.html" }}
+      {{> templates/generic/section.html
+      section-content="templates/pages/index/about.html" }}
     </div>
 
     {{> templates/footer.html }}

@@ -1,6 +1,6 @@
 [package]
 name = "hachha-dev"
-version = "0.10.5"
+version = "0.10.6"
 edition = "2021"
 authors = ["Harrison Hall <hachha@hachha.dev>"]
 description = "An (almost) static personal website and blog."
@@ -28,12 +28,13 @@ toml = "0.8"
 atom_syndication = "0.12"
 
 # Markup
-handlebars = "4.3"  # Updating this may cause whitespace issues
+handlebars = "4.3"  # Updating this may cause whitespace issues!
 markdown = "1.0.0-alpha.22"
 
 # Util
 anyhow = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
+rand = "0.9"
 rust-embed = { version = "8.4", features = ["include-exclude"] }
 tokio = { version = "1.0", features = ["full"] }
 

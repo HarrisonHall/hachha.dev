@@ -12,6 +12,7 @@ use axum::extract::{Path, State};
 use axum::response::Html;
 use axum::{routing::get, Router};
 use chrono::Datelike;
+use rand::seq::IndexedRandom;
 use rust_embed::RustEmbed;
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
 use serde_json::json;

@@ -184,6 +184,7 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         }
     }
 
+    // Compile markdown to html.
     handlebars_helper!(markdown_helper: |content: String| {
         let mut md_options = markdown::Options::gfm();
         md_options.compile.allow_dangerous_html = true;
@@ -199,8 +200,14 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         compiled_markdown
     });
 
+    // Allow html to be rendered normally (not escaped)-- dangerous, if used incorrectly.
+    handlebars_helper!(html_helper: |content: String| {
+        content
+    });
+
     // Register helpers.
     templater.register_helper("markdown", Box::new(markdown_helper));
+    templater.register_helper("html", Box::new(html_helper));
 
     Ok(templater)
 }
