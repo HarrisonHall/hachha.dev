@@ -42,7 +42,7 @@ date = "2025-02-22"
 
 [[links]]
 title = "The satoshi example"
-description = "Giving something to the word--"
+description = "Giving something to the world--"
 url = "https://www.jtwoodhouse.com/the-satoshi-example/"
 date = "2025-02-22"
 
@@ -99,3 +99,21 @@ title = "The Act of Creation"
 description = "Everyone should create."
 url = "https://sheep.horse/2025/1/the_act_of_creation.html"
 date = "2025-02-26"
+
+[[links]]
+title = "Reflecting on a year of Gamedev in Zig"
+description = "Pros and cons of Zig for gamedev in 2025."
+url = "https://bgthompson.codeberg.page/blog/one-year-zig-gamedev-reflections/"
+date = "2025-09-04"
+
+[[links]]
+title = "Get Weird and Disappear"
+description = "> I Don't Need Permission To Swear"
+url = "https://ludic.mataroa.blog/blog/get-weird-and-disappear/"
+date = "2025-09-04"
+
+[[links]]
+title = "Stop Writing `__init__` Methods"
+description = "Confusing constructors are not idiomatic."
+url = "https://blog.glyph.im/2025/04/stop-writing-init-methods.html"
+date = "2025-09-04"
