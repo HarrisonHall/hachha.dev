@@ -1,0 +1,24 @@
+# Cool projects (unused).
+
+[[project]]
+title = "D2"
+description = "Declarative Diagramming"
+urls = [
+  "https://d2lang.com/",
+  "https://github.com/terrastruct/d2",
+]
+tags = [
+  "...",
+]
+
+[[project]]
+title = "C4 Model"
+description = ""
+urls = [
+  "https://c4model.com/tooling",
+]
+tags = []
+
+[misc.links]
+Evertop = "https://github.com/ericjenott/Evertop"
+

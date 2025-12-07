@@ -1,3 +1,5 @@
+# Links for the link blog.
+
 [[links]]
 title = "The Most Mario Colors"
 description = "How do you spell \"MARIO\" with colors?"
@@ -101,6 +103,12 @@ url = "https://sheep.horse/2025/1/the_act_of_creation.html"
 date = "2025-02-26"
 
 [[links]]
+title = "how AWS S3 serves 1 petabyte per second on top of slow HDDs"
+description = "S3 scaling is incredibly interesting."
+url = "https://bigdata.2minutestreaming.com/p/how-aws-s3-scales-with-tens-of-millions-of-hard-drives"
+date = "2025-09-25"
+
+[[links]]
 title = "Reflecting on a year of Gamedev in Zig"
 description = "Pros and cons of Zig for gamedev in 2025."
 url = "https://bgthompson.codeberg.page/blog/one-year-zig-gamedev-reflections/"
@@ -117,3 +125,25 @@ title = "Stop Writing `__init__` Methods"
 description = "Confusing constructors are not idiomatic."
 url = "https://blog.glyph.im/2025/04/stop-writing-init-methods.html"
 date = "2025-09-04"
+
+[[link]]
+title = "Is Rust faster than C?"
+description = "A different take on Rust vs C performance comparisons."
+url = "https://steveklabnik.com/writing/is-rust-faster-than-c/"
+date = "2025-11-23"
+
+[[link]]
+title = "Open Source Has Too Many Parasocial Relationships"
+description = "> The essence of Free Software is: \"When it breaks, you get to keep both halves.\""
+url = "https://pivotnine.com/blog/open-source-has-too-many-parasocial-relationships/"
+date = "2025-12-02"
+
+[[link]]
+title = "You should feed the bots"
+description = "Offense is the best defense."
+url = "https://maurycyz.com/misc/the_cost_of_trash/"
+date = "2025-12-06"
+
+# [[link]]
+# title = ""
+# url = "https://feed-me-up-scotty.vincenttunru.com/"
