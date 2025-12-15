@@ -126,6 +126,12 @@ description = "Confusing constructors are not idiomatic."
 url = "https://blog.glyph.im/2025/04/stop-writing-init-methods.html"
 date = "2025-09-04"
 
+[[links]]
+title = "Majjit LSP"
+description = "A VCS LSP is a great idea."
+url = "https://matklad.github.io/2024/12/13/majjit-lsp.html"
+date = "2025-10-01"
+
 [[link]]
 title = "Is Rust faster than C?"
 description = "A different take on Rust vs C performance comparisons."

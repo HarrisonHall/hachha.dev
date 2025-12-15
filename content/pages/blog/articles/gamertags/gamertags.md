@@ -1,15 +1,10 @@
 Gamertags have always fascinated me. They're a form of identity with high
-freedom and low consequences. They're an answer to the question "what if people
-could pick their own names?" While some platforms rely on SSO token or emails as
-the primary identifier for a user, many still require unique usernames.
-
-Many sources credit Xbox for the creation of the modern gamertag. Regardless of
-their origin
-
-TODO
-
-Everybody had that childhood friend, who they've only ever met online, that
-suddenly vanished one day, never to log in again.
+freedom, anonymity, and low consequences. The origin of the modern "gamertag"
+likely lies with
+[Xbox](https://splicedonline.com/what-was-the-first-gamertag-ever/). They're an
+answer to the question "what if people could pick their own names?" While most
+platforms now rely on SSO token or emails as the primary identifier for a user,
+I hope many will still allow unique usernames.
 
 ## Catman
 
@@ -35,16 +30,11 @@ leaks through.
   <img src="/blog/gamertags/catman/catman_angry.png" style="width:50%" />
 </div>
 
-## History
-
 ## hachha
 
-My own gamertag has changed over the years. It's evolved from
-`hocko`->`HaChHa`->`hachha` in a way that makes the tag a bit more personal, for
-better or worse. It's always fun watching someone struggle to figure out to get
-my attention for a callout; `hachha` is simply my initials and has no official
-pronunciation (I prefer the "ha cha" onomatopoeia). For more anonymous settings,
-I prefer other alternative tags, but for most platforms "hachha" is fine.
-
-Gamertags are a fun way of expressing yourself and often reveal a bit about the
-psyche of the user.
+My own gamertag has changed over the years. It has evolved from `hocko` ->
+`HaChHa` -> `hachha`. It's always fun watching someone struggle to figure out to
+get my attention for a callout; `hachha` is simply my initials and has no
+official pronunciation (I prefer the "ha cha" onomatopoeia, but I hear "ha cha
+ha" frequently). For more anonymous settings, I prefer other alternative tags,
+but for most platforms "hachha" is fine.
