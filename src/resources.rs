@@ -41,11 +41,13 @@ pub async fn get_media(
 /// Get styles from resource data.
 #[derive(RustEmbed)]
 #[folder = "content/styles/"]
+#[exclude = "theme/*"]
 struct EmbeddedStyles;
 pub async fn get_style(
     Path(path): Path<String>,
     State(_site): State<Site>,
 ) -> impl axum::response::IntoResponse {
+    // TODO - special handling for theme.css
     let data = match util::read_embedded_data::<EmbeddedStyles>(&path) {
         Ok(data) => data,
         Err(e) => {

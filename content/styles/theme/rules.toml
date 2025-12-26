@@ -1,0 +1,45 @@
+# Themes:
+#  - background: the base background color
+#  - text: text color
+#  - primary: primary color (headers)
+#  - secondary: secondary color (flavor1)
+#  - accent: accent color (flavor2)
+#  - card: elevated color (panel, navbar)
+#  TODO - highlight: highlighted color (selection)
+
+default = "catppuccin_mocha.css"
+
+# Rose pine on valentines and earth day.
+[[rules]]
+theme = "rose_pine.css"
+dates = ["02/14", "04/22"]
+
+# Cat day.
+[[rules]]
+theme = "tokyo_night.css"
+dates = ["02/22"]
+
+# Original theme for first commit.
+[[rules]]
+theme = "original.css"
+dates = ["03/15"]
+
+# Celebrate css naked day.
+[[rules]]
+theme = "naked_day.css"
+dates = ["04/09"]
+
+# Dracula for halloween.
+[[rules]]
+theme = "dracula.css"
+dates = ["10/30-10/31"]
+
+# Nord on my birthday.
+[[rules]]
+theme = "nord.css"
+dates = ["12/19"]
+
+# Holiday theme at eoy.
+[[rules]]
+theme = "holidays.css"
+dates = ["12/20-12/25"]

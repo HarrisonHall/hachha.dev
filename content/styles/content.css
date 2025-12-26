@@ -15,10 +15,10 @@ body {
 
 body *:focus {
   outline-width: 1px !important;
-  outline-color: var(--flavor1) !important;
+  outline-color: var(--secondary) !important;
   outline-style: solid;
-  border-color: var(--flavor1) !important;
-  box-shadow: 0 0 var(--flavor1) !important;
+  border-color: var(--secondary) !important;
+  box-shadow: 0 0 var(--secondary) !important;
 }
 
 @font-face {
@@ -45,7 +45,7 @@ body *:focus {
   position: sticky;
   width: 100vw;
   top: 0;
-  background-color: var(--navbar);
+  background-color: var(--card);
 }
 
 footer {
@@ -61,7 +61,7 @@ footer p {
 }
 
 .box {
-  background-color: var(--panel);
+  background-color: var(--card);
 }
 
 .container {
@@ -95,17 +95,17 @@ footer p {
 
 h1,
 h4 {
-  color: var(--headers);
+  color: var(--primary);
 }
 
 h2,
 h5 {
-  color: var(--flavor1);
+  color: var(--secondary);
 }
 
 h3,
 h6 {
-  color: var(--flavor2);
+  color: var(--accent);
 }
 
 .blog-markdown h1::before {
@@ -113,7 +113,7 @@ h6 {
 }
 
 .blog-markdown h2 {
-  color: var(--flavor1);
+  color: var(--secondary);
 }
 
 .blog-markdown h2::before {
@@ -137,11 +137,11 @@ h6 {
 }
 
 .blog-markdown strong {
-  color: var(--headers);
+  color: var(--primary);
 }
 
 .blog-markdown em {
-  color: var(--flavor2);
+  color: var(--accent);
 }
 
 .blog-markdown img {
@@ -149,7 +149,7 @@ h6 {
 }
 
 .blog-markdown a {
-  color: var(--headers) !important;
+  color: var(--primary) !important;
 }
 
 p,
@@ -165,12 +165,13 @@ a:visited {
 }
 
 .card {
-  background-color: var(--panel);
-  border-color: var(--headers);
+  background-color: var(--card);
+  border-color: var(--primary);
 }
 
 .blog-card:hover {
-  background-color: var(--selection);
+  /* Historically, background-color was selection. */
+  background-color: var(--text);
 }
 
 .click-box:hover {
@@ -185,13 +186,13 @@ a:visited {
 .btn.btn-primary:hover,
 .btn.btn-primary:focus {
   color: var(--text);
-  background: var(--flavor1);
-  border-color: var(--flavor1);
+  background: var(--primary);
+  border-color: var(--primary);
 }
 
 .btn.btn-link,
 .btn-link {
-  color: var(--flavor2);
+  color: var(--text);
   border: none;
   border-width: none;
 }
@@ -200,7 +201,7 @@ a:visited {
 .btn-link:hover,
 .btn.btn-link:active,
 .btn.btn-link:focus {
-  color: var(--flavor1);
+  color: var(--text);
   border: none;
   border-width: none;
 }
@@ -212,7 +213,7 @@ pre.code,
 pre > code,
 .hljs {
   color: var(--text);
-  background: var(--panel) !important;
+  background: var(--card) !important;
   font-family: MPLUS1Code;
   font-weight: 500;
   font-size: 0.8rem;
@@ -220,7 +221,7 @@ pre > code,
 
 .chip {
   color: var(--background);
-  background: var(--flavor1);
+  background: var(--secondary);
   font-weight: 500;
 }
 

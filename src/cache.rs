@@ -57,6 +57,7 @@ pub struct Cache<T> {
     timeout: f32,
 }
 
+#[allow(unused)]
 impl<T: Clone> Cache<T> {
     /// Generate new cache.
     pub fn new(timeout: f32) -> Self {
@@ -66,6 +67,7 @@ impl<T: Clone> Cache<T> {
         }
     }
 
+    /// Get state of item in the cache.
     pub async fn get_state(&self, name: &str) -> CachedItemState {
         let entries = self.entries.read().await;
         match entries.get(name) {
@@ -77,10 +79,12 @@ impl<T: Clone> Cache<T> {
         }
     }
 
+    /// Check if item is in the cache.
     pub async fn in_cache(&self, name: &str) -> bool {
         return self.get_state(name).await == CachedItemState::Active;
     }
 
+    /// Get item from the cache.
     pub async fn retrieve(&self, name: &str) -> Result<T, CachedItemState> {
         let entries = self.entries.read().await;
         match entries.get(name) {
@@ -92,6 +96,7 @@ impl<T: Clone> Cache<T> {
         }
     }
 
+    /// Get item from the cache, ignoring the expiry.
     pub async fn retrieve_force(&self, name: &str) -> Option<T> {
         let entries = self.entries.read().await;
         match entries.get(name) {
@@ -100,10 +105,13 @@ impl<T: Clone> Cache<T> {
         }
     }
 
+    /// Insert/update item into the cache.
     pub async fn update(&self, name: &str, item: T) -> T {
         self.update_override(name, item, None).await
     }
 
+    /// Update item in the cache, overriding the previous item according to a custom
+    /// timeout.
     pub async fn update_override(&self, name: &str, item: T, custom_timeout: Option<f32>) -> T {
         log::debug!("Updating cached value for {name}");
         let mut entries = self.entries.write().await;

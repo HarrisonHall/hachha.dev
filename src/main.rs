@@ -22,11 +22,13 @@ mod cache;
 mod pages;
 mod resources;
 mod site;
+mod theme;
 mod util;
 
 use crate::cache::Cache;
 use crate::pages::Pages;
 use crate::site::Site;
+use crate::theme::ThemeProvider;
 use crate::util::*;
 
 /// Server entry-point.

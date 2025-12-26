@@ -13,6 +13,9 @@ pub struct ProjectsPage {
     /// Unrendered index page.
     raw_index: String,
     /// Project list.
+    /// This may be unused at runtime, parsing is used to ensure the metadata
+    /// follows the correct format.
+    #[allow(unused)]
     projects: Projects,
     /// All projects metadata.
     metadata: serde_json::Value,

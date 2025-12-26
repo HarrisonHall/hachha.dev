@@ -21,6 +21,7 @@ impl Site {
         let mut app = Router::new();
         app = app.route("/", get(pages::index::visit_index));
         app = app.route("/styles/{*path}", get(resources::get_style));
+        app = app.route("/theme.css", get(theme::get_theme));
         app = app.route("/fonts/{*path}", get(resources::get_font));
         app = app.route("/media/{*path}", get(resources::get_media));
         app = app.route("/blog", get(pages::blog::visit_blog_index));
@@ -70,6 +71,11 @@ impl Site {
         }
     }
 
+    /// Get theme provider.
+    pub fn theme_provider(&self) -> Arc<ThemeProvider> {
+        self.0.theme_provider.clone()
+    }
+
     /// Get page cache.
     pub fn page_cache(&self) -> &Cache<RenderedHtml> {
         &self.0.page_cache
@@ -114,6 +120,7 @@ struct SiteWrapped {
     config: SiteConfig,
     templater: Arc<Handlebars<'static>>,
     pages: Arc<Pages>,
+    theme_provider: Arc<ThemeProvider>,
     page_cache: Cache<RenderedHtml>,
 }
 
@@ -133,6 +140,7 @@ impl SiteWrapped {
         Ok(SiteWrapped {
             templater: Arc::new(create_templater()?),
             pages: Arc::new(Pages::new()?),
+            theme_provider: Arc::new(ThemeProvider::new()?),
             page_cache: Cache::new(args.cache_timeout),
             config: args,
         })
