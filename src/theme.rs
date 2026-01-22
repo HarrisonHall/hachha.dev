@@ -111,7 +111,7 @@ impl ThemeDate {
                     if month > month_a && month < month_b {
                         return true;
                     }
-                    if month_a == month_b {
+                    if month == month_a && month_a == month_b {
                         if day >= day_a && day <= day_b {
                             return true;
                         }
