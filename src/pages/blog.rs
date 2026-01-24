@@ -27,16 +27,20 @@ impl BlogsPages {
                 let mut blog = util::read_embedded_toml::<Blog, EmbeddedBlogFiles>(&path)?;
                 let dir = String::from(match std::path::Path::new(&path).parent() {
                     Some(dir) => dir.to_string_lossy(),
-                    None => bail!("Unable to find directory for blog at {path}"),
+                    None => {
+                        log::error!("Unable to find directory for blog at {path}.");
+                        continue;
+                    }
                 });
-                let article = match std::path::Path::new(&dir).file_name() {
-                    Some(article) => article.to_string_lossy(),
-                    None => bail!("Unable to find directory for blog at {article}"),
+                let article_path = format!("{dir}/blog.md");
+                blog.markdown = match util::read_embedded_text::<EmbeddedBlogFiles>(&article_path) {
+                    Ok(md) => md,
+                    Err(e) => {
+                        log::error!("Failed to read parsed blog: {}", e);
+                        continue;
+                    }
                 };
-                let article_path = format!("{dir}/{article}.md");
-                blog.markdown = util::read_embedded_text::<EmbeddedBlogFiles>(&article_path)?;
                 blog.metadata = util::to_json(&blog)?;
-                blog.uri = article.into_owned();
                 blogs.push(blog);
             }
         }

@@ -33,15 +33,15 @@
         {{#each blogs}}
         <div
           class="click-box"
-          style="padding-top: 0.5rem; padding-bottom: 0.5rem;{{#if darken}}background-color: var(--card);{{/if}}"
+          style="{{#if darken}}background-color: var(--card);{{/if}}"
         >
           <a href="/blog/{{path}}" class="hidden">
             <div class="flex-row narrow">
-              <div class="flex-auto">
+              <div class="flex-auto padded-md">
                 <h5 style="margin-bottom: 0px">{{name}}</h5>
                 <p style="margin-bottom: 0px">{{blurb}}</p>
               </div>
-              <div class="flex-initial">
+              <div class="flex-initial padded-md">
                 {{> templates/generic/date_badge.html date=date }}
               </div>
             </div>

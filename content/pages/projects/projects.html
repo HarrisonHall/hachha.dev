@@ -8,21 +8,19 @@
     {{> templates/navbar.html }}
 
     <main>
-      <div class="container grid-md empty">
-        {{> templates/pages/projects/github_banner.html }}
-      </div>
+      {{> templates/pages/projects/github_banner.html }}
 
       <div class="section">
         {{#each projects}}
         <div
           class=""
-          style="padding-top: 0.5rem; padding-bottom: 0.5rem;{{#if darken}}background-color: var(--card);{{/if}}"
+          style="{{#if darken}}background-color: var(--card);{{/if}}"
         >
           <div class="flex-row narrow">
-            <div class="flex-auto">
+            <div class="flex-auto padded-md">
               <h5 style="font-size: 1em; margin-bottom: 0rem">{{name}}</h5>
               <p style="margin-bottom: 0rem">{{description}}</p>
-              <div style="display: flex; column-gap: 0.75rem">
+              <div class="flex-row" style="column-gap: 0.75rem">
                 {{#each links}}
                 <a href="{{this}}" target="_blank" class="contrast">
                   {{@key}}
@@ -30,7 +28,7 @@
                 {{/each}}
               </div>
             </div>
-            <div class="flex-initial">
+            <div class="flex-initial padded-md">
               {{> templates/generic/date_badge.html date=date }}
             </div>
           </div>
