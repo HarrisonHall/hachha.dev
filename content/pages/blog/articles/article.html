@@ -7,11 +7,11 @@
   <body class="blog-page">
     {{> templates/navbar.html }}
 
-    <article class="blog-article">
+    <main class="blog-article">
       <div class="hero">
         <div class="container grid-lg text-center">
-          <h1 style="font-size: 4em"><b>{{name}}</b></h1>
-          <h2 style="font-size: 2em"><b>{{blurb}}</b></h2>
+          <h1 style="">{{name}}</h1>
+          <h2 style="">{{blurb}}</h2>
           {{> templates/generic/date_badge.html date=date }}
         </div>
       </div>
@@ -19,7 +19,7 @@
       <div class="blog-markdown">
         {{> templates/pages/blog/blog_section.html }}
       </div>
-    </article>
+    </main>
 
     {{> templates/footer.html }}
   </body>

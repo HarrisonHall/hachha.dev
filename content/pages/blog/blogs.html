@@ -7,16 +7,18 @@
   <body class="blog-page">
     {{> templates/navbar.html }}
 
-    <div class="hero" style="padding-bottom: 1rem">
+    <main>
       <h1
         style="
           font-size: 3rem;
           margin-bottom: 0px;
           margin-left: auto;
           margin-right: auto;
+          padding-bottom: 1rem;
         "
+        class="text-center"
       >
-        <b>Blog</b>
+        Blog
         <a
           href="/blog.feed"
           class="icon-link-inline"
@@ -26,18 +28,29 @@
           <i class="ph-fill ph-rss-simple" style="font-size: 2.5rem"></i>
         </a>
       </h1>
-    </div>
 
-    <div class="section">
-      <div class="container">
+      <div class="section">
         {{#each blogs}}
-        </>
-        {{> templates/pages/blog/blog_card.html blog-title=name blog-blurb=blurb
-        blog-path=path blog-date=date darken=darken }}
-        </>
+        <div
+          class="click-box"
+          style="padding-top: 0.5rem; padding-bottom: 0.5rem;{{#if darken}}background-color: var(--card);{{/if}}"
+        >
+          <a href="/blog/{{path}}" class="hidden">
+            <div class="flex-row narrow">
+              <div class="flex-auto">
+                <h5 style="margin-bottom: 0px">{{name}}</h5>
+                <p style="margin-bottom: 0px">{{blurb}}</p>
+              </div>
+              <div class="flex-initial">
+                {{> templates/generic/date_badge.html date=date }}
+              </div>
+            </div>
+          </a>
+        </div>
         {{/each}}
       </div>
-    </div>
+    </main>
+
     {{> templates/footer.html }}
   </body>
 </html>

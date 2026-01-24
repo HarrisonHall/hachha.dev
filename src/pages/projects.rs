@@ -89,7 +89,7 @@ struct Project {
     /// Path to image (if existent).
     image: Option<String>,
     /// Links to project.
-    links: HashMap<String, String>,
+    links: BTreeMap<String, String>,
 }
 
 impl Project {
@@ -112,7 +112,7 @@ impl Default for Project {
             description: "".to_string(),
             date: chrono::NaiveDate::default(),
             image: None,
-            links: HashMap::new(),
+            links: BTreeMap::new(),
         }
     }
 }

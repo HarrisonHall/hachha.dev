@@ -7,7 +7,7 @@
   <body class="links-page">
     {{> templates/navbar.html }}
 
-    <div class="hero" style="padding-bottom: 1rem">
+    <main>
       <h1
         style="
           font-size: 3rem;
@@ -15,8 +15,9 @@
           margin-left: auto;
           margin-right: auto;
         "
+        class="text-center"
       >
-        <b>Links</b>
+        Links
         <a
           href="/links.feed"
           class="icon-link-inline"
@@ -26,53 +27,46 @@
           <i class="ph-fill ph-rss-simple" style="font-size: 2.5rem"></i>
         </a>
       </h1>
-      <div class="container grid-xs">
-        <p class="blog-markdown">
-          This <em>link blog</em> is a collection of fun, interesting, or
-          educational links that I think are worth sharing (I probably found
-          them from something in
-          <a href="https://feeds.hachha.dev/" target="_blank">my slipstream</a
-          >). While the links available are mostly agreeable, I may not
-          necessarily agree myself with the content or authors-- but that
-          doesn't mean the ideas aren't worth thinking about.
-          <em>Hope you learn something neat!</em>
-        </p>
-      </div>
-    </div>
+      <p class="blog-markdown narrow">
+        This <em>link blog</em> is a collection of fun, interesting, or
+        educational links that I think are worth sharing (I probably found them
+        from something in
+        <a href="https://feeds.hachha.dev/" target="_blank">my slipstream</a>).
+        While the links available are mostly agreeable, I may not necessarily
+        agree myself with the content or authors-- but that doesn't mean the
+        ideas aren't worth thinking about.
+        <em>Hope you learn something neat!</em>
+      </p>
 
-    <div class="section">
-      <div class="container">
+      <div class="section">
         {{#each links}}
         <div
-          class="click-box container grid-md"
+          class="click-box"
           style="padding-top: 0.5rem; padding-bottom: 0.5rem;{{#if darken}}background-color: var(--card);{{/if}}"
         >
-          <a href="{{url}}" target="_blank">
-            <div class="container grid-sm">
-              <div class="columns">
-                <div class="column col-9 col-mr-auto col-sm-12">
-                  <div class="tile-content">
-                    <h3
-                      class="tile-title"
-                      style="font-size: 1rem; margin-bottom: 0px"
-                    >
-                      {{title}}
-                    </h3>
-                    <p class="tile-subtitle" style="margin-bottom: 0px">
-                      {{description}}
-                    </p>
-                  </div>
-                </div>
-                <div class="column col-auto col-sm-12">
-                  {{> templates/generic/date_badge.html date=date }}
-                </div>
+          <a href="{{url}}" target="_blank" class="hidden">
+            <div class="flex-row narrow">
+              <div class="flex-auto">
+                <h3
+                  class="tile-title"
+                  style="font-size: 1rem; margin-bottom: 0px"
+                >
+                  {{title}}
+                </h3>
+                <p class="tile-subtitle" style="margin-bottom: 0px">
+                  {{description}}
+                </p>
+              </div>
+              <div class="flex-initial">
+                {{> templates/generic/date_badge.html date=date }}
               </div>
             </div>
           </a>
         </div>
         {{/each}}
       </div>
-    </div>
+    </main>
+
     {{> templates/footer.html }}
   </body>
 </html>
