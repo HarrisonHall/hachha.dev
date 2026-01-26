@@ -216,6 +216,8 @@ pub fn adjust_content_header(
     let resource = resource.as_ref();
     let content_type = if resource.ends_with(".css") {
         "text/css"
+    } else if resource.ends_with(".epub") {
+        "application/epub+zip"
     } else if resource.ends_with(".gif") {
         "image/gif"
     } else if resource.ends_with(".html") {
@@ -244,6 +246,8 @@ pub fn adjust_content_header(
         "font/woff"
     } else if resource.ends_with(".woff2") {
         "font/woff2"
+    } else if resource.ends_with(".xhtml") {
+        "application/xhtml+xml"
     } else {
         "application/octet-stream"
     };

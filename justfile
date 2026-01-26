@@ -36,4 +36,4 @@ upload: build-release
 	server_ip=$(host hachha.dev | head -1 | cut -f4 -d" ")
 	ssh root@${server_ip} -f "pkill -f hachha-dev && mkdir -p ${dir}"
 	scp ./target/x86_64-unknown-linux-musl/release/hachha-dev root@${server_ip}:~/${dir}/hachha-dev
-	ssh root@${server_ip} -f "./${dir}/hachha-dev &"
+	# ssh root@${server_ip} -f "./${dir}/hachha-dev &"

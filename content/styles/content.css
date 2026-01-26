@@ -92,12 +92,16 @@ footer p {
 }
 
 h1 {
-  font-size: 3.5rem;
+  font-size: 3rem;
 }
 
 h1,
 h4 {
   color: var(--primary);
+}
+
+h2 {
+  font-size: 1.75rem;
 }
 
 h2,
@@ -198,6 +202,8 @@ nav {
   /* padding-right: 10rem; */
   margin-left: auto;
   margin-right: auto;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
   max-width: var(--view-width);
 }
 
