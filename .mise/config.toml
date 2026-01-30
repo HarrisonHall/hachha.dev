@@ -1,0 +1,48 @@
+# Dev environment for hachha.dev.
+
+[tools]
+biome = "2.3.13"
+
+[tasks.setup]
+description = "Set up dependencies."
+run = [
+  "rustup default sable",
+  "rustup component add rust-std-x86_64-unknown-linux-musl",
+]
+
+[tasks.ssh]
+description = "SSH to server."
+run = """
+#!/usr/bin/env sh  
+server_ip=$(host hachha.dev | head -1 | cut -f4 -d" ")
+echo $server_ip
+ssh root@${server_ip}
+"""
+
+[tasks.test]
+description = "Test locally."
+run = """
+#/usr/bin/env sh
+cargo build
+sh -c "sleep 2 && xdg-open http://127.0.0.1:8180" 2&>/dev/null &
+cargo run -- --port 8180 --debug
+"""
+
+[tasks.build]
+description = "Build static release for many versions of linux via musl."
+run = "cargo build --target x86_64-unknown-linux-musl --release"
+
+[tasks.upload]
+description = "Upload to server."
+run = """
+#!/usr/bin/env sh
+dir="workspace/dev/hachha-dev"
+server_ip=$(host hachha.dev | head -1 | cut -f4 -d" ")
+ssh root@${server_ip} -f "pkill -f hachha-dev && mkdir -p ${dir}"
+scp ./target/x86_64-unknown-linux-musl/release/hachha-dev root@${server_ip}:~/${dir}/hachha-dev
+# ssh root@${server_ip} -f "./${dir}/hachha-dev &"
+"""
+
+[tasks.format]
+description = "Format content."
+run = "biome --help"
