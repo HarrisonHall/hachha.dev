@@ -211,7 +211,11 @@ pub async fn visit_blog_index(State(site): State<Site>) -> RenderedHtml {
 }
 
 /// Endpoint for individual blogs.
-pub async fn visit_blog(Path(blog): Path<String>, State(site): State<Site>) -> RenderedHtml {
+pub async fn visit_blog(
+    Path(blog): Path<String>,
+    State(site): State<Site>,
+    headers: HeaderMap,
+) -> RenderedHtml {
     // Visit index
     if blog.is_empty() {
         return visit_blog_index(State(site)).await;
@@ -236,7 +240,7 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<Site>) -> R
         }
     };
 
-    return error::visit_404_internal(format!("/blog/{blog}"), State(site)).await;
+    return error::visit_404_internal(format!("/blog/{blog}"), State(site), Some(headers)).await;
 }
 
 /// Get local blog resource.

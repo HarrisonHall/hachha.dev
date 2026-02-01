@@ -12,6 +12,7 @@ pub(crate) mod internal {
     pub use std::time::Instant;
 
     pub use axum::extract::{Path, State};
+    pub use axum::http::{HeaderMap, Uri};
     pub use axum::response::Html;
     pub use axum::{routing::get, Router};
     pub use chrono::Datelike;
