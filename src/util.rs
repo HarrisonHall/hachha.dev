@@ -1,6 +1,5 @@
 //! Utils.
 
-use colored::{ColoredString, Colorize};
 use rust_embed::RustEmbed;
 
 use super::*;
@@ -44,117 +43,40 @@ impl axum::response::IntoResponse for RenderedHtml {
     }
 }
 
-/// Logging struct.
-static LOGGER_SETUP: Once = Once::new();
+/// Initialize logging.
+pub fn init_logging(debug: bool) -> Result<()> {
+    use tracing::level_filters::LevelFilter;
+    use tracing_subscriber::fmt;
+    use tracing_subscriber::prelude::*;
 
-/// Sim logger.
-pub struct Logger {}
-
-impl Logger {
-    /// Create and set a new logger.
-    pub fn init(level: impl Into<String>) -> Result<()> {
-        LOGGER_SETUP.call_once(|| {
-            let logger = Box::new(Self {});
-            log::set_logger(Box::leak(logger)).ok();
-        });
-        let level = level.into().to_uppercase();
-        match level.as_str() {
-            "TRACE" => log::set_max_level(log::LevelFilter::Trace),
-            "DEBUG" => log::set_max_level(log::LevelFilter::Debug),
-            "INFO" => log::set_max_level(log::LevelFilter::Info),
-            "Warn" => log::set_max_level(log::LevelFilter::Warn),
-            "Error" => log::set_max_level(log::LevelFilter::Error),
-            _ => {
-                log::warn!("Invalid log level: {level}");
-                log::set_max_level(log::LevelFilter::Error);
-            }
+    let level = if cfg!(debug_assertions) {
+        LevelFilter::TRACE
+    } else {
+        match debug {
+            true => LevelFilter::DEBUG,
+            false => LevelFilter::INFO,
         }
-        Ok(())
-    }
+    };
+    let format_layer = fmt::layer()
+        .with_level(true)
+        .with_target(true)
+        .with_thread_ids(false)
+        .with_thread_names(false)
+        .compact();
+    let filter_layer = tracing_subscriber::filter::Targets::new()
+        .with_default(LevelFilter::TRACE)
+        .with_target("handlebars", LevelFilter::WARN)
+        .with_target("globset", LevelFilter::WARN)
+        .with_target("axum", LevelFilter::WARN)
+        .with_target("tower_http", LevelFilter::WARN)
+        .with_target("mio", LevelFilter::WARN)
+        .with_target("hachha_dev", level);
+    tracing_subscriber::registry()
+        .with(filter_layer)
+        .with(format_layer)
+        .init();
 
-    // pub fn layer() -> LoggerLayer {
-    //     LoggerLayer::new()
-    // }
-
-    /// Get string for a level.
-    fn get_level_string(&self, level: log::Level) -> &'static str {
-        match level {
-            log::Level::Trace => "TRC",
-            log::Level::Debug => "DBG",
-            log::Level::Info => "INF",
-            log::Level::Warn => "WRN",
-            log::Level::Error => "ERR",
-        }
-    }
-
-    /// Get string for a level, ANSI colored.
-    fn get_level_string_colored(&self, level: log::Level) -> ColoredString {
-        let level = match level {
-            log::Level::Trace => self.get_level_string(level).cyan(),
-            log::Level::Debug => self.get_level_string(level).magenta(),
-            log::Level::Info => self.get_level_string(level).blue(),
-            log::Level::Warn => self.get_level_string(level).yellow(),
-            log::Level::Error => self.get_level_string(level).red(),
-        };
-        level.bold()
-    }
-}
-
-impl log::Log for Logger {
-    /// Check if log message w/ metadata can be logged.
-    fn enabled(&self, metadata: &log::Metadata) -> bool {
-        // Return early if level is low
-        if metadata.level() > log::max_level() {
-            return false;
-        }
-        return true;
-    }
-
-    /// How logger logs the message.
-    fn log(&self, record: &log::Record) {
-        // Skip certain logs.
-        if match record.target() {
-            "globset" => true,
-            "mio::poll" => true,
-            "tracing::span" | "tracing::span::active" => true,
-            "handlebars::render" => record.level() > log::Level::Info,
-            _ => {
-                if record.target().starts_with("tower_http") && record.level() > log::Level::Warn {
-                    true
-                } else {
-                    false
-                }
-            }
-        } {
-            return;
-        }
-
-        let mut prelude_len = 7;
-        let module = record.module_path().unwrap_or("???");
-        prelude_len += module.len();
-        let now_string = chrono::Local::now().format("%Y-%m-%dT%H:%M:%S").to_string();
-        prelude_len += now_string.len();
-
-        print!(
-            "{}[{}]{}: ",
-            self.get_level_string_colored(record.level()),
-            now_string.green(),
-            record.module_path().unwrap_or("???").green().bold(),
-        );
-        for (i, line) in format!("{}", record.args()).split("\n").enumerate() {
-            if line.is_empty() {
-                continue;
-            }
-            if i > 0 {
-                for _ in 0..prelude_len {
-                    print!(" ");
-                }
-            }
-            println!("{}", line);
-        }
-    }
-
-    fn flush(&self) {}
+    Ok(())
 }
 
 /// Read embedded file as data.

@@ -43,8 +43,8 @@ impl Site {
         let app = app.with_state(self.clone());
 
         // Serve.
-        log::info!("Serving haccha.dev on {}", self.config().port);
-        log::debug!("Debug @ http://127.0.0.1:{}", self.config().port);
+        tracing::info!("Serving haccha.dev on {}", self.config().port);
+        tracing::debug!("Debug @ http://127.0.0.1:{}", self.config().port);
         let addr = SocketAddr::from(([0, 0, 0, 0], self.config().port));
         let listener = tokio::net::TcpListener::bind(addr).await?;
         axum::serve(listener, app.into_make_service()).await?;
@@ -63,7 +63,7 @@ impl Site {
             true => match pages::Pages::new() {
                 Ok(pages) => Arc::new(pages),
                 Err(e) => {
-                    log::error!("Unable to rebuild pages!");
+                    tracing::error!("Unable to rebuild pages!");
                     panic!("{e}");
                 }
             },
@@ -95,7 +95,7 @@ impl Site {
         // Compute complete json to render page.
         let mut render_context = self.base_context();
         if util::merge_json(&mut render_context, metadata).is_err() {
-            log::error!("Unable to merge json to render page.");
+            tracing::error!("Unable to merge json to render page.");
             return RenderedHtml::new(pages::error::WORST_CASE_404);
         };
 
@@ -107,7 +107,7 @@ impl Site {
             {
                 Ok(rendered_page) => rendered_page,
                 Err(e) => {
-                    log::error!("Error rendering page: {e}");
+                    tracing::error!("Error rendering page: {e}");
                     pages::error::WORST_CASE_404.to_string()
                 }
             },
@@ -131,10 +131,8 @@ impl SiteWrapped {
         let args: SiteConfig = SiteConfig::parse();
 
         // Set logging
-        util::Logger::init(match args.debug {
-            true => "TRACE",
-            false => "INFO",
-        })?;
+        color_eyre::install()?;
+        util::init_logging(args.debug)?;
 
         // Configure site struct
         Ok(SiteWrapped {
@@ -188,7 +186,7 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         let template_name: String = item.to_string(); //.strip_prefix("templates/").expect("...").to_owned();
         let res = templater.register_partial(&format!("templates/{}", template_name), template);
         if res.is_err() {
-            log::error!("Unable to register partial {}: {:?}", template_name, res);
+            tracing::error!("Unable to register partial {}: {:?}", template_name, res);
         }
     }
 
@@ -200,7 +198,7 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         let mut compiled_markdown = match markdown::to_html_with_options(&content, &md_options) {
             Ok(compiled_markdown) => compiled_markdown,
             Err(e) => {
-                log::error!("Markdown rendering error: {}", e);
+                tracing::error!("Markdown rendering error: {}", e);
                 MD_RENDERING_ERROR.to_string()
             }
         };

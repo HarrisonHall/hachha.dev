@@ -28,7 +28,7 @@ impl BlogsPages {
                 let dir = String::from(match std::path::Path::new(&path).parent() {
                     Some(dir) => dir.to_string_lossy(),
                     None => {
-                        log::error!("Unable to find directory for blog at {path}.");
+                        tracing::error!("Unable to find directory for blog at {path}.");
                         continue;
                     }
                 });
@@ -36,7 +36,7 @@ impl BlogsPages {
                 blog.markdown = match util::read_embedded_text::<EmbeddedBlogFiles>(&article_path) {
                     Ok(md) => md,
                     Err(e) => {
-                        log::error!("Failed to read parsed blog: {}", e);
+                        tracing::error!("Failed to read parsed blog: {}", e);
                         continue;
                     }
                 };
@@ -236,8 +236,7 @@ pub async fn visit_blog(Path(blog): Path<String>, State(site): State<Site>) -> R
         }
     };
 
-    log::error!("Visiting invalid blog {}", full_blog_path);
-    return error::visit_404(State(site)).await;
+    return error::visit_404_internal(format!("/blog/{blog}"), State(site)).await;
 }
 
 /// Get local blog resource.
@@ -249,7 +248,7 @@ pub async fn get_blog_resource(
     let data = match util::read_embedded_data::<EmbeddedBlogFiles>(&blog_resource) {
         Ok(data) => data,
         Err(_) => {
-            log::error!("Unable to render blog resource {blog_resource}");
+            tracing::error!("Unable to render blog resource {blog_resource}");
             EmbeddedData::empty()
         }
     };

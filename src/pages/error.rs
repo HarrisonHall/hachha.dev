@@ -1,5 +1,7 @@
 //! Error pages.
 
+use axum::http::Uri;
+
 use super::*;
 
 pub const WORST_CASE_404: &str = "<html>404</html>";
@@ -30,7 +32,13 @@ impl ErrorPage {
 }
 
 /// Endpoint for error 404 page.
-pub async fn visit_404(State(site): State<Site>) -> RenderedHtml {
+pub async fn visit_404(uri: Uri, State(site): State<Site>) -> RenderedHtml {
+    visit_404_internal(uri.path(), State(site)).await
+}
+
+/// Internal 404
+pub async fn visit_404_internal(path: impl AsRef<str>, State(site): State<Site>) -> RenderedHtml {
+    tracing::warn!("404: Visit invalid uri `{}`.", path.as_ref());
     match site.page_cache().retrieve("404").await {
         Ok(page) => page,
         Err(_) => {

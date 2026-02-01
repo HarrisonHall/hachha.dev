@@ -47,7 +47,7 @@ impl ThemeProvider {
         match util::read_embedded_data::<EmbeddedThemes>(theme_name.as_str()) {
             Ok(d) => d,
             Err(e) => {
-                log::error!("Unable to fetch theme '{}': {e}.", theme_name);
+                tracing::error!("Unable to fetch theme '{}': {e}.", theme_name);
                 self.default_theme.clone()
             }
         }
@@ -127,7 +127,7 @@ impl ThemeDate {
                 }
             },
             ThemeDate::Range { .. } => {
-                log::warn!("Cannot compare ThemeDate ranges.");
+                tracing::warn!("Cannot compare ThemeDate ranges.");
                 false
             }
         }

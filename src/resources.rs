@@ -12,7 +12,7 @@ pub async fn get_favicon(State(_site): State<Site>) -> impl axum::response::Into
     let data = match util::read_embedded_data::<EmbeddedFavicon>("favicon.ico") {
         Ok(data) => data,
         Err(_) => {
-            log::error!("Favicon missing!");
+            tracing::error!("Favicon missing!");
             util::EmbeddedData::empty()
         }
     };
@@ -31,7 +31,7 @@ pub async fn get_media(
     let data = match util::read_embedded_data::<EmbeddedMedia>(&path) {
         Ok(data) => data,
         Err(_) => {
-            log::error!("Asked for missing media {path}");
+            tracing::error!("Asked for missing media {path}");
             util::EmbeddedData::empty()
         }
     };
@@ -51,7 +51,7 @@ pub async fn get_style(
     let data = match util::read_embedded_data::<EmbeddedStyles>(&path) {
         Ok(data) => data,
         Err(e) => {
-            log::error!("Asked for invalid asset at style/{path}: {e}");
+            tracing::error!("Asked for invalid asset at style/{path}: {e}");
             util::EmbeddedData::empty()
         }
     };
@@ -69,7 +69,7 @@ pub async fn get_font(
     let data = match util::read_embedded_data::<EmbeddedFonts>(&path) {
         Ok(data) => data,
         Err(e) => {
-            log::error!("Asked for invalid asset at fonts/{path}: {e}");
+            tracing::error!("Asked for invalid asset at fonts/{path}: {e}");
             util::EmbeddedData::empty()
         }
     };
@@ -86,7 +86,7 @@ pub async fn get_robots_txt(State(_site): State<Site>) -> impl axum::response::I
     let data = match util::read_embedded_data::<EmbeddedRobotsTxt>("robots.txt") {
         Ok(data) => data,
         Err(_) => {
-            log::error!("robots.txt missing!");
+            tracing::error!("robots.txt missing!");
             util::EmbeddedData::empty()
         }
     };

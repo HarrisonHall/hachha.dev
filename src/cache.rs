@@ -113,7 +113,7 @@ impl<T: Clone> Cache<T> {
     /// Update item in the cache, overriding the previous item according to a custom
     /// timeout.
     pub async fn update_override(&self, name: &str, item: T, custom_timeout: Option<f32>) -> T {
-        log::debug!("Updating cached value for {name}");
+        tracing::debug!("Updating cached value for {name}");
         let mut entries = self.entries.write().await;
         match entries.get_mut(name) {
             Some(entry) => entry.update(item.clone()),
