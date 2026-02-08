@@ -31,6 +31,7 @@ impl Site {
             "/blog/{:path}/{*resource}",
             get(pages::blog::get_blog_resource),
         );
+        app = app.route("/blog/tag/{:tag}", get(pages::blog::visit_tag));
         app = app.route("/links", get(pages::links::visit_links_index));
         app = app.route("/links.feed", get(pages::links::visit_links_feed));
         app = app.route("/projects", get(pages::projects::visit_projects));
@@ -211,9 +212,15 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         content
     });
 
+    // Compare strings.
+    handlebars_helper!(matches_helper: |a: String, b: String| {
+        a == b
+    });
+
     // Register helpers.
     templater.register_helper("markdown", Box::new(markdown_helper));
     templater.register_helper("html", Box::new(html_helper));
+    templater.register_helper("matches", Box::new(matches_helper));
 
     Ok(templater)
 }

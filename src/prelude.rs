@@ -6,7 +6,7 @@ pub use crate::util::*;
 
 pub(crate) mod internal {
     pub use std::borrow::Cow;
-    pub use std::collections::{BTreeMap, HashMap};
+    pub use std::collections::{BTreeMap, BTreeSet, HashMap};
     pub use std::net::SocketAddr;
     pub use std::sync::Arc;
     pub use std::time::Instant;

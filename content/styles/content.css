@@ -503,6 +503,41 @@ img.img-fit-contain {
 	cursor: pointer;
 }
 
+.tags {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.tag {
+	font-size: 0.8rem;
+	color: var(--background);
+	background: var(--accent);
+	font-weight: 500;
+	border-radius: calc(infinity * 1px);
+	margin: 0.25em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
+	text-decoration-color: transparent;
+}
+
+.tag:visited {
+	color: var(--background);
+	text-decoration-color: transparent;
+}
+
+.tag.selected {
+	text-decoration-color: color(var(--background));
+}
+
+.tag:focus,
+.tag:hover {
+	text-decoration-color: color(var(--background));
+}
+
+.tag::before {
+	content: "#";
+}
+
 /* Adjustments on tiny screens. */
 
 @media (max-width: 600px) {

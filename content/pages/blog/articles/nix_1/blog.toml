@@ -2,3 +2,4 @@ name = "My New Developer Tooling"
 blurb = "Recent explorations - July 2023"
 date = "2023-07-07"
 article = "nix_1"
+tags = ["dev"]

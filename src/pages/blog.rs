@@ -3,7 +3,6 @@
 use super::*;
 
 use atom_syndication as atom;
-use util::adjust_content_header;
 
 /// The blogs page and subpages.
 pub struct BlogsPages {
@@ -69,7 +68,7 @@ impl BlogsPages {
                 .latest()
                 .ok_or(anyhow!("Unable to convert dt {} to utc.", blog.date))?
                 .into();
-            let entry: atom::Entry = atom::EntryBuilder::default()
+            let entry = atom::EntryBuilder::default()
                 .title(blog.name.clone())
                 .summary(Some(blog.blurb.clone().into()))
                 .link(
@@ -80,21 +79,40 @@ impl BlogsPages {
                 )
                 .published(timestamp)
                 .updated(timestamp)
+                .categories(
+                    blog.tags
+                        .iter()
+                        .map(|tag| atom::CategoryBuilder::default().term(tag).build())
+                        .collect::<Vec<atom::Category>>(),
+                )
                 .build();
             entries.push(entry);
         }
         feed_builder.entries(entries);
         let feed = feed_builder.build().to_string();
 
-        // Generate metadata. Darken every other entry.
+        // Generate blog metadata. Darken every other entry.
         let mut metadata = json!({});
         let mut blog_metadata: Vec<serde_json::Value> = Vec::new();
+        let mut all_tags: BTreeSet<String> = BTreeSet::new();
         for (i, blog) in blogs.iter().enumerate() {
             let mut meta = blog.metadata.clone();
             util::merge_json(&mut meta, &json!({"darken": i % 2 == 0, "path": blog.uri}))?;
             blog_metadata.push(meta);
+            for other_tag in &blog.tags {
+                if !all_tags.contains(other_tag) {
+                    all_tags.insert(other_tag.into());
+                }
+            }
         }
         metadata["blogs"] = serde_json::Value::Array(blog_metadata);
+        metadata["tags"] = serde_json::Value::Array(
+            all_tags
+                .into_iter()
+                .map(|tag| serde_json::Value::String(tag))
+                .collect(),
+        );
+        metadata["tag"] = serde_json::Value::String("".into());
 
         Ok(BlogsPages {
             index,
@@ -159,9 +177,12 @@ pub struct Blog {
     blurb: String,
     /// Date blog was written.
     date: chrono::NaiveDate,
-    /// URI for blog.
+    /// Relative URI for blog.
     #[serde(alias = "article")]
     uri: String,
+    /// Tags.
+    #[serde(default)]
+    tags: Vec<String>,
     /// Read markdown of blog entry.
     #[serde(skip)]
     markdown: String,
@@ -177,6 +198,7 @@ impl Default for Blog {
             blurb: "".to_string(),
             date: chrono::NaiveDate::default(),
             uri: "".to_string(),
+            tags: Vec::new(),
             markdown: "".to_string(),
             metadata: json!({}),
         }
@@ -243,6 +265,50 @@ pub async fn visit_blog(
     return error::visit_404_internal(format!("/blog/{blog}"), State(site), Some(headers)).await;
 }
 
+/// Visit tag.
+pub async fn visit_tag(Path(tag): Path<String>, State(site): State<Site>) -> RenderedHtml {
+    visit_tag_internal(Some(tag.as_str()), State(site)).await
+}
+
+/// Visit tag internal.
+pub async fn visit_tag_internal(tag: Option<&str>, State(site): State<Site>) -> RenderedHtml {
+    let page = format!("tags/{tag:?}");
+
+    // Collect metadata.
+    let mut metadata = site.pages().blogs.metadata.clone();
+    let mut blog_metadata: Vec<serde_json::Value> = Vec::new();
+    for (_, blog) in site.pages().blogs.blogs.iter().enumerate() {
+        for other_tag in &blog.tags {
+            if Some(other_tag.as_str()) == tag {
+                let mut meta = blog.metadata.clone();
+                util::merge_json(
+                    &mut meta,
+                    &json!({"darken": blog_metadata.len() % 2 == 0, "path": blog.uri}),
+                )
+                .ok();
+                blog_metadata.push(meta);
+            }
+        }
+    }
+    metadata["tag"] = match &tag {
+        Some(tag) => serde_json::Value::String((*tag).to_owned()),
+        None => serde_json::Value::String("".into()),
+    };
+    metadata["blogs"] = serde_json::Value::Array(blog_metadata);
+
+    match site.page_cache().retrieve(&page).await {
+        Ok(page) => page,
+        Err(_) => {
+            site.page_cache()
+                .update(
+                    &page,
+                    site.render_page(&site.pages().blogs.index, &metadata),
+                )
+                .await
+        }
+    }
+}
+
 /// Get local blog resource.
 pub async fn get_blog_resource(
     Path((blog, resource)): Path<(String, String)>,
@@ -256,7 +322,7 @@ pub async fn get_blog_resource(
             EmbeddedData::empty()
         }
     };
-    return adjust_content_header(resource, data);
+    return crate::util::adjust_content_header(resource, data);
 }
 
 /// Get blog as atom feed.

@@ -29,6 +29,22 @@
         </a>
       </h1>
 
+      {{#if tags}}
+      <div class="tags">
+        {{#each tags}}
+          <a
+            {{#if (matches this ../tag)}}
+            href="/blog"
+            class="tag selected"
+            {{else}}
+            href="/blog/tag/{{this}}"
+            class="tag"
+            {{/if}}
+            >{{this}}</a>
+        {{/each}}
+      </div>
+      {{/if}}
+
       <div class="section">
         {{#each blogs}}
         <div

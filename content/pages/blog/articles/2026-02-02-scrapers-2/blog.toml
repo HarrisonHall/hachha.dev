@@ -2,3 +2,4 @@ name = "Scrapers 2"
 blurb = "A funny realization"
 date = "2026-02-02"
 article = "scrapers-2"
+tags = ["dev"]

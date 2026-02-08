@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+  <head>
+    {{> templates/head.html }} {{> templates/pages/blog/code_style.html }}
+  </head>
+
+  <body class="tags-page">
+    {{> templates/navbar.html }}
+
+    <main class="blog-article">
+      <div class="padded">
+        <div class="text-center">
+          <h1>TODO</h1>
+          {{#if tags}}
+          <div class="tags">
+            {{#each tags}}
+              <a href="/tags/{{this}}" class="tag">{{this}}</a>
+            {{/each}}
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+      <div class="section">
+        {{#each blogs}}
+        <div
+          class="click-box"
+          style="{{#if darken}}background-color: var(--card);{{/if}}"
+        >
+          <a href="/blog/{{path}}" class="hidden">
+            <div class="flex-row narrow">
+              <div class="flex-auto padded-md">
+                <h5 style="margin-bottom: 0px">{{name}}</h5>
+                <p style="margin-bottom: 0px">{{blurb}}</p>
+              </div>
+              <div class="flex-initial padded-md">
+                {{> templates/generic/date_badge.html date=date }}
+              </div>
+            </div>
+          </a>
+        </div>
+        {{/each}}
+      </div>
+    </main>
+
+    {{> templates/footer.html }}
+  </body>
+</html>

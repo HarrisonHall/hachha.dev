@@ -2,3 +2,4 @@ name = "CSS"
 blurb = "On various frameworks"
 date = "2026-01-24"
 article = "pico.css"
+tags = ["dev"]
