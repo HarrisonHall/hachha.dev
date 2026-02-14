@@ -15,10 +15,10 @@ pub struct LinksPage {
 
 impl LinksPage {
     /// Generate new links pages.
-    pub fn new() -> Result<Self> {
+    pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         // Parse pages.
-        let index = util::read_embedded_text::<EmbeddedLinksFiles>("links.html")?;
-        let mut links = util::read_embedded_toml::<Links, EmbeddedLinksFiles>("links.toml")?;
+        let index = util::read_embedded_text::<EmbeddedPages>("blog/links/links.html")?;
+        let mut links = packed_data.read_toml::<Links>("pages/blog/links/links.toml")?;
         links.sort();
         links.reverse();
 
@@ -105,11 +105,6 @@ impl std::ops::DerefMut for Links {
         &mut self.links
     }
 }
-
-/// Embedded links files.
-#[derive(RustEmbed)]
-#[folder = "content/pages/blog/links"]
-struct EmbeddedLinksFiles;
 
 /// Parsed link data.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]

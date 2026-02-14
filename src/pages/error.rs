@@ -4,13 +4,6 @@ use super::*;
 
 pub const WORST_CASE_404: &str = "<html>404</html>";
 
-/// Raw embedded error page.
-#[derive(RustEmbed)]
-#[folder = "content/pages/"]
-#[exclude = "*/*"]
-#[include = "404.html"]
-struct EmbeddedErrorPage;
-
 /// Error page.
 pub struct ErrorPage {
     /// Unrendered page.
@@ -21,9 +14,9 @@ pub struct ErrorPage {
 
 impl ErrorPage {
     /// Generate new error page.
-    pub fn new() -> Result<Self> {
+    pub fn new(_packed_data: Arc<PackedData>) -> Result<Self> {
         Ok(ErrorPage {
-            raw_page: util::read_embedded_text::<EmbeddedErrorPage>("404.html")?,
+            raw_page: util::read_embedded_text::<EmbeddedPages>("404.html")?,
             context: json!({}),
         })
     }

@@ -19,13 +19,19 @@ pub struct Pages {
 
 impl Pages {
     /// Generate helper for all pages.
-    pub fn new() -> Result<Self> {
+    pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         Ok(Pages {
-            index: index::IndexPage::new()?,
-            error: error::ErrorPage::new()?,
-            blogs: blog::BlogsPages::new()?,
-            links: links::LinksPage::new()?,
-            projects: projects::ProjectsPage::new()?,
+            index: index::IndexPage::new(packed_data.clone())?,
+            error: error::ErrorPage::new(packed_data.clone())?,
+            blogs: blog::BlogsPages::new(packed_data.clone())?,
+            links: links::LinksPage::new(packed_data.clone())?,
+            projects: projects::ProjectsPage::new(packed_data.clone())?,
         })
     }
 }
+
+/// Embedded page templates.
+#[derive(RustEmbed)]
+#[folder = "content/pages"]
+#[include = "*.html"]
+struct EmbeddedPages;

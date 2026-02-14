@@ -1,8 +1,8 @@
 //! Utils.
 
-use rust_embed::RustEmbed;
-
 use super::*;
+
+use rust_embed::RustEmbed;
 
 /// Embedded data type.
 #[derive(Clone)]
@@ -24,6 +24,109 @@ impl std::ops::Deref for EmbeddedData {
 impl axum::response::IntoResponse for EmbeddedData {
     fn into_response(self) -> axum::response::Response {
         self.0.into_response()
+    }
+}
+
+/// Packed data.
+#[derive(Clone)]
+pub struct PackedData {
+    data: Arc<HashMap<String, EmbeddedData>>,
+}
+
+impl PackedData {
+    pub fn new(path: impl AsRef<std::path::Path>) -> Result<Self> {
+        let tar_gz = match std::fs::File::open(path.as_ref()) {
+            Ok(tgz) => tgz,
+            Err(e) => bail!("Failed to open packed data: {e}"),
+        };
+        let tar = flate2::read::GzDecoder::new(tar_gz);
+        let mut archive = tar::Archive::new(tar);
+
+        let entries = match archive.entries() {
+            Ok(entries) => entries,
+            Err(e) => {
+                bail!("Failed to generate entries of packed data: {e}");
+            }
+        };
+        let mut data = HashMap::new();
+        for entry in entries {
+            if let Ok(mut entry) = entry {
+                if let Ok(entry_path) = entry.path() {
+                    tracing::trace!("PackedData found file: {}", entry_path.to_string_lossy());
+                    let path = entry_path.to_string_lossy().into_owned();
+                    let mut full_file = match entry.header().size() {
+                        Ok(size) => Vec::with_capacity(size as usize),
+                        Err(_) => {
+                            tracing::warn!("Failed to view file size for packed file `{path}`.");
+                            Vec::new()
+                        }
+                    };
+                    match entry.read_to_end(&mut full_file) {
+                        Ok(_bytes) => {
+                            data.insert(path, EmbeddedData(Cow::Owned(full_file.into())));
+                        }
+                        Err(e) => {
+                            tracing::error!("Failed to read file `{path}`: {e}")
+                        }
+                    }
+                }
+            }
+        }
+
+        Ok(Self {
+            data: Arc::new(data),
+        })
+    }
+
+    pub fn iter<'a>(&'a self) -> std::collections::hash_map::Iter<'a, String, EmbeddedData> {
+        self.data.iter()
+    }
+
+    /// Read data from packed file.
+    pub fn read_data(&self, path: impl AsRef<str>) -> Result<EmbeddedData> {
+        let path = path
+            .as_ref()
+            .trim_start_matches("./")
+            .trim_start_matches("/")
+            .trim_start_matches("content/");
+
+        // In debug, read from file each time.
+        if cfg!(debug_assertions) {
+            let path = format!("./content/{path}");
+            return match std::fs::read(&path) {
+                Ok(data) => Ok(EmbeddedData(Cow::Owned(data.into()))),
+                Err(e) => {
+                    tracing::warn!("Failed to read file `{path}` in debug: {e}");
+                    bail!("FileNotFound")
+                }
+            };
+        }
+
+        if let Some(data) = self.data.get(path) {
+            return Ok(data.clone());
+        }
+
+        tracing::warn!("Did not find embedded data: `{}`.", path);
+        bail!("FileNotFound")
+    }
+
+    /// Parse embedded file to text.
+    pub fn read_text(&self, path: impl AsRef<str>) -> Result<String> {
+        let data = self.read_data(path.as_ref())?;
+        match std::str::from_utf8(&data) {
+            Ok(file) => Ok(file.to_string()),
+            _ => bail!("Unable to convert binary file {} to string", path.as_ref()),
+        }
+    }
+
+    /// Read toml.
+    pub fn read_toml<T: DeserializeOwned>(&self, path: impl AsRef<str>) -> Result<T> {
+        let data = self.read_data(path.as_ref())?;
+        match std::str::from_utf8(&data) {
+            Ok(file) => toml::from_str::<T>(file)
+                .map_err(|e| anyhow!("read_embedded_toml error for {}: {e}", path.as_ref())),
+            _ => bail!("Unable to convert binary file {} to string", path.as_ref()),
+        }
     }
 }
 
@@ -80,6 +183,7 @@ pub fn init_logging(debug: bool) -> Result<()> {
 }
 
 /// Read embedded file as data.
+#[allow(unused)]
 pub fn read_embedded_data<Embed: RustEmbed>(path: impl AsRef<str>) -> Result<EmbeddedData> {
     match Embed::get(path.as_ref()) {
         Some(file) => Ok(EmbeddedData(file.data)),
@@ -88,6 +192,7 @@ pub fn read_embedded_data<Embed: RustEmbed>(path: impl AsRef<str>) -> Result<Emb
 }
 
 /// Parse embedded file to text.
+#[allow(unused)]
 pub fn read_embedded_text<Embed: RustEmbed>(path: impl AsRef<str>) -> Result<String> {
     let data = read_embedded_data::<Embed>(path.as_ref())?;
     match std::str::from_utf8(&data) {
@@ -97,6 +202,7 @@ pub fn read_embedded_text<Embed: RustEmbed>(path: impl AsRef<str>) -> Result<Str
 }
 
 /// Read embedded toml.
+#[allow(unused)]
 pub fn read_embedded_toml<T: DeserializeOwned, Embed: RustEmbed>(
     path: impl AsRef<str>,
 ) -> Result<T> {

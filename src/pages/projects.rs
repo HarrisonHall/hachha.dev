@@ -2,11 +2,6 @@
 
 use super::*;
 
-/// Raw embedded project files.
-#[derive(RustEmbed)]
-#[folder = "content/pages/projects"]
-struct EmbeddedProjectsFiles;
-
 /// The project page.
 #[derive(Clone)]
 pub struct ProjectsPage {
@@ -23,13 +18,12 @@ pub struct ProjectsPage {
 
 impl ProjectsPage {
     /// Generate new projects page.
-    pub fn new() -> Result<Self> {
+    pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         // Parse index file.
-        let raw_index = util::read_embedded_text::<EmbeddedProjectsFiles>("projects.html")?;
+        let raw_index = util::read_embedded_text::<EmbeddedPages>("projects/projects.html")?;
 
         // Parse projects.
-        let mut projects =
-            util::read_embedded_toml::<Projects, EmbeddedProjectsFiles>("projects.toml")?;
+        let mut projects = packed_data.read_toml::<Projects>("pages/projects/projects.toml")?;
         projects.sort();
         projects.reverse();
 

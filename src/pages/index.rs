@@ -2,11 +2,6 @@
 
 use super::*;
 
-/// Raw index page.
-#[derive(RustEmbed)]
-#[folder = "content/pages/index"]
-struct EmbeddedIndexPage;
-
 /// The index (home) page.
 pub struct IndexPage {
     /// Unrendered page.
@@ -17,10 +12,10 @@ pub struct IndexPage {
 
 impl IndexPage {
     /// Generate new index page.
-    pub fn new() -> Result<Self> {
+    pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         Ok(IndexPage {
-            raw_page: util::read_embedded_text::<EmbeddedIndexPage>("index.html")?,
-            config: util::read_embedded_toml::<Config, EmbeddedIndexPage>("config.toml")?,
+            raw_page: read_embedded_text::<EmbeddedPages>("index/index.html")?,
+            config: packed_data.read_toml::<Config>("pages/index/config.toml")?,
         })
     }
 

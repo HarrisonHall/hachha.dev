@@ -2,33 +2,32 @@
 
 use super::*;
 
-/// Embedded theme data.
-#[derive(RustEmbed)]
-#[folder = "content/styles/theme"]
-struct EmbeddedThemes;
-
 pub struct ThemeProvider {
     default_theme: EmbeddedData,
     theme_rules: ThemeRules,
+    packed_data: Arc<PackedData>,
 }
 
 impl ThemeProvider {
-    pub fn new() -> Result<Self> {
-        let theme_rules = util::read_embedded_toml::<ThemeRules, EmbeddedThemes>("rules.toml")?;
-        let default_theme =
-            match util::read_embedded_data::<EmbeddedThemes>(theme_rules.default.as_str()) {
-                Ok(d) => d.clone(),
-                Err(e) => {
-                    bail!(
-                        "Unable to parse default theme '{}': {}",
-                        theme_rules.default,
-                        e
-                    );
-                }
-            };
+    pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
+        let theme_rules = packed_data.read_toml::<ThemeRules>("content/styles/theme/rules.toml")?;
+        let default_theme = match packed_data.read_data(format!(
+            "content/styles/theme/{}",
+            theme_rules.default.as_str()
+        )) {
+            Ok(d) => d.clone(),
+            Err(e) => {
+                bail!(
+                    "Unable to parse default theme '{}': {}",
+                    theme_rules.default,
+                    e
+                );
+            }
+        };
         Ok(Self {
             theme_rules,
             default_theme,
+            packed_data,
         })
     }
 
@@ -44,7 +43,10 @@ impl ThemeProvider {
             }
         }
 
-        match util::read_embedded_data::<EmbeddedThemes>(theme_name.as_str()) {
+        match self
+            .packed_data
+            .read_data(format!("content/styles/theme/{}", theme_name.as_str()))
+        {
             Ok(d) => d,
             Err(e) => {
                 tracing::error!("Unable to fetch theme '{}': {e}.", theme_name);

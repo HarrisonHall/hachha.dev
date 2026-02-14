@@ -15,15 +15,15 @@ pub struct BlogsPages {
 
 impl BlogsPages {
     /// Generate new blogs pages.
-    pub fn new() -> Result<Self> {
+    pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         // Parse pages.
-        let index = util::read_embedded_text::<EmbeddedBlogFiles>("blogs.html")?;
-        let article = util::read_embedded_text::<EmbeddedBlogFiles>("articles/article.html")?;
+        let index = util::read_embedded_text::<EmbeddedPages>("blog/blogs.html")?;
+        let article = util::read_embedded_text::<EmbeddedPages>("blog/articles/article.html")?;
         let mut blogs = Blogs::default();
-        for path in EmbeddedBlogFiles::iter() {
+        for (path, _data) in packed_data.iter() {
             if path.ends_with("blog.toml") {
                 let path = String::from(path);
-                let mut blog = util::read_embedded_toml::<Blog, EmbeddedBlogFiles>(&path)?;
+                let mut blog = packed_data.read_toml::<Blog>(&path)?;
                 let dir = String::from(match std::path::Path::new(&path).parent() {
                     Some(dir) => dir.to_string_lossy(),
                     None => {
@@ -32,7 +32,7 @@ impl BlogsPages {
                     }
                 });
                 let article_path = format!("{dir}/blog.md");
-                blog.markdown = match util::read_embedded_text::<EmbeddedBlogFiles>(&article_path) {
+                blog.markdown = match packed_data.read_text(&article_path) {
                     Ok(md) => md,
                     Err(e) => {
                         tracing::error!("Failed to read parsed blog: {}", e);
@@ -160,12 +160,6 @@ impl std::ops::DerefMut for Blogs {
         &mut self.articles
     }
 }
-
-/// Embedded blog files.
-#[derive(RustEmbed)]
-#[folder = "content/pages/blog"]
-#[exclude = "content/pages/links"]
-struct EmbeddedBlogFiles;
 
 /// Parsed blog data.
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -312,10 +306,10 @@ pub async fn visit_tag_internal(tag: Option<&str>, State(site): State<Site>) -> 
 /// Get local blog resource.
 pub async fn get_blog_resource(
     Path((blog, resource)): Path<(String, String)>,
-    State(_site): State<Site>,
+    State(site): State<Site>,
 ) -> impl axum::response::IntoResponse {
-    let blog_resource: String = format!("articles/{blog}/{resource}");
-    let data = match util::read_embedded_data::<EmbeddedBlogFiles>(&blog_resource) {
+    let blog_resource: String = format!("pages/blog/articles/{blog}/{resource}");
+    let data = match site.packed_data().read_data(&blog_resource) {
         Ok(data) => data,
         Err(_) => {
             tracing::error!("Unable to render blog resource {blog_resource}");

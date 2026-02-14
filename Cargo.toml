@@ -1,6 +1,6 @@
 [package]
 name = "hachha-dev"
-version = "0.13.0"
+version = "0.14.0"
 edition = "2021"
 authors = ["Harrison Hall <hachha@hachha.dev>"]
 description = "An (almost) static personal website and blog."
@@ -30,8 +30,10 @@ markdown = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
 clap = { version = "4.1", features = ["derive"] }
 color-eyre = "0.6"
+flate2 = { version = "1.1", features = ["zlib-rs"] }
 rand = "0.9"
-rust-embed = { version = "8.4", features = ["include-exclude"] }
+rust-embed = { version = "8.4", features = ["include-exclude", "compression"] }
+tar = "0.4"
 tokio = { version = "1.0", features = ["full"] }
 tracing = "0.1"
 tracing-subscriber = "0.3"

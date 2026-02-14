@@ -61,7 +61,7 @@ impl Site {
     /// Get pages.
     pub fn pages(&self) -> Arc<Pages> {
         match cfg!(debug_assertions) {
-            true => match pages::Pages::new() {
+            true => match pages::Pages::new(self.packed_data()) {
                 Ok(pages) => Arc::new(pages),
                 Err(e) => {
                     tracing::error!("Unable to rebuild pages!");
@@ -75,6 +75,11 @@ impl Site {
     /// Get theme provider.
     pub fn theme_provider(&self) -> Arc<ThemeProvider> {
         self.0.theme_provider.clone()
+    }
+
+    /// Get packed data.
+    pub fn packed_data(&self) -> Arc<PackedData> {
+        self.0.packed_data.clone()
     }
 
     /// Get page cache.
@@ -122,25 +127,30 @@ struct SiteWrapped {
     templater: Arc<Handlebars<'static>>,
     pages: Arc<Pages>,
     theme_provider: Arc<ThemeProvider>,
+    packed_data: Arc<PackedData>,
     page_cache: Cache<RenderedHtml>,
 }
 
 impl SiteWrapped {
     /// Generate new site object.
     fn new() -> Result<Self> {
-        // Parse arguments
+        // Parse arguments.
         let args: SiteConfig = SiteConfig::parse();
 
-        // Set logging
+        // Set logging.
         color_eyre::install()?;
         util::init_logging(args.debug)?;
 
-        // Configure site struct
+        // Parse packed data into memory.
+        let packed_data = Arc::new(PackedData::new(args.packed_data())?);
+
+        // Configure site struct.
         Ok(SiteWrapped {
             templater: Arc::new(create_templater()?),
-            pages: Arc::new(Pages::new()?),
-            theme_provider: Arc::new(ThemeProvider::new()?),
+            pages: Arc::new(Pages::new(packed_data.clone())?),
+            theme_provider: Arc::new(ThemeProvider::new(packed_data.clone())?),
             page_cache: Cache::new(args.cache_timeout),
+            packed_data,
             config: args,
         })
     }
@@ -154,6 +164,9 @@ pub struct SiteConfig {
     #[arg(short, long, value_name = "PORT", default_value_t = 8443)]
     pub port: u16,
     /// Log file path.
+    #[arg(long, value_name = "PACKED_DATA_PATH")]
+    pub packed_data: Option<PathBuf>,
+    /// Log file path.
     #[arg(long, value_name = "LOG_PATH")]
     pub log: Option<String>,
     /// Timeout for cache (seconds).
@@ -164,8 +177,18 @@ pub struct SiteConfig {
     pub debug: bool,
 }
 
+impl SiteConfig {
+    fn packed_data(&self) -> PathBuf {
+        match &self.packed_data {
+            Some(path) => path.clone(),
+            None => "./site.tgz".into(),
+        }
+    }
+}
+
 #[derive(RustEmbed)]
 #[folder = "content/templates/"]
+#[include = "*.html"]
 pub struct Templates;
 
 /// Create handlebars templater for the site.

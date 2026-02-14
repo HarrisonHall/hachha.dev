@@ -21,6 +21,7 @@ ssh root@${server_ip}
 
 [tasks.test]
 description = "Test locally."
+depends = ["bundle"]
 run = """
 #/usr/bin/env sh
 cargo build
@@ -28,18 +29,25 @@ sh -c "sleep 2 && xdg-open http://127.0.0.1:8180" 2&>/dev/null &
 cargo run -- --port 8180 --debug
 """
 
+[tasks.bundle]
+description = "Bundle the static site files."
+run = "cd content && tar -czf ../site.tgz *"
+
 [tasks.build]
 description = "Build static release for many versions of linux via musl."
+depends = ["bundle"]
 run = "cargo build --target x86_64-unknown-linux-musl --release"
 
 [tasks.upload]
 description = "Upload to server."
+depends = ["build"]
 run = """
 #!/usr/bin/env sh
 dir="workspace/dev/hachha-dev"
 server_ip=$(host hachha.dev | head -1 | cut -f4 -d" ")
 ssh root@${server_ip} -f "pkill -f hachha-dev && mkdir -p ${dir}"
 scp ./target/x86_64-unknown-linux-musl/release/hachha-dev root@${server_ip}:~/${dir}/hachha-dev
+scp ./site.tgz root@${server_ip}:~/${dir}/site.tgz
 # ssh root@${server_ip} -f "./${dir}/hachha-dev &"
 """
 
