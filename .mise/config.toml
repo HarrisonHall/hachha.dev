@@ -45,7 +45,7 @@ run = """
 #!/usr/bin/env sh
 dir="workspace/dev/hachha-dev"
 server_ip=$(host hachha.dev | head -1 | cut -f4 -d" ")
-ssh root@${server_ip} -f "pkill -f hachha-dev && mkdir -p ${dir}"
+ssh root@${server_ip} -f "pkill -f hachha-dev && mkdir -p ${dir} && sleep 0.5"
 scp ./target/x86_64-unknown-linux-musl/release/hachha-dev root@${server_ip}:~/${dir}/hachha-dev
 scp ./site.tgz root@${server_ip}:~/${dir}/site.tgz
 # ssh root@${server_ip} -f "./${dir}/hachha-dev &"

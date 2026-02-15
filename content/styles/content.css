@@ -38,6 +38,8 @@
 	--pico-primary-under: var(--primary);
 	--pico-secondary-under: var(--primary);
 	--pico-underline: var(--primary);
+	--pico-mark-color: var(--card);
+	--pico-mark-background-color: var(--secondary);
 
 	--pico-typography-spacing-top: 0.2rem !important;
 	--pico-typography-spacing-vertical: 1rem !important;
@@ -171,14 +173,23 @@ dl dd {
 	margin-bottom: 0.2rem;
 }
 
-blockquote {
+blockquote,
+.blog-markdown .markdown-alert {
+	display: block;
+	margin: var(--pico-typography-spacing-vertical) 0;
+	padding: var(--pico-spacing);
+	border-right: none;
+	border-left: 0.25rem solid var(--pico-blockquote-border-color);
+	border-inline-start: 0.25rem solid var(--pico-blockquote-border-color);
+	border-inline-end: none;
 	margin-top: 0.25rem;
 	margin-bottom: 0.25rem;
 	padding-top: 0.1rem;
 	padding-bottom: 0.1rem;
 }
 
-blockquote p {
+blockquote p,
+.blog-markdown .markdown-alert p {
 	padding-top: 0.1rem;
 	padding-bottom: 0.1rem;
 	--pico-typography-spacing-vertical: 0.25rem !important;
@@ -230,6 +241,11 @@ a.hidden {
 a.hidden:focus,
 a.hidden:hover {
 	text-decoration: underline;
+}
+
+mark {
+	border-radius: var(--pico-border-radius);
+	padding: 0rem 0.125rem;
 }
 
 /* General purpose classes: */
@@ -358,6 +374,10 @@ a.hidden:hover {
 }
 
 /* Components and overrides: */
+
+img {
+	border-radius: var(--pico-border-radius);
+}
 
 img.img-circle {
 	border-radius: 50%;
@@ -489,6 +509,42 @@ img.img-fit-contain {
 	margin-bottom: 0px;
 }
 
+.blog-markdown .markdown-alert .markdown-alert-title {
+	font-weight: 800;
+	font-size: 1.2em;
+	color: var(--accent);
+}
+
+.markdown-alert .markdown-alert-title::before {
+	font-family: "PhosphorFill";
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-right: 0.4em;
+	/* line-height: 150%; */
+	font-size: 90%;
+	font-weight: 100;
+}
+
+.markdown-alert-note .markdown-alert-title::before {
+	content: "\E2CE";
+}
+
+.markdown-alert-tip .markdown-alert-title::before {
+	content: "\E2DC";
+}
+
+.markdown-alert-important .markdown-alert-title::before {
+	content: "\EE44";
+}
+
+.markdown-alert-caution .markdown-alert-title::before {
+	content: "\E4E0";
+}
+
+.markdown-alert-warning .markdown-alert-title::before {
+	content: "\E7FC";
+}
+
 .card {
 	background-color: var(--card);
 	border-color: var(--primary);
@@ -536,6 +592,25 @@ img.img-fit-contain {
 
 .tag::before {
 	content: "#";
+}
+
+.spoiler {
+	color: var(--card);
+	background-color: var(--card);
+	transition: filter 0.1s ease-in-out;
+	border-radius: var(--pico-border-radius);
+	padding: 0rem 0.125rem;
+}
+
+.spoiler::before,
+.spoiler::after {
+	content: "||";
+}
+
+.spoiler:hover,
+.spoiler:focus {
+	color: var(--text);
+	background-color: var(--card);
 }
 
 /* Adjustments on tiny screens. */

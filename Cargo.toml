@@ -1,6 +1,6 @@
 [package]
 name = "hachha-dev"
-version = "0.14.1"
+version = "0.14.2"
 edition = "2021"
 authors = ["Harrison Hall <hachha@hachha.dev>"]
 description = "An (almost) static personal website and blog."
@@ -24,7 +24,7 @@ atom_syndication = "0.12"
 
 # Markup
 handlebars = "4.3"  # Updating this may cause whitespace issues!
-markdown = "1.0"
+comrak = "0.50"
 
 # Util
 chrono = { version = "0.4", features = ["serde"] }

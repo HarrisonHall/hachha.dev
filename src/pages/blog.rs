@@ -176,7 +176,7 @@ pub struct Blog {
     uri: String,
     /// Tags.
     #[serde(default)]
-    tags: Vec<String>,
+    tags: BTreeSet<String>,
     /// Read markdown of blog entry.
     #[serde(skip)]
     markdown: String,
@@ -192,7 +192,7 @@ impl Default for Blog {
             blurb: "".to_string(),
             date: chrono::NaiveDate::default(),
             uri: "".to_string(),
-            tags: Vec::new(),
+            tags: BTreeSet::new(),
             markdown: "".to_string(),
             metadata: json!({}),
         }

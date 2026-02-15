@@ -194,9 +194,6 @@ pub struct Templates;
 /// Create handlebars templater for the site.
 fn create_templater<'a>() -> Result<Handlebars<'a>> {
     use handlebars::handlebars_helper;
-    use markdown;
-
-    static MD_RENDERING_ERROR: &str = "<p>Unable to render markdown :(</p>";
 
     let mut templater = Handlebars::new();
 
@@ -216,18 +213,32 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
 
     // Compile markdown to html.
     handlebars_helper!(markdown_helper: |content: String| {
-        let mut md_options = markdown::Options::gfm();
-        md_options.compile.allow_dangerous_html = true;
-        md_options.compile.allow_dangerous_protocol = true;
-        let mut compiled_markdown = match markdown::to_html_with_options(&content, &md_options) {
-            Ok(compiled_markdown) => compiled_markdown,
-            Err(e) => {
-                tracing::error!("Markdown rendering error: {}", e);
-                MD_RENDERING_ERROR.to_string()
-            }
-        };
-        compiled_markdown = compiled_markdown.replace("<pre>", "<pre class=\"code\">");  // Replace code blocks
-        compiled_markdown
+        let mut options = comrak::Options::default();
+        options.extension.strikethrough = true;
+        options.extension.table = true;
+        options.extension.tasklist = true;
+        options.extension.autolink = true;
+        // options.extension.header_ids = true;
+        options.extension.footnotes = true;
+        options.extension.inline_footnotes = true;
+        options.extension.alerts = true;
+        options.extension.shortcodes = true;
+        options.extension.wikilinks_title_before_pipe = true;
+        options.extension.underline = true;
+        options.extension.subscript = true;
+        options.extension.superscript = true;
+        options.extension.spoiler = true;
+        options.extension.greentext = true;
+        options.extension.cjk_friendly_emphasis = true;
+        options.extension.subtext = true;
+        options.extension.highlight = true;
+
+        options.render.gfm_quirks = true;
+        options.render.github_pre_lang = true;
+        options.render.r#unsafe = true;
+        // options.extension.phoenix_heex = true;
+
+        comrak::markdown_to_html(&content, &options)
     });
 
     // Allow html to be rendered normally (not escaped)-- dangerous, if used incorrectly.

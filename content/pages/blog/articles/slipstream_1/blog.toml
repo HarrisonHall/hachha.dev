@@ -2,4 +2,4 @@ name = "Slipstream"
 blurb = "Fetching and filtering and aggregating, oh my"
 date = "2024-11-29"
 article = "slipstream_1"
-tags = ["rss"]
+tags = ["dev", "rss"]
