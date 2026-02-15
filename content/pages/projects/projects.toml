@@ -32,3 +32,17 @@ date = "2024-11-29"
 description = "Feed fetcher, filterer, and aggregator."
 [projects.links]
 github = "https://github.com/HarrisonHall/slipstream"
+
+[[projects]]
+name = "durf"
+date = "2025-12-28"
+description = "WIP document parser & viewer."
+[projects.links]
+github = "https://github.com/HarrisonHall/durf"
+
+[[projects]]
+name = "jdpub"
+date = "2026-01-25"
+description = "Japanese epub annotator & more."
+[projects.links]
+github = "https://github.com/HarrisonHall/jdpub"
