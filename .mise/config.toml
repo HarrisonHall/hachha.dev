@@ -2,12 +2,13 @@
 
 [tools]
 biome = "2.3.13"
+"cargo:cargo-zigbuild" = "latest"
 
 [tasks.setup]
 description = "Set up dependencies."
 run = [
   "rustup default sable",
-  "rustup component add rust-std-x86_64-unknown-linux-musl",
+  # "rustup component add rust-std-x86_64-unknown-linux-musl",
 ]
 
 [tasks.ssh]
@@ -34,9 +35,10 @@ description = "Bundle the static site files."
 run = "cd content && tar -czf ../site.tgz *"
 
 [tasks.build]
-description = "Build static release for many versions of linux via musl."
+description = "Build static release for many versions of linux via zigbuild."
 depends = ["bundle"]
-run = "cargo build --target x86_64-unknown-linux-musl --release"
+#run = "cargo zigbuild --target x86_64-unknown-linux-gnu.2.19 --release"
+run = "cargo zigbuild --target x86_64-unknown-linux-gnu.2.32 --release"
 
 [tasks.upload]
 description = "Upload to server."
@@ -46,7 +48,7 @@ run = """
 dir="workspace/dev/hachha-dev"
 server_ip=$(host hachha.dev | head -1 | cut -f4 -d" ")
 ssh root@${server_ip} -f "pkill -f hachha-dev && mkdir -p ${dir} && sleep 0.5"
-scp ./target/x86_64-unknown-linux-musl/release/hachha-dev root@${server_ip}:~/${dir}/hachha-dev
+scp ./target/x86_64-unknown-linux-gnu/release/hachha-dev root@${server_ip}:~/${dir}/hachha-dev
 scp ./site.tgz root@${server_ip}:~/${dir}/site.tgz
 # ssh root@${server_ip} -f "./${dir}/hachha-dev &"
 """
