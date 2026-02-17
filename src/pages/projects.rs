@@ -125,18 +125,13 @@ impl std::cmp::Ord for Project {
 
 /// Endpoint for project index page.
 pub async fn visit_projects(State(site): State<Site>) -> RenderedHtml {
-    match site.page_cache().retrieve("projects").await {
-        Ok(page) => page,
-        Err(_) => {
-            site.page_cache()
-                .update(
-                    "projects",
-                    site.render_page(
-                        &site.pages().projects.raw_index,
-                        &site.pages().projects.metadata,
-                    ),
-                )
-                .await
-        }
-    }
+    site.clone()
+        .page_cache()
+        .retrieve_or_update("projects", async move {
+            site.render_page(
+                &site.pages().projects.raw_index,
+                &site.pages().projects.metadata,
+            )
+        })
+        .await
 }

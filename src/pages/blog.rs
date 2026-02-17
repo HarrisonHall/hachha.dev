@@ -229,17 +229,12 @@ impl std::cmp::Ord for Blog {
 
 /// Endpoint for blogs index page.
 pub async fn visit_blog_index(State(site): State<Site>) -> RenderedHtml {
-    match site.page_cache().retrieve("blog").await {
-        Ok(page) => page,
-        Err(_) => {
-            site.page_cache()
-                .update(
-                    "blog",
-                    site.render_page(&site.pages().blogs.index, &site.pages().blogs.metadata),
-                )
-                .await
-        }
-    }
+    site.clone()
+        .page_cache()
+        .retrieve_or_update("blog", async move {
+            site.render_page(&site.pages().blogs.index, &site.pages().blogs.metadata)
+        })
+        .await
 }
 
 /// Endpoint for individual blogs.
@@ -252,27 +247,25 @@ pub async fn visit_blog(
     if blog.is_empty() {
         return visit_blog_index(State(site)).await;
     }
-    let full_blog_path: String = format!("blog/{blog}");
-    match site.page_cache().retrieve(&full_blog_path).await {
-        Ok(page) => {
-            return page;
-        }
-        Err(_) => {
-            if let Some(blog) = site.pages().blogs.get_blog(&blog) {
-                let mut blog_metadata = blog.metadata.clone();
-                blog_metadata["blog-content"] = serde_json::Value::String(blog.markdown.clone());
-                return site
-                    .page_cache()
-                    .update(
-                        &full_blog_path,
-                        site.render_page(&site.pages().blogs.article, &blog_metadata),
-                    )
-                    .await;
-            };
-        }
-    };
 
-    return error::visit_404_internal(format!("/blog/{blog}"), State(site), Some(headers)).await;
+    // Check for blog.
+    let full_blog_path: String = format!("blog/{blog}");
+    match site.pages().blogs.get_blog(&blog) {
+        Some(blog) => {
+            site.clone()
+                .page_cache()
+                .retrieve_or_update(&full_blog_path, async move {
+                    let mut blog_metadata = blog.metadata.clone();
+                    blog_metadata["blog-content"] =
+                        serde_json::Value::String(blog.markdown.clone());
+                    site.render_page(&site.pages().blogs.article, &blog_metadata)
+                })
+                .await
+        }
+        None => {
+            error::visit_404_internal(format!("/blog/{blog}"), State(site), Some(headers)).await
+        }
+    }
 }
 
 /// Visit tag.
@@ -306,17 +299,12 @@ pub async fn visit_tag_internal(tag: Option<&str>, State(site): State<Site>) -> 
     };
     metadata["blogs"] = serde_json::Value::Array(blog_metadata);
 
-    match site.page_cache().retrieve(&page).await {
-        Ok(page) => page,
-        Err(_) => {
-            site.page_cache()
-                .update(
-                    &page,
-                    site.render_page(&site.pages().blogs.index, &metadata),
-                )
-                .await
-        }
-    }
+    site.clone()
+        .page_cache()
+        .retrieve_or_update(&page, async move {
+            site.render_page(&site.pages().blogs.index, &metadata)
+        })
+        .await
 }
 
 /// Get local blog resource.

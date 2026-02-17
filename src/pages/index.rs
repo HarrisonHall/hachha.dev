@@ -35,18 +35,13 @@ struct Config {
 
 /// Endpoint for site index.
 pub async fn visit_index(State(site): State<Site>) -> RenderedHtml {
-    match site.page_cache().retrieve("index").await {
-        Ok(page) => page,
-        Err(_) => {
+    site.clone()
+        .page_cache()
+        .retrieve_or_update("index", async move {
             let context = json!({
                 "phrase": site.pages().index.get_phrase(),
             });
-            site.page_cache()
-                .update(
-                    "index",
-                    site.render_page(&site.pages().index.raw_page, &context),
-                )
-                .await
-        }
-    }
+            site.render_page(&site.pages().index.raw_page, &context)
+        })
+        .await
 }

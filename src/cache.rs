@@ -96,6 +96,18 @@ impl<T: Clone> Cache<T> {
         }
     }
 
+    /// Get item from the cache, or insert default if necessary.
+    pub async fn retrieve_or_update(
+        &self,
+        name: &str,
+        replace: impl std::future::Future<Output = T>,
+    ) -> T {
+        match self.retrieve(name).await {
+            Ok(entry) => entry,
+            Err(_) => self.update(name, replace.await).await,
+        }
+    }
+
     /// Get item from the cache, ignoring the expiry.
     pub async fn retrieve_force(&self, name: &str) -> Option<T> {
         let entries = self.entries.read().await;

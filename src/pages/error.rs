@@ -49,15 +49,10 @@ pub async fn visit_404_internal(
         path.as_ref(),
         remote_ip
     );
-    match site.page_cache().retrieve("404").await {
-        Ok(page) => page,
-        Err(_) => {
-            site.page_cache()
-                .update(
-                    "404",
-                    site.render_page(&site.pages().error.raw_page, &site.pages().error.context),
-                )
-                .await
-        }
-    }
+    site.clone()
+        .page_cache()
+        .retrieve_or_update("404", async move {
+            site.render_page(&site.pages().error.raw_page, &site.pages().error.context)
+        })
+        .await
 }

@@ -145,17 +145,12 @@ impl std::cmp::Ord for Link {
 
 /// Endpoint for links index page.
 pub async fn visit_links_index(State(site): State<Site>) -> RenderedHtml {
-    match site.page_cache().retrieve("links").await {
-        Ok(page) => page,
-        Err(_) => {
-            site.page_cache()
-                .update(
-                    "links",
-                    site.render_page(&site.pages().links.index, &site.pages().links.metadata),
-                )
-                .await
-        }
-    }
+    site.clone()
+        .page_cache()
+        .retrieve_or_update("links", async move {
+            site.render_page(&site.pages().links.index, &site.pages().links.metadata)
+        })
+        .await
 }
 
 /// Get links as atom feed.
