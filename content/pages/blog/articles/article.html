@@ -14,7 +14,7 @@
           <h2 style="">{{blurb}}</h2>
           {{> templates/generic/date_badge.html date=date }}
           {{#if tags}}
-          <div class="tags">
+          <div class="container tags">
             {{#each tags}}
               <a href="/blog/tag/{{this}}" class="tag">{{this}}</a>
             {{/each}}

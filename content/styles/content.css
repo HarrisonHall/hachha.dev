@@ -59,6 +59,8 @@ body {
 	display: flex;
 	flex-direction: column;
 	width: 100vw;
+	max-width: 100vw;
+	overflow-x: hidden;
 	min-height: 100vh;
 	background-color: var(--background);
 }
@@ -205,17 +207,12 @@ html header {
 }
 
 nav {
-	/* background-color: var(--card); */
-	/* position: sticky; */
-	overflow: show;
 	/* overflow: hidden; */
-	/* padding-left: 10rem; */
-	/* padding-right: 10rem; */
 	margin-left: auto;
 	margin-right: auto;
 	padding-left: 0.25rem;
 	padding-right: 0.25rem;
-	max-width: var(--view-width);
+	max-width: var(--view-width) !important;
 }
 
 nav li {
