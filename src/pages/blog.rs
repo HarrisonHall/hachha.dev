@@ -25,7 +25,19 @@ impl BlogsPages {
                 let path = String::from(path);
                 let mut blog = packed_data.read_toml::<Blog>(&path)?;
                 let dir = String::from(match std::path::Path::new(&path).parent() {
-                    Some(dir) => dir.to_string_lossy(),
+                    Some(parent) => {
+                        blog.directory = match parent.file_name() {
+                            Some(fname) => fname.to_string_lossy().into_owned(),
+                            None => {
+                                tracing::warn!(
+                                    "Blog has invalid slug: {}, defaulting to uri.",
+                                    blog.uri
+                                );
+                                blog.uri.clone()
+                            }
+                        };
+                        parent.to_string_lossy()
+                    }
                     None => {
                         tracing::error!("Unable to find directory for blog at {path}.");
                         continue;
@@ -174,6 +186,9 @@ pub struct Blog {
     /// Relative URI for blog.
     #[serde(alias = "article")]
     uri: String,
+    /// Resource path directory name (e.g., 2026-02-01-cool_blog).
+    #[serde(default)]
+    directory: String,
     /// Tags.
     #[serde(default)]
     tags: BTreeSet<String>,
@@ -192,6 +207,7 @@ impl Default for Blog {
             blurb: "".to_string(),
             date: chrono::NaiveDate::default(),
             uri: "".to_string(),
+            directory: "".into(),
             tags: BTreeSet::new(),
             markdown: "".to_string(),
             metadata: json!({}),
@@ -308,7 +324,22 @@ pub async fn get_blog_resource(
     Path((blog, resource)): Path<(String, String)>,
     State(site): State<Site>,
 ) -> impl axum::response::IntoResponse {
-    let blog_resource: String = format!("pages/blog/articles/{blog}/{resource}");
+    // Blog resource referenced by article uri, not file path, so we do a lookup.
+    let mut blog_path = blog.clone();
+    for other_blog in &*site.pages().blogs.blogs {
+        tracing::debug!("blog {} vs {}", blog_path, other_blog.uri);
+        if other_blog.uri == blog {
+            tracing::info!(
+                "Using resource alias {} -> {}.",
+                blog_path,
+                other_blog.directory
+            );
+            blog_path = other_blog.directory.clone();
+            break;
+        }
+    }
+    let blog_resource: String = format!("pages/blog/articles/{blog_path}/{resource}");
+
     let data = match site.packed_data().read_data(&blog_resource) {
         Ok(data) => data,
         Err(_) => {
