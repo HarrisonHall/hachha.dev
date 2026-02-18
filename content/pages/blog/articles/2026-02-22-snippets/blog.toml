@@ -1,0 +1,5 @@
+name = "Snippets"
+blurb = "Code templates are a far-underutilized feature"
+date = "2026-02-22"
+article= "snippets"
+tags = ["dev"]

@@ -315,13 +315,7 @@ pub async fn get_blog_resource(
     // Blog resource referenced by article uri, not file path, so we do a lookup.
     let mut blog_path = blog.clone();
     for other_blog in &*site.pages().blogs.blogs {
-        tracing::debug!("blog {} vs {}", blog_path, other_blog.uri);
         if other_blog.uri == blog {
-            tracing::info!(
-                "Using resource alias {} -> {}.",
-                blog_path,
-                other_blog.directory
-            );
             blog_path = other_blog.directory.clone();
             break;
         }

@@ -185,9 +185,10 @@ blockquote,
 	border-inline-start: 0.25rem solid var(--pico-blockquote-border-color);
 	border-inline-end: none;
 	margin-top: 0.25rem;
-	margin-bottom: 0.25rem;
+	margin-bottom: var(--pico-typography-spacing-vertical);
+	/* margin-bottom: 0.25rem; */
 	padding-top: 0.1rem;
-	padding-bottom: 0.1rem;
+	padding-bottom: 0.2rem;
 }
 
 blockquote p,
@@ -243,6 +244,10 @@ a.hidden:hover {
 mark {
 	border-radius: var(--pico-border-radius);
 	padding: 0rem 0.125rem;
+}
+
+hr {
+	border-color: var(--text);
 }
 
 /* General purpose classes: */
