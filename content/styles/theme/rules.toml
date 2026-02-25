@@ -7,14 +7,14 @@
 #  - card: elevated color (panel, navbar)
 #  TODO - highlight: highlighted color (selection)
 
-default = "catppuccin_mocha.css"
+default = "custom-2026-02.css"
 
 # Rose pine on valentines and earth day.
 [[rules]]
 theme = "rose_pine.css"
 dates = ["02/14", "04/22"]
 
-# Cat day.
+# Cat day (jp).
 [[rules]]
 theme = "tokyo_night.css"
 dates = ["02/22"]
@@ -28,6 +28,11 @@ dates = ["03/15"]
 [[rules]]
 theme = "naked_day.css"
 dates = ["04/09"]
+
+# Cat day (us).
+[[rules]]
+theme = "catppuccin_mocha.css"
+dates = ["10/29"]
 
 # Dracula for halloween.
 [[rules]]

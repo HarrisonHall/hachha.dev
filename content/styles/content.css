@@ -37,6 +37,12 @@
 	--pico-secondary: var(--secondary);
 	--pico-primary-under: var(--primary);
 	--pico-secondary-under: var(--primary);
+	--pico-primary-underline: var(--primary);
+	--pico-secondary-underline: var(--primary);
+	--pico-primary-hover: var(--primary);
+	--pico-secondary-hover: var(--secondary);
+	--pico-primary-hover-underline: var(--primary);
+	--pico-secondary-hover-underline: var(--secondary);
 	--pico-underline: var(--primary);
 	--pico-mark-color: var(--card);
 	--pico-mark-background-color: var(--secondary);
@@ -96,26 +102,13 @@ footer p {
 }
 
 h1 {
-	font-size: 3rem;
-}
-
-h1,
-h4 {
-	color: var(--primary);
+	font-size: 2.5rem;
+	color: var(--text);
 }
 
 h2 {
-	font-size: 1.75rem;
-}
-
-h2,
-h5 {
-	color: var(--secondary);
-}
-
-h3,
-h6 {
-	color: var(--accent);
+	font-size: 1.5rem;
+	color: var(--text);
 }
 
 h1 > i,
@@ -380,6 +373,10 @@ hr {
 	text-align: center;
 }
 
+.text-left {
+	text-align: left;
+}
+
 .box {
 	background-color: var(--card);
 }
@@ -499,6 +496,21 @@ img.img-fit-contain {
 .divider {
 	border-top-color: var(--text);
 	height: 0.1rem;
+}
+
+.blog-markdown h1,
+.blog-markdown h4 {
+	color: var(--primary);
+}
+
+.blog-markdown h2,
+.blog-markdown h5 {
+	color: var(--secondary);
+}
+
+.blog-markdown h3,
+.blog-markdown h6 {
+	color: var(--accent);
 }
 
 .blog-markdown h1::before {
@@ -625,6 +637,17 @@ img.img-fit-contain {
 
 .click-box:hover {
 	cursor: pointer;
+}
+
+.striped-list h5 {
+	color: var(--secondary);
+}
+
+.date {
+	color: var(--secondary);
+	text-decoration: underline;
+	text-wrap: nowrap;
+	white-space: nowrap;
 }
 
 .tags {
