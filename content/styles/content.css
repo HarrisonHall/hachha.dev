@@ -126,6 +126,22 @@ li {
 	font-size: 0.8rem;
 }
 
+li > p {
+	margin-bottom: 0.25em;
+}
+
+li > i,
+p > i {
+	font-size: 1.2em;
+	line-height: 1;
+	vertical-align: bottom;
+}
+
+li > ul,
+li > ol {
+	margin-bottom: 0.2em;
+}
+
 a:visited {
 	color: var(--text);
 }

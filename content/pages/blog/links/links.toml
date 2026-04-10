@@ -132,24 +132,32 @@ description = "A VCS LSP is a great idea."
 url = "https://matklad.github.io/2024/12/13/majjit-lsp.html"
 date = "2025-10-01"
 
-[[link]]
+[[links]]
 title = "Is Rust faster than C?"
 description = "A different take on Rust vs C performance comparisons."
 url = "https://steveklabnik.com/writing/is-rust-faster-than-c/"
 date = "2025-11-23"
 
-[[link]]
+[[links]]
 title = "Open Source Has Too Many Parasocial Relationships"
 description = "> The essence of Free Software is: \"When it breaks, you get to keep both halves.\""
 url = "https://pivotnine.com/blog/open-source-has-too-many-parasocial-relationships/"
 date = "2025-12-02"
 
-[[link]]
+[[links]]
 title = "You should feed the bots"
 description = "Offense is the best defense."
 url = "https://maurycyz.com/misc/the_cost_of_trash/"
 date = "2025-12-06"
 
-# [[link]]
-# title = ""
-# url = "https://feed-me-up-scotty.vincenttunru.com/"
+[[links]]
+title = "Feed me up, Scotty!"
+url = "https://feed-me-up-scotty.vincenttunru.com/"
+description = "CSS selectors for RSS feeds"
+date = "2026-04-10"
+
+[[links]]
+title = "Slash Pages"
+description = "Common website pages"
+url = "https://slashpages.net/"
+date = "2026-04-10"

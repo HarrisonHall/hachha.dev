@@ -32,7 +32,8 @@ cargo run -- --port 8180 --debug
 
 [tasks.bundle]
 description = "Bundle the static site files."
-run = "cd content && tar -czf ../site.tgz *"
+# Bundle, deref symlinks.
+run = "cd content && tar -hczf ../site.tgz *"
 
 [tasks.build]
 description = "Build static release for many versions of linux via zigbuild."

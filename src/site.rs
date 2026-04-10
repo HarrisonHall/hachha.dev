@@ -2,6 +2,7 @@
 
 use super::*;
 
+use axum::response::Redirect;
 use clap::Parser;
 use handlebars::Handlebars;
 
@@ -32,13 +33,22 @@ impl Site {
             get(pages::blog::get_blog_resource),
         );
         app = app.route("/blog/tag/{:tag}", get(pages::blog::visit_tag));
+        app = Site::add_redirect(app, "/feed", "/blog.feed");
+        app = Site::add_redirect(app, "/feed.xml", "/blog.feed");
+        app = Site::add_redirect(app, "/atom.xml", "/blog.feed");
         app = app.route("/links", get(pages::links::visit_links_index));
-        app = app.route("/links.feed", get(pages::links::visit_links_feed));
+        app = Site::add_redirect(app, "/bookmarks", "/links");
+        app = app.route("/links/feed.xml", get(pages::links::visit_links_feed));
+        app = Site::add_redirect(app, "/links.feed", "/links/feed.xml");
+        app = Site::add_redirect(app, "/links/atom.xml", "/links/feed.xml");
         app = app.route("/projects", get(pages::projects::visit_projects));
         app = app.route("/favicon.ico", get(resources::get_favicon));
         app = app.route("/robots.txt", get(resources::get_robots_txt));
         app = app.fallback(get(pages::error::visit_404));
         app = app.layer(tower_http::trace::TraceLayer::new_for_http());
+
+        // Add slash pages.
+        app = self.pages().slashpages.add_routes(app);
 
         // Add self as state.
         let app = app.with_state(self.clone());
@@ -51,6 +61,22 @@ impl Site {
         axum::serve(listener, app.into_make_service()).await?;
 
         Ok(())
+    }
+
+    /// Add redirect.
+    fn add_redirect<T>(
+        router: Router<T>,
+        from_page: impl AsRef<str>,
+        to_page: impl AsRef<str>,
+    ) -> Router<T>
+    where
+        T: Clone + Send + Sync + 'static,
+    {
+        let to_page: String = to_page.as_ref().to_string();
+        router.route(
+            from_page.as_ref(),
+            get(|| async move { Redirect::temporary(to_page.as_ref()) }),
+        )
     }
 
     /// Get config.

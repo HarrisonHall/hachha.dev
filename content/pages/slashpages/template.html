@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    {{> templates/head.html }} {{> templates/pages/blog/code_style.html }}
+  </head>
+
+  <body class="blog-page">
+    {{> templates/navbar.html }}
+
+    <main class="blog-article">
+      <div class="blog-markdown">
+        <div class="section" {{#if section-bg}} style="background-color: {{section-bg}};" {{/if}}>
+          <div class="container grid-md">
+            {{{markdown (lookup this "slashpage-content")}}}
+          </div>
+        </div>
+
+        {{> templates/pages/slashpages/slashpage.html }}
+      </div>
+    </main>
+
+    {{> templates/footer.html }}
+  </body>
+</html>

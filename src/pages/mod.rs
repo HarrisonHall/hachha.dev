@@ -7,6 +7,7 @@ pub mod error;
 pub mod index;
 pub mod links;
 pub mod projects;
+pub mod slashpages;
 
 /// All pages helper.
 pub struct Pages {
@@ -15,6 +16,7 @@ pub struct Pages {
     pub blogs: blog::BlogsPages,
     pub links: links::LinksPage,
     pub projects: projects::ProjectsPage,
+    pub slashpages: slashpages::SlashPages,
 }
 
 impl Pages {
@@ -26,6 +28,7 @@ impl Pages {
             blogs: blog::BlogsPages::new(packed_data.clone())?,
             links: links::LinksPage::new(packed_data.clone())?,
             projects: projects::ProjectsPage::new(packed_data.clone())?,
+            slashpages: slashpages::SlashPages::new(packed_data.clone())?,
         })
     }
 }

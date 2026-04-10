@@ -49,10 +49,18 @@ impl PackedData {
             }
         };
         let mut data = HashMap::new();
+        let mut links = Vec::new();
         for entry in entries {
             if let Ok(mut entry) = entry {
                 if let Ok(entry_path) = entry.path() {
                     tracing::trace!("PackedData found file: {}", entry_path.to_string_lossy());
+                    if let Ok(Some(link)) = entry.link_name() {
+                        links.push((
+                            entry_path.into_owned().to_string_lossy().to_string(),
+                            link.to_string_lossy().to_string(),
+                        ));
+                        continue;
+                    }
                     let path = entry_path.to_string_lossy().into_owned();
                     let mut full_file = match entry.header().size() {
                         Ok(size) => Vec::with_capacity(size as usize),
@@ -71,6 +79,19 @@ impl PackedData {
                     }
                 }
             }
+        }
+
+        // Map links to correct data.
+        for (link_from, link_to) in links {
+            let linked_data = match data.get(&link_to) {
+                Some(linked_data) => linked_data.clone(),
+                None => {
+                    tracing::error!("Symlinked PackedData {link_from}->{link_to} does not exist.");
+                    continue;
+                }
+            };
+            tracing::debug!("Linking PackedData {link_from}->{link_to}.");
+            data.insert(link_from, linked_data);
         }
 
         Ok(Self {
