@@ -1,3 +1,3 @@
-## About
+# {{icon users-three}} Community
 
 ...

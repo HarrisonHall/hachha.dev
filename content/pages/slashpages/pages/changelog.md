@@ -1,3 +1,3 @@
-# Changelog
+# {{icon list-checks}} Changelog
 
 ...

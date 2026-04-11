@@ -1,4 +1,4 @@
-# Calendar
+# {{icon calendar-check}} Calendar
 
 ## 2027
 

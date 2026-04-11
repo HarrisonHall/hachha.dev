@@ -1,4 +1,4 @@
-# Wish
+# {{icon list-heart}} Wish
 
 ## In general
 

@@ -4,15 +4,15 @@ This is my [slashpages](https://slashpages.net/) page, following the indieweb
 standard. Not all official slashpages are implemented, but you can check out the
 following "slashes":
 
-| Slash                 | Description                                                             | <div style=""></div>    |
-| --------------------- | ----------------------------------------------------------------------- | ----------------------- |
-| [About](/about)       | About me!                                                               | {{icon info}}           |
-| [Contact](/contact)   | Contact me.                                                             | {{icon address-book}}   |
-| [Follow](/follow)     | Various links. Alternatively, [subscribe](/subscribe), [feeds](/feeds). | {{icon bell-simple}}    |
-| [Slashes](/slashes)   | _This page._ Alternatively, [slashpages](/slashpages).                  | {{icon star}}           |
-| [Links](/links)       | Bookmarks and various interesting articles.                             | {{icon link-simple}}    |
-| [Defaults](/defaults) | Preferred tooling.                                                      | {{icon wrench}}         |
-| [TIL](/til)           | "Today I Learned"s.                                                     | {{icon graduation-cap}} |
+| Slash                 | Description                                                                       | <div style=""></div>    |
+| --------------------- | --------------------------------------------------------------------------------- | ----------------------- |
+| [About](/about)       | About me!                                                                         | {{icon info}}           |
+| [Contact](/contact)   | Contact me.                                                                       | {{icon address-book}}   |
+| [Defaults](/defaults) | Preferred tooling.                                                                | {{icon wrench}}         |
+| [Follow](/follow)     | Various links. Alternatively, [subscribe](/subscribe), [feeds](/feeds).           | {{icon bell-simple}}    |
+| [Links](/links)       | Bookmarks and various interesting articles. Alternatively, [postroll](/postroll). | {{icon link-simple}}    |
+| [Slashes](/slashes)   | _This page._ Alternatively, [slashpages](/slashpages).                            | {{icon star}}           |
+| [TIL](/til)           | "Today I Learned"s.                                                               | {{icon graduation-cap}} |
 
 ## Secondary
 
@@ -32,17 +32,18 @@ following "slashes":
 
 ## Tertiary
 
-- WIP
-  - [calendar](/calendar)
-  - [changelog](/changelog) ([log](/log))
-  - [hill](/hill) ([hills](/hills))
-  - [nope](/nope)
-  - [podroll](/podroll)
-  - [top4](/top4) ([topfour](/topfour))
-  - [questions](/questions)
-  - [wish](/wish)
-  - [why](/why)
-  - [yep](/yep)
+| Slash                   | Description                                         | <div style=""></div>    |
+| ----------------------- | --------------------------------------------------- | ----------------------- |
+| [Calendar](/calendar)   | Upcoming events and releases.                       | {{icon calendar-check}} |
+| [Changelog](/changelog) | Changes to this site.                               | {{icon list-checks}}    |
+| [Hill](/hill)           | Hills I'll die on. Alternatively, [hills](/hills).  | {{icon mountains}}      |
+| [Nope](/nope)           | Nope, nada, じゃない.                               | {{icon thumbs-down}}    |
+| [Podroll](/podroll)     | Some podcasts.                                      | {{icon microphone}}     |
+| [Top4](/top4)           | Some favorites. Alternatively, [topfour](/topfour). | {{icon list-star}}      |
+| [Questions](/questions) | Q&A.                                                | {{icon question}}       |
+| [Wish](/wish)           | General wishlist.                                   | {{icon list-heart}}     |
+| [Why](/why)             | ...                                                 | {{icon circles-three}}  |
+| [Yep](/yep)             | 確かに.                                             | {{icon thumbs-up}}      |
 
 - Future
   - blogroll
@@ -57,7 +58,6 @@ following "slashes":
   - next
   - now
   - posse
-  - postroll
   - pricing
   - save, referrals
   - someday

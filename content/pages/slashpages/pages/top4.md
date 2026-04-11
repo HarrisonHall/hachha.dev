@@ -1,4 +1,4 @@
-# Top 4
+# {{icon list-star}} Top 4
 
 ## Games
 

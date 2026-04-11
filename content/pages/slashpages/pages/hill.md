@@ -1,4 +1,4 @@
-# Hills
+# {{icon mountains}} Hills
 
 - The best games are the ones with the most movement that requires the least
   subvocalization.

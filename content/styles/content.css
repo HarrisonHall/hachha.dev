@@ -677,6 +677,10 @@ img.img-fit-contain {
 	background-color: var(--card);
 }
 
+.error-404-page > h2 > i {
+	font-size: 1.25em;
+}
+
 /* Adjustments on tiny screens. */
 
 @media (max-width: 600px) {
