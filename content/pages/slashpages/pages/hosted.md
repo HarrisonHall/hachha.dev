@@ -1,4 +1,4 @@
-# Hosted
+# {{icon hard-drives}} Hosted
 
 Between my web server and home server, I've self-hosted quite a few services
 over the years.
@@ -10,8 +10,8 @@ Currently, I'm serving:
   - [slipstream](https://feeds.hachha.dev)
 - Home server
   - Adguard
-  - Radicle
-  - Radicale
+  - Radicle (forge)
+  - Radicale (caldav)
   - Jellyfin
   - Borg
   - Morningbot

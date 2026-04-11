@@ -118,6 +118,17 @@ h6 {
 	color: var(--accent);
 }
 
+h1 > i,
+h2 > i,
+h3 > i,
+h4 > i,
+h5 > i,
+h6 > i {
+	font-size: 1em;
+	vertical-align: bottom;
+	/* padding-bottom: 0.2em; */
+}
+
 p,
 a,
 li {
@@ -131,10 +142,17 @@ li > p {
 }
 
 li > i,
-p > i {
+p > i,
+td > i {
 	font-size: 1.2em;
 	line-height: 1;
 	vertical-align: bottom;
+}
+
+td > i {
+	display: flex;
+	width: min-content;
+	margin-left: auto;
 }
 
 li > ul,
@@ -529,6 +547,10 @@ img.img-fit-contain {
 
 .slashes h1 {
 	font-size: 1.5rem;
+}
+
+.slashes h1::before {
+	content: none;
 }
 
 .slashes h2 {

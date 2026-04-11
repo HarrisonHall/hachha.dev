@@ -1,4 +1,4 @@
-# Follow
+# {{icon bell-simple}} Follow
 
 You can follow me on [mastodon](https://mastodon.social/@harryhallyall).
 

@@ -1,4 +1,4 @@
-# Ideas
+# {{icon lightbulb}} Ideas
 
 > I have ideas, I swear!
 

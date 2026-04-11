@@ -1,4 +1,4 @@
-# PFP
+# {{icon user-square}} PFP
 
 I typically use the following names online:
 

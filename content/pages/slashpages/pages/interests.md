@@ -1,4 +1,4 @@
-# Interests
+# {{icon person-simple-bike}} Interests
 
 - Development
   - Gamedev

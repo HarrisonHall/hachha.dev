@@ -1,4 +1,4 @@
-# Chipotle
+# {{icon fork-knife}} Chipotle
 
 ## Cava
 

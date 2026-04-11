@@ -264,7 +264,15 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         options.render.r#unsafe = true;
         // options.extension.phoenix_heex = true;
 
-        comrak::markdown_to_html(&content, &options)
+        let mut as_html = comrak::markdown_to_html(&content, &options);
+
+        if let Ok(icon_re) = regex::Regex::new(r"\{\{\s*icon\s*(?P<icon>\S+)\s*\}\}") {
+            as_html = icon_re.replace_all(&as_html, "<i class=\"ph-fill ph-$icon\"></i>").to_string();
+        } else {
+            tracing::error!("Failed to compile icon regex.");
+        }
+
+        as_html
     });
 
     // Allow html to be rendered normally (not escaped)-- dangerous, if used incorrectly.
@@ -277,10 +285,16 @@ fn create_templater<'a>() -> Result<Handlebars<'a>> {
         a == b
     });
 
+    // Easily map to icon.
+    handlebars_helper!(icon_helper: |icon: String| {
+        format!("<i class=\"ph-fill ph-{icon}\"></i>")
+    });
+
     // Register helpers.
     templater.register_helper("markdown", Box::new(markdown_helper));
     templater.register_helper("html", Box::new(html_helper));
     templater.register_helper("matches", Box::new(matches_helper));
+    templater.register_helper("icon", Box::new(icon_helper));
 
     Ok(templater)
 }

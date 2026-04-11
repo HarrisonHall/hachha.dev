@@ -1,3 +1,5 @@
-# Where
+# {{icon map-pin}} Where
 
-<i class="ph-fill ph-map-pin"></i> Greenville, South Carolina, USA
+- Myrtle Beach, South Carolina, USA
+- Clemson, South Carolina, USA
+- Greenville, South Carolina, USA

@@ -1,4 +1,4 @@
-# Colophon
+# {{icon hammer}} Colophon
 
 _IMO_, this site is _wicked cool_.
 

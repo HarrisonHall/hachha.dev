@@ -1,22 +1,22 @@
-# Defaults
+# {{icon wrench}} Defaults
 
 These days, I tend to favor [mise](https://mise.jdx.dev/) for cli tooling, and
 [nix](https://nixos.org/) for my dev box and other graphical applications. My
 [dotfiles](https://github.com/HarrisonHall/dotfiles) are available.
 
-| Utility  | Tool                        |
-| -------- | --------------------------- |
-| OS       | NixOS, Alpine               |
-| WM       | Niri, Cosmic                |
-| Terminal | Wezterm, Ghostty            |
-| $SHELL   | Fish                        |
-| $EDITOR  | helix                       |
-| $VISUAL  | kate                        |
-| vcs      | jj (git)                    |
-| forge    | radicle, github             |
-| feeds    | slipstream                  |
-| tasks    | cfait                       |
-| comms    | Discord, Signal, ProtonMail |
+| Utility   | Tool                        |
+| --------- | --------------------------- |
+| OS        | NixOS, Alpine               |
+| WM        | Niri, Cosmic                |
+| Terminal  | Wezterm, Ghostty            |
+| `$SHELL`  | Fish                        |
+| `$EDITOR` | Helix                       |
+| `$VISUAL` | Kate                        |
+| VCS       | `jj` (`git`)                |
+| Forge     | `radicle`, Github           |
+| Feeds     | `slipstream`                |
+| Tasks     | `cfait`                     |
+| Comms     | Discord, Signal, ProtonMail |
 
 - Tools:
   - Core:
@@ -36,7 +36,7 @@ These days, I tend to favor [mise](https://mise.jdx.dev/) for cli tooling, and
 
 - Languages:
   - Rust - Most personal projects, systems programming
-  - Python - Scripting
+  - Python - Scripting, general development (professionally)
   - Typescript - Web development (professionally)
   - Zig - Systems programming
   - C/C++ - Systems programming (professionally)
