@@ -1,0 +1,5 @@
+name = "Lifeguard Duty"
+blurb = "Small game announcement"
+date = "2026-04-02"
+article= "lifeguard-duty"
+tags = ["dev", "games"]

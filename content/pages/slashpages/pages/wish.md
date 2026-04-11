@@ -1,12 +1,12 @@
-## Wish
+# Wish
 
-### In general
+## In general
 
 Excluding world peace and all that crap,
 
 - Better standards for snippets
 - Nintendo to make more Mario platformers & rpgs
 
-### Personally
+## Personally
 
 - Better lighting in my apartment

@@ -1,8 +1,8 @@
-## Calendar
+# Calendar
 
-### 2027
+## 2027
 
-### 2026
+## 2026
 
 - Mushoku Tensei S3
 - Tensura S4

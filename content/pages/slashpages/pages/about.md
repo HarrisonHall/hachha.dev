@@ -1,4 +1,4 @@
-## About
+# About
 
 I'm Harrison Hall. By trade, I'm a developer. Recently, I've enjoyed running,
 learning Japanese, gamedev, reading, and a musical endeavor.

@@ -1,4 +1,4 @@
-## Carry
+# Carry
 
 My _everyday carry_ isn't very unique.
 

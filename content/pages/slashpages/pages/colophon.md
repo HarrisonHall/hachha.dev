@@ -1,4 +1,4 @@
-## Colophon
+# Colophon
 
 _IMO_, this site is _wicked cool_.
 
@@ -13,5 +13,20 @@ Some of the cooler, custom features are:
 - A caching system
 - Embedded & bundled data
 - Atom feed generation
+- Blog parsing & tagging
 - ...
 - There's some other cool stuff, I promise
+
+"Custom" as in, "I coded that." Nothing in this site is particularly novel, but
+it is fun to hack around with. I wrote [a few](/blog/site_launch_design) older
+blog posts about it.
+
+As far as the rest of the stack goes:
+
+| Tech         | Framework                             |
+| ------------ | ------------------------------------- |
+| Icons        | [Phosphor](https://phosphoricons.com) |
+| CSS          | [PicoCSS](https://picocss.com/)       |
+| Highlighting | `highlight.js`                        |
+| Templating   | `Handlebars`                          |
+| Markdown     | `Comrak`                              |

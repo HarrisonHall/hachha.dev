@@ -1,22 +1,22 @@
-## Chipotle
+# Chipotle
 
-### Cava
-
-- `TODO`
-
-### Chick-fil-A
+## Cava
 
 - `TODO`
 
-### Chuys
+## Chick-fil-A
 
 - `TODO`
 
-### Firehouse Subs
+## Chuys
+
+- `TODO`
+
+## Firehouse Subs
 
 - Large Italian on wheat.
 
-### Panda Express
+## Panda Express
 
 - Plate
   - Half fried rice, half chow mein

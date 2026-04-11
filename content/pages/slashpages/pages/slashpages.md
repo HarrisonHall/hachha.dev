@@ -1,10 +1,10 @@
-## Slashpages
+# Slashpages
 
 This is my [slashpages](https://slashpages.net/) page, following the indieweb
 standard. Not all official slashpages are implemented, but you can check out the
 following "slashes":
 
-### Primary
+## Primary
 
 | Slash                 | Description                                 |
 | --------------------- | ------------------------------------------- |
@@ -13,7 +13,7 @@ following "slashes":
 | [Defaults](/defaults) | Preferred tooling.                          |
 | [TIL](/til)           | "Today I Learned"s.                         |
 
-### Secondary
+## Secondary
 
 | Slash                 | Description                                                             |
 | --------------------- | ----------------------------------------------------------------------- |
@@ -22,19 +22,20 @@ following "slashes":
 | [Follow](/follow)     | Various links. Alternatively, [subscribe](/subscribe), [feeds](/feeds). |
 | [Slashes](/slashes)   | This page. Alternatively, [slashpages](/slashpages).                    |
 
-### Tertiary
+## Tertiary
 
-- [blank](/blank)
-- [carry](/carry)
-- [colophon](/colophon)
-- [hello](/hello)
-- [hosted](/hosted) ([self-hosted](/self-hosted) or
-  [self-hosting](/self-hosting))
-- [ideas](/ideas)
-- [interests](/interests)
-- [pfp](/pfp)
-- [shoebox](/shoebox)
-- [where](/where)
+| Slash                   | Description                                                                                 |
+| ----------------------- | ------------------------------------------------------------------------------------------- |
+| [Blank](/blank)         | A blank page.                                                                               |
+| [Carry](/carry)         | My everyday carry.                                                                          |
+| [Colophon](/colophon)   | How this page was made.                                                                     |
+| [Hello](/hello)         | Hello!                                                                                      |
+| [Hosted](/hosted)       | What I self-host. Alternatively, [self-hosted](/self-hosted), [self-hosting](/self-hosting) |
+| [Ideas](/ideas)         | Some ideas. Feel free to take 'em.                                                          |
+| [Interests](/interests) | Various interests.                                                                          |
+| [PFP](/pfp)             | My profile picture(s).                                                                      |
+| [Shoebox](/shoebox)     | Various, miscellaneous assortments.                                                         |
+| [Where](/where)         | Where I am.                                                                                 |
 
 - WIP
   - [calendar](/calendar)

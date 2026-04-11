@@ -1,4 +1,4 @@
-## Defaults
+# Defaults
 
 These days, I tend to favor [mise](https://mise.jdx.dev/) for cli tooling, and
 [nix](https://nixos.org/) for my dev box and other graphical applications. My

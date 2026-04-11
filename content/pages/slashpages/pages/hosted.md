@@ -1,4 +1,4 @@
-## Hosted
+# Hosted
 
 Between my web server and home server, I've self-hosted quite a few services
 over the years.

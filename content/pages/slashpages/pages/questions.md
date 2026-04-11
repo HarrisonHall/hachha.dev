@@ -1,10 +1,10 @@
-## Questions
+# Questions
 
-### Asking
+## Asking
 
 > Q: ...
 
-### Answering
+## Answering
 
 > Q: What is the best feed aggregator?  
 > A: [Slipstream](https://github.com/HarrisonHall/slipstream)

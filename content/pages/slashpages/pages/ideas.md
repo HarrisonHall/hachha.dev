@@ -1,4 +1,4 @@
-## Ideas
+# Ideas
 
 > I have ideas, I swear!
 

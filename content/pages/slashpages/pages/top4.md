@@ -1,6 +1,6 @@
-## Top 4
+# Top 4
 
-### Games
+## Games
 
 - Celeste
 - Paper Mario (64/TTYD)
@@ -26,13 +26,13 @@
 - Adventure
 - Super Mario 64
 
-### Movies
+## Movies
 
 - Blade Runner 2049
 - The Life Aquatic with Steve Zissou
 - The Martian
 
-### TV
+## TV
 
 - Always Sunny
 - Avatar
@@ -48,7 +48,7 @@
 - Adventure Time
 - Archer
 
-### Anime
+## Anime
 
 - Tensura
 - Evangelion
@@ -59,7 +59,7 @@
 - Oshi No Ko
 -
 
-### Books
+## Books
 
 - Mistborn
 - Tensura
@@ -68,7 +68,7 @@
 - Pendragon
 - Moonwalking with Einstein
 
-### Manga
+## Manga
 
 - Yotsuba to
 - Dungeon Meshi
