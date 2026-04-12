@@ -14,6 +14,10 @@ Some of the cooler, custom features are:
 - Embedded & bundled data
 - Atom feed generation
 - Blog parsing & tagging
+- Indieweb spec integrations
+  - h-card
+  - h-entry
+  - slashpages
 - ...
 - There's some other cool stuff, I promise
 

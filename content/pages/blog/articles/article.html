@@ -7,23 +7,24 @@
   <body class="blog-page">
     {{> templates/navbar.html }}
 
-    <main class="blog-article">
+    <main class="blog-article h-entry">
       <div class="padded">
         <div class="text-center">
-          <h1 style="">{{name}}</h1>
-          <h2 style="">{{blurb}}</h2>
-          {{> templates/generic/date_badge.html date=date }}
+          <h1 style="" class="p-name">{{name}}</h1>
+          <h2 style="" class="p-summary">{{blurb}}</h2>
+          <div class="hidden">{{> templates/generic/date_badge.html }}</div>
+          <a class="p-author h-card hidden" href="https://hachha.dev">Harrison Hall</a>
           {{#if tags}}
           <div class="container tags">
             {{#each tags}}
-              <a href="/blog/tag/{{this}}" class="tag">{{this}}</a>
+              <a href="/blog/tag/{{this}}" class="tag p-category">{{this}}</a>
             {{/each}}
           </div>
           {{/if}}
         </div>
       </div>
 
-      <div class="blog-markdown">
+      <div class="blog-markdown e-content">
         {{> templates/pages/blog/blog_section.html }}
       </div>
     </main>

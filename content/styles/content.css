@@ -266,12 +266,12 @@ nav li {
 	border-width: 1px;
 }
 
-a.hidden {
+a.subtle {
 	text-decoration: none;
 }
 
-a.hidden:focus,
-a.hidden:hover {
+a.subtle:focus,
+a.subtle:hover {
 	text-decoration: underline;
 }
 
@@ -285,6 +285,10 @@ hr {
 }
 
 /* General purpose classes: */
+
+.hidden {
+	display: none;
+}
 
 .flex-row {
 	display: flex;
@@ -680,6 +684,16 @@ img.img-fit-contain {
 .error-404-page > h2 > i {
 	font-size: 1.25em;
 }
+
+.h-card {
+	/* display: none; */
+}
+
+.h-entry {
+	/* display: none; */
+}
+
+.h-entry > 
 
 /* Adjustments on tiny screens. */
 
