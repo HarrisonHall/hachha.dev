@@ -161,3 +161,15 @@ title = "Slash Pages"
 description = "Common website pages"
 url = "https://slashpages.net/"
 date = "2026-04-10"
+
+[[links]]
+title = "Everything is broken"
+description = "> good software [...] has been a losing battle"
+url = "https://medium.com/message/everything-is-broken-81e5f33a24e1"
+date = "2026-04-13"
+
+[[links]]
+title = "Writing design docs"
+description = "> The deliverable you care about is shared understanding of a problem and alignment on a solution."
+url = "https://blog.ceejbot.com/posts/design-docs/"
+date = "2026-04-13"

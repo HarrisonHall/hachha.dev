@@ -103,12 +103,12 @@ footer p {
 
 h1 {
 	font-size: 2.5rem;
-	color: var(--text);
+	color: var(--primary);
 }
 
 h2 {
 	font-size: 1.5rem;
-	color: var(--text);
+	color: var(--primary);
 }
 
 h1 > i,

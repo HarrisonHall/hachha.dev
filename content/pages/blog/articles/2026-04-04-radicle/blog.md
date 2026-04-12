@@ -1,22 +1,22 @@
 I have moved [git.hachha.dev](https://git.hachha.dev) from
-[gitea](https://about.gitea.com/) to [radicle](https://radicle.xyz/). I've been
+[Gitea](https://about.gitea.com/) to [Radicle](https://radicle.xyz/). I've been
 following radicle for a couple of years now, but I figured it was finally time
 to actually follow through and thoroughly investigate it.
 
-At its core, radicle is a decentralized git forge. So github, but without
-microsoft. Since it isn't centralized, the risk of having useful software taken
+At its core, Radicle is a decentralized git forge. So GitHub, but without
+Microsoft. Since it isn't centralized, the risk of having useful software taken
 down by overeager legal teams should be far lower. Radicle still supports
 private repos. It uses a custom P2P protocol based off of Secure Scuttlebutt
 (SSB).
 
-## Setting up radicle
+## Setting up Radicle
 
 Radicle has a pretty detailed official guide online, but I think it is useful to
-document the workflows I use. After installing radicle, run `rad auth` to create
+document the workflows I use. After installing Radicle, run `rad auth` to create
 your local identity. `rad node start` is used to manually start the background
 daemon. The background daemon
 
-## The seed node
+## The Seed Node
 
 My home server is my seed node.
 
