@@ -7,7 +7,7 @@ use atom_syndication as atom;
 /// The blogs page and subpages.
 pub struct BlogsPages {
     index: String,
-    article: String,
+    post: String,
     blogs: Blogs,
     feed: String,
     metadata: serde_json::Value,
@@ -17,8 +17,8 @@ impl BlogsPages {
     /// Generate new blogs pages.
     pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         // Parse pages.
-        let index = util::read_embedded_text::<EmbeddedPages>("blog/blogs.html")?;
-        let article = util::read_embedded_text::<EmbeddedPages>("blog/articles/article.html")?;
+        let blogs_template = util::read_embedded_text::<EmbeddedPages>("blog/blogs.html")?;
+        let post_template = util::read_embedded_text::<EmbeddedPages>("blog/posts/post.html")?;
         let mut blogs = Blogs::default();
         for (path, _data) in packed_data.iter() {
             if path.ends_with("blog.toml") {
@@ -43,8 +43,8 @@ impl BlogsPages {
                         continue;
                     }
                 });
-                let article_path = format!("{dir}/blog.md");
-                blog.markdown = match packed_data.read_text(&article_path) {
+                let post_path = format!("{dir}/blog.md");
+                blog.markdown = match packed_data.read_text(&post_path) {
                     Ok(md) => md,
                     Err(e) => {
                         tracing::error!("Failed to read parsed blog: {}", e);
@@ -127,8 +127,8 @@ impl BlogsPages {
         metadata["tag"] = serde_json::Value::String("".into());
 
         Ok(BlogsPages {
-            index,
-            article,
+            index: blogs_template,
+            post: post_template,
             blogs,
             feed,
             metadata,
@@ -148,28 +148,26 @@ impl BlogsPages {
 /// Parsed blog list.
 #[derive(Clone, Debug, Serialize, Deserialize)]
 struct Blogs {
-    /// Blog articles.
-    articles: Vec<Blog>,
+    /// Blog posts.
+    posts: Vec<Blog>,
 }
 
 impl Default for Blogs {
     fn default() -> Self {
-        Self {
-            articles: Vec::new(),
-        }
+        Self { posts: Vec::new() }
     }
 }
 
 impl std::ops::Deref for Blogs {
     type Target = Vec<Blog>;
     fn deref(&self) -> &Self::Target {
-        &self.articles
+        &self.posts
     }
 }
 
 impl std::ops::DerefMut for Blogs {
     fn deref_mut(&mut self) -> &mut Self::Target {
-        &mut self.articles
+        &mut self.posts
     }
 }
 
@@ -184,7 +182,7 @@ pub struct Blog {
     /// Date blog was written.
     date: chrono::NaiveDate,
     /// Relative URI for blog.
-    #[serde(alias = "article")]
+    #[serde(alias = "article", alias = "post")]
     uri: String,
     /// Resource path directory name (e.g., 2026-02-01-cool_blog).
     #[serde(default)]
@@ -258,7 +256,7 @@ pub async fn visit_blog(
                     let mut blog_metadata = blog.metadata.clone();
                     blog_metadata["blog-content"] =
                         serde_json::Value::String(blog.markdown.clone());
-                    site.render_page(&site.pages().blogs.article, &blog_metadata)
+                    site.render_page(&site.pages().blogs.post, &blog_metadata)
                 })
                 .await
         }
@@ -312,7 +310,7 @@ pub async fn get_blog_resource(
     Path((blog, resource)): Path<(String, String)>,
     State(site): State<Site>,
 ) -> impl axum::response::IntoResponse {
-    // Blog resource referenced by article uri, not file path, so we do a lookup.
+    // Blog resource referenced by post uri, not file path, so we do a lookup.
     let mut blog_path = blog.clone();
     for other_blog in &*site.pages().blogs.blogs {
         if other_blog.uri == blog {
