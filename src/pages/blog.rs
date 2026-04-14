@@ -17,44 +17,46 @@ impl BlogsPages {
     /// Generate new blogs pages.
     pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         // Parse pages.
-        let blogs_template = util::read_embedded_text::<EmbeddedPages>("blog/blogs.html")?;
-        let post_template = util::read_embedded_text::<EmbeddedPages>("blog/posts/post.html")?;
+        let blogs_template = util::read_embedded_text::<EmbeddedPages>("blogs.html")?;
+        let post_template = util::read_embedded_text::<EmbeddedPages>("post.html")?;
         let mut blogs = Blogs::default();
         for (path, _data) in packed_data.iter() {
-            if path.ends_with("blog.toml") {
-                let path = String::from(path);
-                let mut blog = packed_data.read_toml::<Blog>(&path)?;
-                let dir = String::from(match std::path::Path::new(&path).parent() {
-                    Some(parent) => {
-                        blog.directory = match parent.file_name() {
-                            Some(fname) => fname.to_string_lossy().into_owned(),
-                            None => {
-                                tracing::warn!(
-                                    "Blog has invalid slug: {}, defaulting to uri.",
-                                    blog.uri
-                                );
-                                blog.uri.clone()
-                            }
-                        };
-                        parent.to_string_lossy()
-                    }
-                    None => {
-                        tracing::error!("Unable to find directory for blog at {path}.");
-                        continue;
-                    }
-                });
-                let post_path = format!("{dir}/blog.md");
-                blog.markdown = match packed_data.read_text(&post_path) {
-                    Ok(md) => md,
-                    Err(e) => {
-                        tracing::error!("Failed to read parsed blog: {}", e);
-                        continue;
-                    }
-                };
-                blog.metadata = util::to_json(&blog)?;
-                blogs.push(blog);
+            if !(path.starts_with("pages/blog/posts") && path.ends_with(".md")) {
+                continue;
             }
+
+            let full_text = packed_data.read_text(path)?;
+            match markdown_frontmatter::parse::<Blog>(&full_text) {
+                Ok((mut blog, markdown)) => {
+                    match std::path::Path::new(&path).parent() {
+                        Some(parent) => {
+                            blog.directory = match parent.file_name() {
+                                Some(fname) => fname.to_string_lossy().into_owned(),
+                                None => {
+                                    tracing::warn!(
+                                        "Blog has invalid slug: {}, defaulting to uri.",
+                                        blog.uri
+                                    );
+                                    blog.uri.clone()
+                                }
+                            };
+                        }
+                        None => {
+                            tracing::error!("Unable to find directory for blog at {path}.");
+                            continue;
+                        }
+                    }
+
+                    blog.markdown = markdown.to_string();
+                    blog.metadata = util::to_json(&blog)?;
+                    blogs.push(blog);
+                }
+                Err(e) => {
+                    tracing::error!("Failed to parse blog: {e}");
+                }
+            };
         }
+
         blogs.sort();
         blogs.reverse();
 

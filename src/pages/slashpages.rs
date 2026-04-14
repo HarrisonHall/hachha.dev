@@ -14,7 +14,7 @@ impl SlashPages {
     /// Generate new index page.
     pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         let mut sp = Self {
-            raw_page: read_embedded_text::<EmbeddedPages>("slashpages/template.html")?,
+            raw_page: read_embedded_text::<EmbeddedPages>("slashpage.html")?,
             pages: HashMap::new(),
         };
 

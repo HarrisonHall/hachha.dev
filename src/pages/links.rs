@@ -17,7 +17,7 @@ impl LinksPage {
     /// Generate new links pages.
     pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         // Parse pages.
-        let index = util::read_embedded_text::<EmbeddedPages>("blog/links/links.html")?;
+        let index = util::read_embedded_text::<EmbeddedPages>("links.html")?;
         let mut links = packed_data.read_toml::<Links>("pages/blog/links/links.toml")?;
         links.sort();
         links.reverse();

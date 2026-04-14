@@ -109,11 +109,11 @@ impl PackedData {
             .as_ref()
             .trim_start_matches("./")
             .trim_start_matches("/")
-            .trim_start_matches("content/");
+            .trim_start_matches("resources/");
 
         // In debug, read from file each time.
         if cfg!(debug_assertions) {
-            let path = format!("./content/{path}");
+            let path = format!("./resources/{path}");
             return match std::fs::read(&path) {
                 Ok(data) => Ok(EmbeddedData(Cow::Owned(data.into()))),
                 Err(e) => {

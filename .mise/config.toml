@@ -33,7 +33,7 @@ cargo run -- --port 8180 --debug
 [tasks.bundle]
 description = "Bundle the static site files."
 # Bundle, deref symlinks.
-run = "cd content && tar -hczf ../site.tgz *"
+run = "cd resources && tar -hczf ../site.tgz *"
 
 [tasks.build]
 description = "Build static release for many versions of linux via zigbuild."
@@ -55,5 +55,5 @@ scp ./site.tgz root@${server_ip}:~/${dir}/site.tgz
 """
 
 [tasks.format]
-description = "Format content."
+description = "Format resources."
 run = "biome --help"

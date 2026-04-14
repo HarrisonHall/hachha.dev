@@ -35,6 +35,6 @@ impl Pages {
 
 /// Embedded page templates.
 #[derive(RustEmbed)]
-#[folder = "content/pages"]
+#[folder = "resources/pages"]
 #[include = "*.html"]
 struct EmbeddedPages;

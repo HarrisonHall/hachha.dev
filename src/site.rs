@@ -214,7 +214,7 @@ impl SiteConfig {
 }
 
 #[derive(RustEmbed)]
-#[folder = "content/templates/"]
+#[folder = "resources/templates/"]
 #[include = "*.html"]
 pub struct Templates;
 

@@ -25,7 +25,7 @@ atom_syndication = "0.12"
 # Markup
 handlebars = "4.3"  # Updating this may cause whitespace issues!
 comrak = "0.50"
-# pomsky = "0.12"
+markdown-frontmatter = "0.5.1"
 regex = "1.12"
 
 # Util

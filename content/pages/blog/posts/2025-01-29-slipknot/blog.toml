@@ -1,5 +1,0 @@
-name = "Slipknot"
-blurb = "Basic CLI slipfeed server utilizing a simple config"
-date = "2025-01-29"
-article = "slipknot"
-tags = ["dev", "rss"]

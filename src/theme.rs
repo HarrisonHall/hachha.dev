@@ -10,9 +10,10 @@ pub struct ThemeProvider {
 
 impl ThemeProvider {
     pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
-        let theme_rules = packed_data.read_toml::<ThemeRules>("content/styles/theme/rules.toml")?;
+        let theme_rules =
+            packed_data.read_toml::<ThemeRules>("resources/styles/theme/rules.toml")?;
         let default_theme = match packed_data.read_data(format!(
-            "content/styles/theme/{}",
+            "resources/styles/theme/{}",
             theme_rules.default.as_str()
         )) {
             Ok(d) => d.clone(),
@@ -45,7 +46,7 @@ impl ThemeProvider {
 
         match self
             .packed_data
-            .read_data(format!("content/styles/theme/{}", theme_name.as_str()))
+            .read_data(format!("resources/styles/theme/{}", theme_name.as_str()))
         {
             Ok(d) => d,
             Err(e) => {
