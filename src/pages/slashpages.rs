@@ -19,12 +19,12 @@ impl SlashPages {
         };
 
         for (full_path, _data) in packed_data.iter() {
-            if !full_path.starts_with("pages/slashpages/pages/") {
+            if !full_path.starts_with("content/slashpages/") {
                 continue;
             }
 
             let path = full_path
-                .replace("pages/slashpages/pages/", "")
+                .replace("content/slashpages/", "")
                 .replace(".md", "");
 
             if path.starts_with("_") {

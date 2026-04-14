@@ -11,7 +11,7 @@ You heard it here first, `slipstream` is
 just in time for
 [cat day](https://en.wikipedia.org/wiki/National_Cat_Day#Japan)!
 
-![slipstream](/blog/slipstream_2/web_ui.png)
+![slipstream](/blog/media/slipstream_web_ui.png)
 
 I couldn't be happier with the result, but it's worth noting this isn't what I
 originally promised. Where are custom lua filters? Tracking read articles (read:

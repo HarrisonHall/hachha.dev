@@ -19,7 +19,7 @@ pub async fn get_media(
     Path(path): Path<String>,
     State(site): State<Site>,
 ) -> impl axum::response::IntoResponse {
-    let path = format!("media/{path}");
+    let path = format!("resources/media/{path}");
     let data = match site.packed_data().read_data(&path) {
         Ok(data) => data,
         Err(_) => {
@@ -35,8 +35,7 @@ pub async fn get_style(
     Path(path): Path<String>,
     State(site): State<Site>,
 ) -> impl axum::response::IntoResponse {
-    // TODO - special handling for theme.css
-    let path = format!("styles/{path}");
+    let path = format!("resources/styles/{path}");
     let data = match site.packed_data().read_data(&path) {
         Ok(data) => data,
         Err(e) => {
@@ -52,7 +51,7 @@ pub async fn get_font(
     Path(path): Path<String>,
     State(site): State<Site>,
 ) -> impl axum::response::IntoResponse {
-    let path = format!("fonts/{path}");
+    let path = format!("resources/fonts/{path}");
     let data = match site.packed_data().read_data(&path) {
         Ok(data) => data,
         Err(e) => {

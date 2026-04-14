@@ -30,12 +30,12 @@ so the holiday variants tend to overstay their welcome. Sometimes my irl style
 leaks through.
 
 <div style="display:flex;width:100%;max-width:400px;margin:0px;">
-  <img src="/blog/gamertags/catman/catman_ballcap.png" style="width:50%;" />
-  <img src="/blog/gamertags/catman/catman_headband.png" style="width:50%;" />
+  <img src="/blog/media/catman/catman_ballcap.png" style="width:50%;" />
+  <img src="/blog/media/catman/catman_headband.png" style="width:50%;" />
 </div>
 <div style="display:flex;width:100%;max-width:400px;margin:0px;margin-bottom:1em;">
-  <img src="/blog/gamertags/catman/catman_shades.png" style="width:50%;" />
-  <img src="/blog/gamertags/catman/catman_angry.png" style="width:50%" />
+  <img src="/blog/media/catman/catman_shades.png" style="width:50%;" />
+  <img src="/blog/media/catman/catman_angry.png" style="width:50%" />
 </div>
 
 ## hachha

@@ -15,7 +15,7 @@ impl IndexPage {
     pub fn new(packed_data: Arc<PackedData>) -> Result<Self> {
         Ok(IndexPage {
             raw_page: read_embedded_text::<EmbeddedPages>("index.html")?,
-            config: packed_data.read_toml::<Config>("pages/index_phrases.toml")?,
+            config: packed_data.read_toml::<Config>("content/index_phrases.toml")?,
         })
     }
 

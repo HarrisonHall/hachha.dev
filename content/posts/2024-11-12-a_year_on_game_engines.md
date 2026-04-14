@@ -34,7 +34,7 @@ challenged and I need the product to be "perfect." One of my hard requirements
 was that the game _had_ to run on my laptop, not just my desktop. So how did it
 work on a laptop? Not great.
 
-![Oh the jitter!](/blog/a_year_on_game_engines/attempt1.gif)
+![Oh the jitter!](/blog/media/toki/attempt1.gif)
 
 Aside from some of the replication kinks (e.g. jittering) that needed to be
 worked out, I could only spawn ~300 enemies at a time! Surprisingly enough,
@@ -67,7 +67,7 @@ from Godot about the current state of the system and handle inputs and network
 events. The extension would also handle bevy execution and pass messages via
 async queues. Surprisingly, it worked-- well, even!
 
-![3d boids!](/blog/a_year_on_game_engines/attempt3.gif)
+![3d boids!](/blog/media/toki/attempt3.gif)
 
 At one point, I counted 56 threads being used in the game process! It _felt_
 wasteful, but I couldn't complain about performance. The "model" and "view"
@@ -90,9 +90,9 @@ custom framework this way? I could take what I liked from Godot, what I liked
 from other engines (a scene tree from godot, simplified entity handling with
 some ideas from the Mario 64 decomp, etc.).
 
-![Voxels 1!](/blog/a_year_on_game_engines/attempt4_voxels.png)
+![Voxels 1!](/blog/media/toki/attempt4_voxels.png)
 
-![Voxels 2!](/blog/a_year_on_game_engines/attempt4_final.png)
+![Voxels 2!](/blog/media/toki/attempt4_final.png)
 
 From the screenshots, you should be able to tell that the primary focus of this
 rewrite was going to be getting the map done **first**. I chose a simple voxel

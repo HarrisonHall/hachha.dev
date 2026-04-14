@@ -29,7 +29,7 @@ impl Site {
         app = app.route("/blog.feed", get(pages::blog::visit_blog_feed));
         app = app.route("/blog/{:path}", get(pages::blog::visit_blog));
         app = app.route(
-            "/blog/{:path}/{*resource}",
+            "/blog/media/{*resource}",
             get(pages::blog::get_blog_resource),
         );
         app = app.route("/blog/tag/{:tag}", get(pages::blog::visit_tag));

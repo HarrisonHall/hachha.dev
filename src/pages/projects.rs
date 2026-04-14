@@ -23,7 +23,7 @@ impl ProjectsPage {
         let raw_index = util::read_embedded_text::<EmbeddedPages>("projects.html")?;
 
         // Parse projects.
-        let mut projects = packed_data.read_toml::<Projects>("pages/projects.toml")?;
+        let mut projects = packed_data.read_toml::<Projects>("content/projects.toml")?;
         projects.sort();
         projects.reverse();
 

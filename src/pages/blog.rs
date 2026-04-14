@@ -21,7 +21,7 @@ impl BlogsPages {
         let post_template = util::read_embedded_text::<EmbeddedPages>("post.html")?;
         let mut blogs = Blogs::default();
         for (path, _data) in packed_data.iter() {
-            if !(path.starts_with("pages/blog/posts") && path.ends_with(".md")) {
+            if !(path.starts_with("content/posts") && path.ends_with(".md")) {
                 continue;
             }
 
@@ -49,6 +49,12 @@ impl BlogsPages {
 
                     blog.markdown = markdown.to_string();
                     blog.metadata = util::to_json(&blog)?;
+
+                    if blog.unpublished {
+                        tracing::debug!("Skipping {}: unpublished.", blog.name);
+                        continue;
+                    }
+
                     blogs.push(blog);
                 }
                 Err(e) => {
@@ -198,6 +204,15 @@ pub struct Blog {
     /// Raw cached blog json.
     #[serde(skip)]
     metadata: serde_json::Value,
+    /// Unpublished flag.
+    #[serde(default = "Blog::default_unpublished")]
+    unpublished: bool,
+}
+
+impl Blog {
+    fn default_unpublished() -> bool {
+        false
+    }
 }
 
 impl Default for Blog {
@@ -211,6 +226,7 @@ impl Default for Blog {
             tags: BTreeSet::new(),
             markdown: "".to_string(),
             metadata: json!({}),
+            unpublished: false,
         }
     }
 }
@@ -309,18 +325,10 @@ pub async fn visit_tag_internal(tag: Option<&str>, State(site): State<Site>) -> 
 
 /// Get local blog resource.
 pub async fn get_blog_resource(
-    Path((blog, resource)): Path<(String, String)>,
+    Path(resource): Path<String>,
     State(site): State<Site>,
 ) -> impl axum::response::IntoResponse {
-    // Blog resource referenced by post uri, not file path, so we do a lookup.
-    let mut blog_path = blog.clone();
-    for other_blog in &*site.pages().blogs.blogs {
-        if other_blog.uri == blog {
-            blog_path = other_blog.directory.clone();
-            break;
-        }
-    }
-    let blog_resource: String = format!("pages/blog/articles/{blog_path}/{resource}");
+    let blog_resource: String = format!("content/posts/media/{resource}");
 
     let data = match site.packed_data().read_data(&blog_resource) {
         Ok(data) => data,
