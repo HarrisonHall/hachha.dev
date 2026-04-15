@@ -25,10 +25,17 @@
 
       <!-- -->
       {{> templates/pages/index/link_tree.html }}
+
       <!-- -->
       {{> templates/generic/divider_hor.html }}
 
       <!-- -->
+      <div class="links">
+        {{#each links}}
+          <a href="{{url}}" {{#if target}} target="{{target}}" {{/if}} class="link">{{name}}</a>
+        {{/each}}
+      </div>
+      
     </main>
 
     <!-- -->

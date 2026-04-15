@@ -43,6 +43,12 @@ impl Site {
         app = Site::add_redirect(app, "/links.feed", "/links/feed.xml");
         app = Site::add_redirect(app, "/links/atom.xml", "/links/feed.xml");
         app = app.route("/projects", get(pages::projects::visit_projects));
+        app = Site::add_redirect(app, "/games", "https://github.com/trackl-games");
+        app = Site::add_redirect(
+            app,
+            "/resume",
+            "https://www.linkedin.com/in/harrison-hall-525b81123/",
+        );
         app = app.route("/favicon.ico", get(resources::get_favicon));
         app = app.route("/robots.txt", get(resources::get_robots_txt));
         app = app.fallback(get(pages::error::visit_404));

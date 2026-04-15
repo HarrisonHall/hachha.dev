@@ -6,3 +6,18 @@ phrases = [
   "Subscribe to my feeds!",
   "> whoami",
 ]
+
+[[links]]
+name = "Links"
+url = "/links"
+
+[[links]]
+name = "Games"
+url = "/games"
+target="_blank"
+
+[[links]]
+name = "Resume"
+url = "/resume"
+target="_blank"
+

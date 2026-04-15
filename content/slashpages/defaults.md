@@ -4,6 +4,12 @@ These days, I tend to favor [mise](https://mise.jdx.dev/) for cli tooling, and
 [nix](https://nixos.org/) for my dev box and other graphical applications. My
 [dotfiles](https://github.com/HarrisonHall/dotfiles) are available.
 
+## System Utilities
+
+I use Linux casually and professionally. I typically prefer lightweight tiling
+window managers over full-blown desktop environments. With the little PC gaming
+I do, I haven't had surprisingly few issues using with Steam on Linux.
+
 | Utility   | Tool                        |
 | --------- | --------------------------- |
 | OS        | NixOS, Alpine               |
@@ -17,6 +23,24 @@ These days, I tend to favor [mise](https://mise.jdx.dev/) for cli tooling, and
 | Feeds     | `slipstream`                |
 | Tasks     | `cfait`                     |
 | Comms     | Discord, Signal, ProtonMail |
+| Browser   | Firefox                     |
+
+## Languages
+
+I reach for rust on most personal projects since it has an expressive type
+system, convenient build/packaging system, and high-quality ecosystem. I
+typically treat less as a systems programming language and more as a high-level
+language.
+
+| Language   | Usage                                           |
+| ---------- | ----------------------------------------------- |
+| Rust       | Most personal projects, systems programming     |
+| Python     | Scripting, general development (professionally) |
+| TypeScript | Web development (professionally)                |
+| Zig        | Systems programming                             |
+| C/C++      | Systems programming (professionally)            |
+
+## Misc. Tooling
 
 - Tools:
   - Core:
@@ -33,10 +57,3 @@ These days, I tend to favor [mise](https://mise.jdx.dev/) for cli tooling, and
     - Anki
     - Godot
     - LocalSend
-
-- Languages:
-  - Rust - Most personal projects, systems programming
-  - Python - Scripting, general development (professionally)
-  - Typescript - Web development (professionally)
-  - Zig - Systems programming
-  - C/C++ - Systems programming (professionally)

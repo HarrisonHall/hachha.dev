@@ -1,7 +1,7 @@
 # {{icon info}} About
 
 I'm Harrison Hall. By trade, I'm a developer. Recently, I've enjoyed running,
-learning Japanese, gamedev, reading, and a musical endeavor.
+learning Japanese, gamedev, reading, and ||a musical endeavor||.
 
 You can catch me on:
 
@@ -11,4 +11,4 @@ You can catch me on:
 - [linkedin](https://www.linkedin.com/in/harrison-hall-525b81123/)
   <i class="ph-fill ph-smiley-nervous"></i>
 
-And of course, [hachha.dev](https://hachha.dev).
+and of course, [hachha.dev](https://hachha.dev).

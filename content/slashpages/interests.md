@@ -1,6 +1,6 @@
 # {{icon person-simple-bike}} Interests
 
-- Development
+- Software Development
   - Gamedev
 - Running
 - Japanese

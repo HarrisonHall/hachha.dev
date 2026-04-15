@@ -1,5 +1,7 @@
 # {{icon user-square}} PFP
 
+![catman](/media/catman.png)
+
 I typically use the following names online:
 
 - `harrisonhall`

@@ -28,9 +28,25 @@ impl IndexPage {
     }
 }
 
+/// Configuration for the index page.
 #[derive(Clone, Serialize, Deserialize)]
 struct Config {
+    /// Phrases that can appear on the index page.
     phrases: Vec<String>,
+    /// Highlighted links.
+    links: Vec<Link>,
+}
+
+/// Link on the index page.
+#[derive(Clone, Serialize, Deserialize)]
+struct Link {
+    /// Name of the link.
+    name: String,
+    /// Url.
+    url: String,
+    /// Target field for
+    #[serde(default)]
+    target: Option<String>,
 }
 
 /// Endpoint for site index.
@@ -40,6 +56,7 @@ pub async fn visit_index(State(site): State<Site>) -> RenderedHtml {
         .retrieve_or_update("index", async move {
             let context = json!({
                 "phrase": site.pages().index.get_phrase(),
+                "links": site.pages().index.config.links.clone(),
             });
             site.render_page(&site.pages().index.raw_page, &context)
         })

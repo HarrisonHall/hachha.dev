@@ -1,5 +1,5 @@
 # {{icon map-pin}} Where
 
-- Myrtle Beach, South Carolina, USA
-- Clemson, South Carolina, USA
-- Greenville, South Carolina, USA
+- {{icon rewind}} Myrtle Beach, South Carolina, USA
+- {{icon rewind}} Clemson, South Carolina, USA
+- {{icon map-pin}} Greenville, South Carolina, USA
