@@ -4,7 +4,7 @@ use super::*;
 
 /// Get favicon from resource data.
 pub async fn get_favicon(State(site): State<Site>) -> impl axum::response::IntoResponse {
-    let data = match site.packed_data().read_data("media/favicon.ico") {
+    let data = match site.packed_data().read_data("resources/media/favicon.ico") {
         Ok(data) => data,
         Err(_) => {
             tracing::error!("Favicon missing!");
@@ -64,7 +64,7 @@ pub async fn get_font(
 
 /// Get robots.txt
 pub async fn get_robots_txt(State(site): State<Site>) -> impl axum::response::IntoResponse {
-    let data = match site.packed_data().read_data("robots.txt") {
+    let data = match site.packed_data().read_data("resources/robots.txt") {
         Ok(data) => data,
         Err(_) => {
             tracing::error!("robots.txt missing!");
