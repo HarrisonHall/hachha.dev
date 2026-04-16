@@ -429,6 +429,8 @@ img.img-square {
 }
 
 img.img-large {
+	min-width: 256px;
+	min-height: 256px;
 	max-width: 256px;
 	max-height: 256px;
 }

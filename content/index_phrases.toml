@@ -14,10 +14,10 @@ url = "/links"
 [[links]]
 name = "Games"
 url = "/games"
-target="_blank"
+# target="_blank"
 
 [[links]]
 name = "Resume"
 url = "/resume"
-target="_blank"
+# target="_blank"
 
