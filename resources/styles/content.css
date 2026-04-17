@@ -142,6 +142,12 @@ td > i {
 	vertical-align: bottom;
 }
 
+th, td {
+	background: var(--card);
+	border-bottom: var(--pico-border-width) solid var(--background);
+	/* background-color: var(--card); */
+}
+
 td > i {
 	display: flex;
 	width: min-content;

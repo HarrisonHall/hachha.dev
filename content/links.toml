@@ -173,3 +173,33 @@ title = "Writing design docs"
 description = "> The deliverable you care about is shared understanding of a problem and alignment on a solution."
 url = "https://blog.ceejbot.com/posts/design-docs/"
 date = "2026-04-13"
+
+[[links]]
+title = "Compost modernity!"
+description = "> a-leave-no-trace ethic, where beauty, health and ecology form a golden braid"
+url = "https://aeon.co/essays/in-solarpunk-cities-of-the-future-tech-follows-natures-lead"
+date = "2026-04-16"
+
+[[links]]
+title = "How are we preparing for the Long Web?"
+description = "The internet is disappearing, preparation is a necessary balancing act"
+url = "https://brennan.day/how-are-we-preparing-for-the-long-web/"
+date = "2026-04-16"
+
+[[links]]
+title = "The Right to Read"
+description = ">  The battle for the right to read is going against us so far. The enemy is organized, and we are not."
+url = "https://www.gnu.org/philosophy/right-to-read.en.html"
+date = "2026-04-16"
+
+[[links]]
+title = "Computers can be understood"
+description = "Not magic, each layer of abstraction can be tackled independently"
+url = "https://blog.nelhage.com/post/computers-can-be-understood/"
+date = "2026-04-16"
+
+# [[links]]
+# title = ""
+# description = ""
+# url = ""
+# date = ""

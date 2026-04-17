@@ -15,9 +15,7 @@ following "slashes":
 
 | Slash                   | Description                                                                                  | <div style=""></div>        |
 | ----------------------- | -------------------------------------------------------------------------------------------- | --------------------------- |
-| [Blank](/blank)         | A blank page.                                                                                | {{icon placeholder}}        |
 | [Carry](/carry)         | My everyday carry.                                                                           | {{icon backpack}}           |
-| [Chipotle](/chipotle)   | Reference for meal preference.                                                               | {{icon fork-knife}}         |
 | [Colophon](/colophon)   | How this page was made.                                                                      | {{icon hammer}}             |
 | [Contact](/contact)     | Contact me.                                                                                  | {{icon address-book}}       |
 | [Follow](/follow)       | Various links. Alternatively, [subscribe](/subscribe), [feeds](/feeds).                      | {{icon bell-simple}}        |
@@ -38,6 +36,7 @@ Most of these tertiary pages are a WIP.
 | ----------------------- | --------------------------------------------------- | ----------------------- |
 | [Calendar](/calendar)   | Upcoming events and releases.                       | {{icon calendar-check}} |
 | [Changelog](/changelog) | Changes to this site.                               | {{icon list-checks}}    |
+| [Chipotle](/chipotle)   | Reference for meal preference.                      | {{icon fork-knife}}     |
 | [Hill](/hill)           | Hills I'll die on. Alternatively, [hills](/hills).  | {{icon mountains}}      |
 | [Nope](/nope)           | Nope, nada, じゃない.                               | {{icon thumbs-down}}    |
 | [Podroll](/podroll)     | Some podcasts.                                      | {{icon microphone}}     |
@@ -51,6 +50,7 @@ Most of these tertiary pages are a WIP.
 
 | Slash             | Description                                | <div style=""></div>  |
 | ----------------- | ------------------------------------------ | --------------------- |
+| [Blank](/blank)   | A blank page.                              | {{icon placeholder}}  |
 | [Caw](/caw)       | Caw!                                       | {{icon bird}}         |
 | Hats              | My collection of hats                      | {{icon baseball-cap}} |
 | [Status](/status) | Status of [hachha.dev](https://hachha.dev) | {{icon chart-line}}   |
