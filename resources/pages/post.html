@@ -16,6 +16,9 @@
           <a class="p-author h-card hidden" href="https://hachha.dev">Harrison Hall</a>
           {{#if tags}}
           <div class="container tags">
+            <a href="/blog" class="icon-link" style="font-size: 1.15em; margin-top: auto; margin-bottom: auto; margin-left: 0.25em; margin-right: 0.5rem; color: var(--accent);">
+              <i class="ph-fill ph-tag"></i>
+            </a>
             {{#each tags}}
               <a href="/blog/tag/{{this}}" class="tag p-category">{{this}}</a>
             {{/each}}

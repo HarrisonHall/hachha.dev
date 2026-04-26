@@ -31,6 +31,9 @@
 
       {{#if tags}}
       <div class="tags">
+        <a href="/blog" class="icon-link" style="font-size: 1.15em; margin-top: auto; margin-bottom: auto; margin-left: 0.25em; margin-right: 0.5rem; color: var(--accent);">
+          <i class="ph-fill ph-tag"></i>
+        </a>
         {{#each tags}}
           <a
             {{#if (matches this ../tag)}}
