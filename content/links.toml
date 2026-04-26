@@ -198,6 +198,42 @@ description = "Not magic, each layer of abstraction can be tackled independently
 url = "https://blog.nelhage.com/post/computers-can-be-understood/"
 date = "2026-04-16"
 
+[[links]]
+title = "I Left Port 22 Open on the Internet for 54 Days. Here's Who Showed Up."
+description = "Attack patterns"
+url = "https://arman-bd.hashnode.dev/i-left-port-22-open-on-the-internet-for-54-days-here-s-who-showed-up"
+date = "2026-04-26"
+
+[[links]]
+title = "Grug design"
+description = "'nuff said"
+url = "https://www.grug.design/know"
+date = "2026-04-26"
+
+[[links]]
+title = "No adblocker detected"
+description = "Detect adblocker, inform user"
+url = "https://maurycyz.com/misc/ads/"
+date = "2026-04-26"
+
+[[links]]
+title = "Git clone"
+description = "Github (2026) sucks, go local"
+url = "https://glfmn.io/posts/git-clone/"
+date = "2026-04-26"
+
+[[links]]
+title = "Bro, ban me at the IP level if you don't like me!"
+description = "Cancerous bots"
+url = "https://boston.conman.org/2025/08/21.1"
+date = "2026-04-26"
+
+[[links]]
+title = "Modifying Other People's Software"
+description = "Software patching strategies"
+url = "https://natkr.com/2025-08-14-modifying-other-peoples-software/"
+date = "2026-04-26"
+
 # [[links]]
 # title = ""
 # description = ""
