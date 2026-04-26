@@ -234,6 +234,18 @@ description = "Software patching strategies"
 url = "https://natkr.com/2025-08-14-modifying-other-peoples-software/"
 date = "2026-04-26"
 
+[[links]]
+title = "Open Social"
+description = "> there's going to be a shift"
+url = "https://overreacted.io/open-social/"
+date = "2026-04-26"
+
+[[links]]
+title = "Uncertain⟨T⟩"
+description = "Uncertainty monad"
+url = "https://nshipster.com/uncertainty/"
+date = "2026-04-26"
+
 # [[links]]
 # title = ""
 # description = ""
