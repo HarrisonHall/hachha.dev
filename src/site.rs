@@ -39,6 +39,7 @@ impl Site {
         app = app.route("/links", get(pages::links::visit_links_index));
         app = Site::add_redirect(app, "/bookmarks", "/links");
         app = Site::add_redirect(app, "/postroll", "/links");
+        app = Site::add_redirect(app, "/parks", "https://parks.hachha.dev");
         app = app.route("/links/feed.xml", get(pages::links::visit_links_feed));
         app = Site::add_redirect(app, "/links.feed", "/links/feed.xml");
         app = Site::add_redirect(app, "/links/atom.xml", "/links/feed.xml");

@@ -825,7 +825,7 @@ dependencies = [
 
 [[package]]
 name = "hachha-dev"
-version = "0.17.3"
+version = "0.17.4"
 dependencies = [
  "atom_syndication",
  "axum",
