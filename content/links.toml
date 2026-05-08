@@ -246,6 +246,12 @@ description = "Uncertainty monad"
 url = "https://nshipster.com/uncertainty/"
 date = "2026-04-26"
 
+[[links]]
+title = "Joyful web design"
+description = "> You can – and should feel free to – play with the web"
+url = "https://jamesg.blog/2026/05/01/joyful-web-design"
+date = "2026-05-02"
+
 # [[links]]
 # title = ""
 # description = ""

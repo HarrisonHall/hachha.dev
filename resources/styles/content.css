@@ -506,21 +506,35 @@ img.img-fit-contain {
 	height: 0.1rem;
 }
 
-.blog-markdown h1,
-.blog-markdown h4 {
+.blog-markdown h1 {
+	font-size: 1.75rem;
 	color: var(--primary);
 }
 
-.blog-markdown h2,
-.blog-markdown h5 {
+.blog-markdown h2 {
+	font-size: 1.4rem;
 	color: var(--secondary);
 }
 
-.blog-markdown h3,
-.blog-markdown h6 {
+.blog-markdown h3 {
+	font-size: 1.3rem;
 	color: var(--accent);
 }
 
+.blog-markdown h4 {
+	font-size: 1.25rem;
+	color: var(--primary);
+}
+
+.blog-markdown h5 {
+	font-size: 1.2rem;
+	color: var(--secondary);
+}
+
+.blog-markdown h6 {
+	font-size: 1.15rem;
+	color: var(--accent);
+}
 .blog-markdown h1::before {
 	content: "# ";
 }
@@ -604,13 +618,23 @@ img.img-fit-contain {
 }
 
 .markdown-alert .markdown-alert-title::before {
-	font-family: "PhosphorFill";
+	font-family: PhosphorFill;
 	margin-top: auto;
 	margin-bottom: auto;
 	margin-right: 0.4em;
 	/* line-height: 150%; */
 	font-size: 90%;
 	font-weight: 100;
+}
+
+.blog-post h1::before {
+	font-family: PhosphorFill;
+	content: "\E348";
+	line-height: 100%;
+	vertical-align: bottom;
+	padding-right: 0.15em;
+	font-weight: 100;
+	font-size: 100%;
 }
 
 .markdown-alert-note .markdown-alert-title::before {
@@ -656,6 +680,17 @@ img.img-fit-contain {
 	text-decoration: underline;
 	text-wrap: nowrap;
 	white-space: nowrap;
+}
+
+.timestamp {
+	font-size: 0.8rem;
+	color: var(--secondary);
+	/* background: var(--secondary); */
+	font-weight: 500;
+	border-radius: calc(infinity * 1px);
+	margin: 0.25em;
+	padding-left: 0.5em;
+	padding-right: 0.5em;
 }
 
 .tags {
