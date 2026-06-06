@@ -17,7 +17,8 @@
     - Web exploitation framework detection
   - Web Development
     - Data ingestion pipelines
-  - Tech Lead
+  - Tech Lead 2025-Present
+  - Senior 2026-Present
 
 ## Education
 

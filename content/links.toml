@@ -252,6 +252,42 @@ description = "> You can – and should feel free to – play with the web"
 url = "https://jamesg.blog/2026/05/01/joyful-web-design"
 date = "2026-05-02"
 
+[[links]]
+title = "Slop Grenade"
+description = "> They asked you because they wanted your human judgment."
+url = "https://noslopgrenade.com/"
+date = "2026-05-23"
+
+[[links]]
+title = "Programming Still Sucks."
+description = "> The cron job pays salaries."
+url = "https://www.stvn.sh/writing/programming-still-sucks-fqffhyp"
+date = "2026-05-23"
+
+[[links]]
+title = "To My Students"
+description = "> Care more about people, relationships, and justice than you do about profits, code, or productivity."
+url = "http://ozark.hendrix.edu/~yorgey/forest/00FD/index.xml"
+date = "2026-06-07"
+
+[[links]]
+title = "The User Doesn't Care - But you should"
+description = "Don't let the persistent, seemingly-pragmatic dogma prevent you from making good decisions."
+url = "https://lewiscampbell.tech/blog/260607.html"
+date = "2026-06-08"
+
+[[links]]
+title = "Deploying a distributed system? A type system helps a lot"
+description = "Strong typing is good, launching a distributed system is a exemplar study"
+url = "https://catern.com/progsys.html"
+date = "2026-06-14"
+
+[[links]]
+title = "Some Data Should Be Code"
+description = "> for complex tasks you have to bring out a real programming language"
+url = "https://borretti.me/article/some-data-should-be-code"
+date = "2026-06-14"
+
 # [[links]]
 # title = ""
 # description = ""
