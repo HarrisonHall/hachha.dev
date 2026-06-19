@@ -288,6 +288,12 @@ description = "> for complex tasks you have to bring out a real programming lang
 url = "https://borretti.me/article/some-data-should-be-code"
 date = "2026-06-14"
 
+[[links]]
+title = "Stop Naming Your Variables \"Flag\": The Art of Boolean Prefixes"
+description = "Use boolean prefixes for flags: `is`, `has`, `can`, `should`"
+url = "https://thatamazingprogrammer.com/posts/stop-naming-your-variables-flag-the-art-of-boolean-prefixes/"
+date = "2026-06-19"
+
 # [[links]]
 # title = ""
 # description = ""

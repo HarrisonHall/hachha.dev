@@ -72,7 +72,7 @@ language.
 | Anki      | Japanese SRS.          |
 | Godot     | Game engine.           |
 | LocalSend | Share files w/o cords. |
-| fcitx5    | Japanese IME.          |
+| fcitx5    | Japanese IME (mozc).   |
 
 ## Watching
 
