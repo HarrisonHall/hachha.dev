@@ -294,6 +294,30 @@ description = "Use boolean prefixes for flags: `is`, `has`, `can`, `should`"
 url = "https://thatamazingprogrammer.com/posts/stop-naming-your-variables-flag-the-art-of-boolean-prefixes/"
 date = "2026-06-19"
 
+[[links]]
+title = "But yak shaving is fun"
+description = "Include your dependencies-- or write them yourself"
+url = "https://parksb.github.io/en/article/32.html"
+date = "2026-06-22"
+
+[[links]]
+title = "The Case for Physical Media Ownership"
+description = "Preservation and ownership are important"
+url = "https://dervis.de/physical/"
+date = "2026-06-27"
+
+[[links]]
+title = "permacomputing"
+description = "> permacomputing encourages a more sustainable approach, maximizing hardware lifespans, minimizing energy use and focussing on the use of already available computational resources"
+url = "https://permacomputing.net/"
+date = "2026-06-27"
+
+[[links]]
+title = "Choose Boring Technology and Innovative Practices"
+description = "> Choose Boring Material and Innovative Tools"
+url = "https://buttondown.com/hillelwayne/archive/choose-boring-technology-and-innovative-practices/"
+date = "2026-06-27"
+
 # [[links]]
 # title = ""
 # description = ""
