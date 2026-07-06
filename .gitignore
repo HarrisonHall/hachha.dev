@@ -1,3 +1,6 @@
 /target
 
 site.tgz
+*.db
+*.db-wal
+*.db-tshm

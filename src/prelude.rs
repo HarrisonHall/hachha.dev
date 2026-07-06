@@ -1,4 +1,5 @@
 pub use crate::cache::Cache;
+pub use crate::db::{Database, EndpointHistoryOptions};
 pub use crate::pages::Pages;
 pub use crate::site::Site;
 pub use crate::theme::ThemeProvider;
@@ -17,6 +18,7 @@ pub(crate) mod internal {
     pub use axum::http::{HeaderMap, Uri};
     pub use axum::response::Html;
     pub use axum::{routing::get, Router};
+    pub use bon::Builder;
     pub use chrono::Datelike;
     pub use color_eyre::eyre::{anyhow, bail, Result};
     pub use rand::seq::IndexedRandom;

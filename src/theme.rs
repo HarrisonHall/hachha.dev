@@ -236,5 +236,8 @@ impl From<&chrono::NaiveDate> for ThemeDate {
 
 /// Get theme, matching rules.
 pub async fn get_theme(State(site): State<Site>) -> impl axum::response::IntoResponse {
+    EndpointHistoryOptions::default()
+        .write(&site, "theme.css")
+        .await;
     adjust_content_header("theme.css", site.theme_provider().get_theme())
 }

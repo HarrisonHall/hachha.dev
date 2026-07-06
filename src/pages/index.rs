@@ -50,7 +50,10 @@ struct Link {
 }
 
 /// Endpoint for site index.
-pub async fn visit_index(State(site): State<Site>) -> RenderedHtml {
+pub async fn visit_index(uri: Uri, State(site): State<Site>) -> RenderedHtml {
+    EndpointHistoryOptions::default()
+        .write(&site, uri.path())
+        .await;
     site.clone()
         .page_cache()
         .retrieve_or_update("index", async move {

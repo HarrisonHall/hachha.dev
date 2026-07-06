@@ -24,6 +24,11 @@ impl ErrorPage {
 
 /// Endpoint for error 404 page.
 pub async fn visit_404(uri: Uri, State(site): State<Site>, headers: HeaderMap) -> RenderedHtml {
+    EndpointHistoryOptions::builder()
+        .valid(true)
+        .build()
+        .write(&site, uri.path())
+        .await;
     visit_404_internal(uri.path(), State(site), Some(headers)).await
 }
 

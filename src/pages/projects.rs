@@ -124,7 +124,10 @@ impl std::cmp::Ord for Project {
 }
 
 /// Endpoint for project index page.
-pub async fn visit_projects(State(site): State<Site>) -> RenderedHtml {
+pub async fn visit_projects(uri: Uri, State(site): State<Site>) -> RenderedHtml {
+    EndpointHistoryOptions::default()
+        .write(&site, uri.path())
+        .await;
     site.clone()
         .page_cache()
         .retrieve_or_update("projects", async move {

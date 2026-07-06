@@ -12,8 +12,8 @@ pub struct Site(Arc<SiteWrapped>);
 
 impl Site {
     /// Generate shared site.
-    pub fn new() -> Result<Self> {
-        Ok(Site(Arc::new(SiteWrapped::new()?)))
+    pub async fn new() -> Result<Self> {
+        Ok(Site(Arc::new(SiteWrapped::new().await?)))
     }
 
     /// Serve site.
@@ -86,6 +86,11 @@ impl Site {
         &self.0.config
     }
 
+    /// Get db.
+    pub fn db(&self) -> &Database {
+        &self.0.db
+    }
+
     /// Get pages.
     pub fn pages(&self) -> Arc<Pages> {
         match cfg!(debug_assertions) {
@@ -152,6 +157,7 @@ impl Site {
 /// Site state.
 struct SiteWrapped {
     config: SiteConfig,
+    db: Arc<Database>,
     templater: Arc<Handlebars<'static>>,
     pages: Arc<Pages>,
     theme_provider: Arc<ThemeProvider>,
@@ -161,7 +167,7 @@ struct SiteWrapped {
 
 impl SiteWrapped {
     /// Generate new site object.
-    fn new() -> Result<Self> {
+    async fn new() -> Result<Self> {
         // Parse arguments.
         let args: SiteConfig = SiteConfig::parse();
 
@@ -174,6 +180,7 @@ impl SiteWrapped {
 
         // Configure site struct.
         Ok(SiteWrapped {
+            db: Arc::new(Database::new("site.db").await?),
             templater: Arc::new(create_templater()?),
             pages: Arc::new(Pages::new(packed_data.clone())?),
             theme_provider: Arc::new(ThemeProvider::new(packed_data.clone())?),

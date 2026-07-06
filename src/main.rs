@@ -1,6 +1,7 @@
 //! Main.
 
 mod cache;
+mod db;
 mod pages;
 mod prelude;
 mod resources;
@@ -15,7 +16,7 @@ use prelude::*;
 #[tokio::main]
 async fn main() -> Result<()> {
     // Build/parse site and serve.
-    let site = Site::new()?;
+    let site = Site::new().await?;
     site.serve().await?;
     Ok(())
 }

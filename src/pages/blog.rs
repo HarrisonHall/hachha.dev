@@ -244,7 +244,10 @@ impl std::cmp::Ord for Blog {
 }
 
 /// Endpoint for blogs index page.
-pub async fn visit_blog_index(State(site): State<Site>) -> RenderedHtml {
+pub async fn visit_blog_index(uri: Uri, State(site): State<Site>) -> RenderedHtml {
+    EndpointHistoryOptions::default()
+        .write(&site, uri.path())
+        .await;
     site.clone()
         .page_cache()
         .retrieve_or_update("blog", async move {
@@ -255,19 +258,23 @@ pub async fn visit_blog_index(State(site): State<Site>) -> RenderedHtml {
 
 /// Endpoint for individual blogs.
 pub async fn visit_blog(
+    uri: Uri,
     Path(blog): Path<String>,
     State(site): State<Site>,
     headers: HeaderMap,
 ) -> RenderedHtml {
     // Visit index
     if blog.is_empty() {
-        return visit_blog_index(State(site)).await;
+        return visit_blog_index(uri, State(site)).await;
     }
 
     // Check for blog.
     let full_blog_path: String = format!("blog/{blog}");
     match site.pages().blogs.get_blog(&blog) {
         Some(blog) => {
+            EndpointHistoryOptions::default()
+                .write(&site, uri.path())
+                .await;
             site.clone()
                 .page_cache()
                 .retrieve_or_update(&full_blog_path, async move {
@@ -279,13 +286,25 @@ pub async fn visit_blog(
                 .await
         }
         None => {
+            EndpointHistoryOptions::builder()
+                .valid(true)
+                .build()
+                .write(&site, uri.path())
+                .await;
             error::visit_404_internal(format!("/blog/{blog}"), State(site), Some(headers)).await
         }
     }
 }
 
 /// Visit tag.
-pub async fn visit_tag(Path(tag): Path<String>, State(site): State<Site>) -> RenderedHtml {
+pub async fn visit_tag(
+    uri: Uri,
+    Path(tag): Path<String>,
+    State(site): State<Site>,
+) -> RenderedHtml {
+    EndpointHistoryOptions::default()
+        .write(&site, uri.path())
+        .await;
     visit_tag_internal(Some(tag.as_str()), State(site)).await
 }
 
@@ -325,14 +344,25 @@ pub async fn visit_tag_internal(tag: Option<&str>, State(site): State<Site>) -> 
 
 /// Get local blog resource.
 pub async fn get_blog_resource(
+    uri: Uri,
     Path(resource): Path<String>,
     State(site): State<Site>,
 ) -> impl axum::response::IntoResponse {
     let blog_resource: String = format!("content/posts/media/{resource}");
 
     let data = match site.packed_data().read_data(&blog_resource) {
-        Ok(data) => data,
+        Ok(data) => {
+            EndpointHistoryOptions::default()
+                .write(&site, uri.path())
+                .await;
+            data
+        }
         Err(_) => {
+            EndpointHistoryOptions::builder()
+                .valid(true)
+                .build()
+                .write(&site, uri.path())
+                .await;
             tracing::error!("Unable to render blog resource {blog_resource}");
             EmbeddedData::empty()
         }
@@ -341,7 +371,13 @@ pub async fn get_blog_resource(
 }
 
 /// Get blog as atom feed.
-pub async fn visit_blog_feed(State(site): State<Site>) -> impl axum::response::IntoResponse {
+pub async fn visit_blog_feed(
+    uri: Uri,
+    State(site): State<Site>,
+) -> impl axum::response::IntoResponse {
+    EndpointHistoryOptions::default()
+        .write(&site, uri.path())
+        .await;
     (
         [(axum::http::header::CONTENT_TYPE, "application/atom+xml")],
         site.pages().blogs.feed.clone(),

@@ -144,7 +144,10 @@ impl std::cmp::Ord for Link {
 }
 
 /// Endpoint for links index page.
-pub async fn visit_links_index(State(site): State<Site>) -> RenderedHtml {
+pub async fn visit_links_index(uri: Uri, State(site): State<Site>) -> RenderedHtml {
+    EndpointHistoryOptions::default()
+        .write(&site, uri.path())
+        .await;
     site.clone()
         .page_cache()
         .retrieve_or_update("links", async move {
@@ -154,7 +157,13 @@ pub async fn visit_links_index(State(site): State<Site>) -> RenderedHtml {
 }
 
 /// Get links as atom feed.
-pub async fn visit_links_feed(State(site): State<Site>) -> impl axum::response::IntoResponse {
+pub async fn visit_links_feed(
+    uri: Uri,
+    State(site): State<Site>,
+) -> impl axum::response::IntoResponse {
+    EndpointHistoryOptions::default()
+        .write(&site, uri.path())
+        .await;
     (
         [(axum::http::header::CONTENT_TYPE, "application/atom+xml")],
         site.pages().links.feed.clone(),

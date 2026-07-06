@@ -189,6 +189,7 @@ pub fn init_logging(debug: bool) -> Result<()> {
         .with_default(LevelFilter::TRACE)
         .with_target("handlebars", LevelFilter::WARN)
         .with_target("globset", LevelFilter::WARN)
+        .with_target("turso_core", LevelFilter::WARN)
         .with_target("axum", LevelFilter::WARN)
         .with_target("tower_http", LevelFilter::WARN)
         .with_target("mio", LevelFilter::WARN)
