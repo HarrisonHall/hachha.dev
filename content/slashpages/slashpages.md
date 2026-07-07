@@ -23,6 +23,7 @@ following "slashes":
 | [Hosted](/hosted)       | What I self-host. Alternatively, [self-hosted](/self-hosted), [self-hosting](/self-hosting). | {{icon hard-drives}}        |
 | [Ideas](/ideas)         | Some ideas. Feel free to take 'em.                                                           | {{icon lightbulb}}          |
 | [Interests](/interests) | Various interests.                                                                           | {{icon person-simple-bike}} |
+| [Keys](/keys)           | Public keys.                                                                                 | {{icon key}}                |
 | [PFP](/pfp)             | My profile picture(s).                                                                       | {{icon user-square}}        |
 | [Shoebox](/shoebox)     | Various, miscellaneous assortments.                                                          | {{icon package}}            |
 | [TIL](/til)             | "Today I Learned"s.                                                                          | {{icon graduation-cap}}     |
