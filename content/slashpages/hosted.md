@@ -16,7 +16,7 @@ Currently, I'm serving:
   - Borg
   - Morningbot
 
-Historically, I've hosted a few other servies:
+Historically, I've hosted a few other services:
 
 - Miniflux
 - Gitea

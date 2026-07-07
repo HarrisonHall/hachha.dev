@@ -14,7 +14,10 @@ My _everyday carry_ isn't unique.
       - I've been an avid field notes carrier since 2018. The books are
         excellent for bullet journaling.
     - Contact solution
+    - Chapstick
+    - Tissues
 - Ring 2
   - Laptop
   - Charger
   - Headphones
+  - E-reader
