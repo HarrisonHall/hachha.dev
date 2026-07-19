@@ -46,6 +46,7 @@ impl Site {
         app = app.route("/projects", get(pages::projects::visit_projects));
         app = app.route("/favicon.ico", get(resources::get_favicon));
         app = app.route("/robots.txt", get(resources::get_robots_txt));
+        app = app.route("/version", get(pages::meta::version));
         app = app.fallback(get(pages::error::visit_404));
         app = app.layer(tower_http::trace::TraceLayer::new_for_http());
 

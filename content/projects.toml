@@ -16,6 +16,7 @@ name = "dotfiles"
 date = "2023-02-01"
 description = "Dotfiles."
 [projects.links]
+radicle = "https://radicle.network/nodes/git.hocko.tech/rad:zVEJbh2fGkDqBm1VXLSykMTkqZYQ"
 github = "https://github.com/HarrisonHall/dotfiles"
 
 [[projects]]
@@ -24,6 +25,7 @@ date = "2023-03-18"
 description = "My personal website 2.0. You're already here!"
 [projects.links]
 website = "https://hachha.dev"
+radicle = "https://radicle.network/nodes/git.hocko.tech/rad:z2GtatVmhH2tMC39spA4ZSUJp1g5e"
 github = "https://github.com/HarrisonHall/hachha.dev"
 
 [[projects]]
@@ -31,6 +33,7 @@ name = "slipstream"
 date = "2024-11-29"
 description = "Feed fetcher, filterer, and aggregator."
 [projects.links]
+radicle = "https://radicle.network/nodes/git.hocko.tech/rad:z2tsG27Hdj89W81iZckLoGYpvKP5R"
 github = "https://github.com/HarrisonHall/slipstream"
 
 [[projects]]
@@ -45,4 +48,5 @@ name = "jdpub"
 date = "2026-01-25"
 description = "Japanese epub annotator & more."
 [projects.links]
+radicle = "https://radicle.network/nodes/git.hocko.tech/rad:z3hP29M8wZvaoF9CxfFzwYrkmbhDS"
 github = "https://github.com/HarrisonHall/jdpub"
