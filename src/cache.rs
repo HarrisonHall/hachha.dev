@@ -39,11 +39,11 @@ impl<T> CacheEntry<T> {
         // Check timeout
         let timeout = self.timeout_override.unwrap_or(timeout);
         let time_since_update: f32 = self.update_time.elapsed().as_secs_f32();
-        return time_since_update > timeout;
+        time_since_update > timeout
     }
 
     /// Update entry.
-    fn update(&mut self, new_entry: T) -> () {
+    fn update(&mut self, new_entry: T) {
         self.entry = new_entry;
         self.update_time = Instant::now();
     }
@@ -111,10 +111,7 @@ impl<T: Clone> Cache<T> {
     /// Get item from the cache, ignoring the expiry.
     pub async fn retrieve_force(&self, name: &str) -> Option<T> {
         let entries = self.entries.read().await;
-        match entries.get(name) {
-            Some(entry) => Some(entry.entry.clone()),
-            None => None,
-        }
+        entries.get(name).map(|entry| entry.entry.clone())
     }
 
     /// Insert/update item into the cache.

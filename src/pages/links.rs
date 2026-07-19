@@ -81,16 +81,10 @@ impl LinksPage {
 }
 
 /// Parsed link list.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Default)]
 struct Links {
     /// Links.
     links: Vec<Link>,
-}
-
-impl Default for Links {
-    fn default() -> Self {
-        Self { links: Vec::new() }
-    }
 }
 
 impl std::ops::Deref for Links {
@@ -133,7 +127,7 @@ impl Default for Link {
 
 impl std::cmp::PartialOrd for Link {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.date.partial_cmp(&other.date)
+        Some(self.cmp(other))
     }
 }
 

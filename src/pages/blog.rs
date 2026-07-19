@@ -58,7 +58,7 @@ impl BlogsPages {
                     blogs.push(blog);
                 }
                 Err(e) => {
-                    tracing::error!("Failed to parse blog: {e}");
+                    tracing::error!("Failed to parse blog ({path}): {e}");
                 }
             };
         }
@@ -129,7 +129,7 @@ impl BlogsPages {
         metadata["tags"] = serde_json::Value::Array(
             all_tags
                 .into_iter()
-                .map(|tag| serde_json::Value::String(tag))
+                .map(serde_json::Value::String)
                 .collect(),
         );
         metadata["tag"] = serde_json::Value::String("".into());
@@ -144,26 +144,18 @@ impl BlogsPages {
     }
 
     fn get_blog(&self, path: &str) -> Option<&Blog> {
-        for other_blog in self.blogs.iter() {
-            if path == other_blog.uri {
-                return Some(other_blog);
-            }
-        }
-        None
+        self.blogs
+            .iter()
+            .find(|&other_blog| path == other_blog.uri)
+            .map(|v| v as _)
     }
 }
 
 /// Parsed blog list.
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize, Default)]
 struct Blogs {
     /// Blog posts.
     posts: Vec<Blog>,
-}
-
-impl Default for Blogs {
-    fn default() -> Self {
-        Self { posts: Vec::new() }
-    }
 }
 
 impl std::ops::Deref for Blogs {
@@ -233,7 +225,7 @@ impl Default for Blog {
 
 impl std::cmp::PartialOrd for Blog {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.date.partial_cmp(&other.date)
+        Some(self.cmp(other))
     }
 }
 
@@ -315,13 +307,13 @@ pub async fn visit_tag_internal(tag: Option<&str>, State(site): State<Site>) -> 
     // Collect metadata.
     let mut metadata = site.pages().blogs.metadata.clone();
     let mut blog_metadata: Vec<serde_json::Value> = Vec::new();
-    for (_, blog) in site.pages().blogs.blogs.iter().enumerate() {
+    for blog in site.pages().blogs.blogs.iter() {
         for other_tag in &blog.tags {
             if Some(other_tag.as_str()) == tag {
                 let mut meta = blog.metadata.clone();
                 util::merge_json(
                     &mut meta,
-                    &json!({"darken": blog_metadata.len() % 2 == 0, "path": blog.uri}),
+                    &json!({"darken": blog_metadata.len().is_multiple_of(2), "path": blog.uri}),
                 )
                 .ok();
                 blog_metadata.push(meta);
@@ -367,7 +359,7 @@ pub async fn get_blog_resource(
             EmbeddedData::empty()
         }
     };
-    return crate::util::adjust_content_header(resource, data);
+    crate::util::adjust_content_header(resource, data)
 }
 
 /// Get blog as atom feed.

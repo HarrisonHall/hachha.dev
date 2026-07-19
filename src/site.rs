@@ -123,10 +123,10 @@ impl Site {
     /// Generate base context.
     pub fn base_context(&self) -> serde_json::Value {
         let current_time = chrono::Utc::now();
-        return json!({
+        json!({
             "version": env!("CARGO_PKG_VERSION"),
             "year": current_time.year(),
-        });
+        })
     }
 
     /// Render page with templater given json values.

@@ -140,6 +140,7 @@ impl Database {
 }
 
 #[derive(Builder, Clone, Copy)]
+#[derive(Default)]
 pub struct EndpointHistoryOptions {
     pub valid: bool,
 }
@@ -153,8 +154,3 @@ impl EndpointHistoryOptions {
     }
 }
 
-impl Default for EndpointHistoryOptions {
-    fn default() -> Self {
-        Self { valid: false }
-    }
-}

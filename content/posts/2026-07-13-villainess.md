@@ -2,7 +2,7 @@
 unpublished = true
 name = "Villainess"
 blurb = "The official tier list (2026)"
-date = "2026-17-13"
+date = "2026-07-13"
 article= "villainess"
 tags = ["life", "jp"]
 +++

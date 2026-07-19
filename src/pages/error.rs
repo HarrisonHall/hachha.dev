@@ -41,10 +41,7 @@ pub async fn visit_404_internal(
     // tracing::warn!("HEADERS: {:?}", headers);
     let remote_ip = match &headers {
         Some(headers) => match headers.get("x-forwarded-for") {
-            Some(value) => match value.to_str() {
-                Ok(value) => value,
-                Err(_) => "<Invalid>",
-            },
+            Some(value) => value.to_str().unwrap_or("<Invalid>"),
             None => "<Missing-Header>",
         },
         None => "<No-Headers>",

@@ -31,12 +31,12 @@ impl SlashPages {
                 continue;
             }
 
-            if path.trim().len() == 0 {
+            if path.trim().is_empty() {
                 continue;
             }
 
-            if let Ok(data) = packed_data.read_text(&full_path) {
-                if data.len() == 0 {
+            if let Ok(data) = packed_data.read_text(full_path) {
+                if data.is_empty() {
                     continue;
                 }
 

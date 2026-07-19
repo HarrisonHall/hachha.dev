@@ -113,7 +113,7 @@ impl Default for Project {
 
 impl std::cmp::PartialOrd for Project {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.date.partial_cmp(&other.date)
+        Some(self.cmp(other))
     }
 }
 

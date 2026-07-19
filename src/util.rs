@@ -50,32 +50,30 @@ impl PackedData {
         };
         let mut data = HashMap::new();
         let mut links = Vec::new();
-        for entry in entries {
-            if let Ok(mut entry) = entry {
-                if let Ok(entry_path) = entry.path() {
-                    tracing::trace!("PackedData found file: {}", entry_path.to_string_lossy());
-                    if let Ok(Some(link)) = entry.link_name() {
-                        links.push((
-                            entry_path.into_owned().to_string_lossy().to_string(),
-                            link.to_string_lossy().to_string(),
-                        ));
-                        continue;
+        for mut entry in entries.flatten() {
+            if let Ok(entry_path) = entry.path() {
+                tracing::trace!("PackedData found file: {}", entry_path.to_string_lossy());
+                if let Ok(Some(link)) = entry.link_name() {
+                    links.push((
+                        entry_path.into_owned().to_string_lossy().to_string(),
+                        link.to_string_lossy().to_string(),
+                    ));
+                    continue;
+                }
+                let path = entry_path.to_string_lossy().into_owned();
+                let mut full_file = match entry.header().size() {
+                    Ok(size) => Vec::with_capacity(size as usize),
+                    Err(_) => {
+                        tracing::warn!("Failed to view file size for packed file `{path}`.");
+                        Vec::new()
                     }
-                    let path = entry_path.to_string_lossy().into_owned();
-                    let mut full_file = match entry.header().size() {
-                        Ok(size) => Vec::with_capacity(size as usize),
-                        Err(_) => {
-                            tracing::warn!("Failed to view file size for packed file `{path}`.");
-                            Vec::new()
-                        }
-                    };
-                    match entry.read_to_end(&mut full_file) {
-                        Ok(_bytes) => {
-                            data.insert(path, EmbeddedData(Cow::Owned(full_file.into())));
-                        }
-                        Err(e) => {
-                            tracing::error!("Failed to read file `{path}`: {e}")
-                        }
+                };
+                match entry.read_to_end(&mut full_file) {
+                    Ok(_bytes) => {
+                        data.insert(path, EmbeddedData(Cow::Owned(full_file)));
+                    }
+                    Err(e) => {
+                        tracing::error!("Failed to read file `{path}`: {e}")
                     }
                 }
             }
@@ -112,8 +110,8 @@ impl PackedData {
 
         // In debug, read from file each time.
         if cfg!(debug_assertions) {
-            return match std::fs::read(&path) {
-                Ok(data) => Ok(EmbeddedData(Cow::Owned(data.into()))),
+            return match std::fs::read(path) {
+                Ok(data) => Ok(EmbeddedData(Cow::Owned(data))),
                 Err(e) => {
                     tracing::warn!("Failed to read file `{path}` in debug: {e}");
                     bail!("FileNotFound")
@@ -248,7 +246,7 @@ pub fn merge_json(a: &mut serde_json::Value, b: &serde_json::Value) -> Result<()
                 None => bail!("Unable to merge json."),
             };
             for (k, v) in b {
-                merge_json(a.entry(k).or_insert(serde_json::Value::Null), &v)?;
+                merge_json(a.entry(k).or_insert(serde_json::Value::Null), v)?;
             }
         }
         (a, b) => *a = (*b).clone(),
@@ -272,9 +270,7 @@ pub fn adjust_content_header(
         "text/html"
     } else if resource.ends_with(".ico") {
         "image/vdn.microsoft.icon"
-    } else if resource.ends_with(".jpg") {
-        "image/jpeg"
-    } else if resource.ends_with(".jpeg") {
+    } else if resource.ends_with(".jpg") || resource.ends_with(".jpeg") {
         "image/jpeg"
     } else if resource.ends_with(".js") {
         "text/javascript"
@@ -299,5 +295,5 @@ pub fn adjust_content_header(
     } else {
         "application/octet-stream"
     };
-    return ([(axum::http::header::CONTENT_TYPE, content_type)], response);
+    ([(axum::http::header::CONTENT_TYPE, content_type)], response)
 }

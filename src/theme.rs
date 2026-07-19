@@ -103,7 +103,7 @@ impl ThemeDate {
                     month: month_o,
                     day: day_o,
                 } => {
-                    return month == month_o && day == day_o;
+                    month == month_o && day == day_o
                 }
                 ThemeDate::Range {
                     month_a,
@@ -126,7 +126,7 @@ impl ThemeDate {
                             return true;
                         }
                     }
-                    return false;
+                    false
                 }
             },
             ThemeDate::Range { .. } => {
